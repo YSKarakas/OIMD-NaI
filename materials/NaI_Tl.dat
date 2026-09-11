@@ -1,0 +1,133 @@
+# NaI:Tl -- material specification for the optical simulation.
+#
+# PROVENANCE. Every number below carries its source. Values marked PROVISIONAL
+# are placeholders whose source has not yet been secured; they are flagged rather
+# than quietly assumed, and results that depend on them are not publishable until
+# they are replaced.
+#
+#   src_A = Bonesini, arXiv:2505.06929, Table 1
+#   src_B = Roberts et al., arXiv:2403.02668, Table I (Geant4 parameter compilation)
+#
+# NOTE -- the two sources disagree about this material:
+#   light yield   src_A 38,000 ph/MeV   src_B 41,000 ph/MeV      (7.9 %)
+#   decay         src_A 250 ns single   src_B 220 ns (96 %) + 1500 ns (4 %)
+# The structure of the decay differs, not merely its value. src_B is used here
+# because it is the compilation assembled specifically for Geant4 and benchmarked
+# against measurement; the disagreement is itself a subject of this study.
+
+name          = NaI_Tl
+density_g_cm3 = 3.67                    # src_A; PDG gives 3.667 for pure NaI
+composition   = Na:0.153373922,I:0.846626078   # exact, from stoichiometry
+
+scintillation_yield_per_MeV = 41000     # src_B
+yield_ratio_1               = 0.96      # src_B
+yield_ratio_2               = 0.04      # src_B
+time_constant_1_ns          = 220       # src_B
+time_constant_2_ns          = 1500      # src_B
+
+# RESOLUTIONSCALE inflates the variance of the photon number above Poisson.
+# src_B uses 3.50 for this material, stating that the resolution scale "was
+# calculated from the energy resolution" -- that is, fitted to the observable it
+# would then be used to reproduce. Using it would make simulated energy
+# resolution a fit rather than a prediction, so this study keeps it at 1 and
+# reports the statistical resolution as a lower bound. The gap to measurement is
+# the non-proportionality and transfer term, which Geant4 does not model.
+resolution_scale = 1.0
+
+# --- Refractive index -------------------------------------------------------
+# PROVISIONAL: flat 1.85, the value universally quoted at the 415 nm emission
+# peak. Real NaI is dispersive; a measured n(lambda) is needed before any
+# light-extraction number from this file is quoted.
+[RINDEX]
+200  1.85
+900  1.85
+
+# --- Bulk absorption length -------------------------------------------------
+# PROVISIONAL: flat 2000 mm. Good NaI is nearly transparent at its own emission
+# wavelength, but self-absorption near the band edge is exactly what this study
+# is meant to quantify, so a measured curve is required.
+[ABSLENGTH_mm]
+200  2000
+900  2000
+
+# --- Emission spectrum ------------------------------------------------------
+# PROVISIONAL: Gaussian, peak 415 nm (src_A), FWHM 65 nm. The real NaI:Tl band
+# is asymmetric; src_B Figure 8b shows the measured shape but publishes no
+# machine-readable table. Digitising it is a task for Paper 0.
+[SCINTILLATIONCOMPONENT1]
+340  0.024939
+345  0.040133
+350  0.062500
+355  0.094190
+360  0.137366
+365  0.193867
+370  0.264775
+375  0.349947
+380  0.447586
+385  0.553989
+390  0.663553
+395  0.769131
+400  0.862731
+405  0.936483
+410  0.983728
+415  1.000000
+420  0.983728
+425  0.936483
+430  0.862731
+435  0.769131
+440  0.663553
+445  0.553989
+450  0.447586
+455  0.349947
+460  0.264775
+465  0.193867
+470  0.137366
+475  0.094190
+480  0.062500
+485  0.040133
+490  0.024939
+495  0.014997
+500  0.008727
+505  0.004915
+510  0.002678
+515  0.001413
+520  0.000721
+
+[SCINTILLATIONCOMPONENT2]
+340  0.024939
+345  0.040133
+350  0.062500
+355  0.094190
+360  0.137366
+365  0.193867
+370  0.264775
+375  0.349947
+380  0.447586
+385  0.553989
+390  0.663553
+395  0.769131
+400  0.862731
+405  0.936483
+410  0.983728
+415  1.000000
+420  0.983728
+425  0.936483
+430  0.862731
+435  0.769131
+440  0.663553
+445  0.553989
+450  0.447586
+455  0.349947
+460  0.264775
+465  0.193867
+470  0.137366
+475  0.094190
+480  0.062500
+485  0.040133
+490  0.024939
+495  0.014997
+500  0.008727
+505  0.004915
+510  0.002678
+515  0.001413
+520  0.000721

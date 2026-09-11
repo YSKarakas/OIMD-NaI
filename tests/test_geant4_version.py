@@ -70,3 +70,81 @@ def test_version_key_is_usable_in_a_cache_key():
         pytest.skip("g4data not built")
     assert key and key != "unknown-geant4"
     assert "/" not in key and " " not in key
+
+
+# --------------------------------------------------------------------------- #
+# Macro binding
+# --------------------------------------------------------------------------- #
+
+@pytest.mark.geant4
+def test_macro_commands_actually_reach_the_geometry(tmp_path):
+    """Guard against silent macro-command failure.
+
+    G4GenericMessenger stores its property map under the declared name but looks
+    values up by the command's last path token. A nested declaration such as
+    "crystal/shape" therefore registers under a key that can never be found:
+    the command executes, reports no error, and changes nothing. That cost real
+    time to find, so the application echoes the geometry it actually built and
+    this test asserts the echo reflects deliberately non-default values.
+    """
+    import subprocess
+    from pathlib import Path
+
+    from scint.geant4 import geant4_env
+
+    repo = Path(__file__).resolve().parent.parent
+    binary = repo / "build" / "sim" / "scint_optical"
+    if not binary.exists():
+        pytest.skip(f"{binary} not built")
+
+    macro = tmp_path / "binding.mac"
+    macro.write_text(
+        "/scint/crystal/shape box\n"
+        "/scint/crystal/width 33.3 mm\n"
+        "/scint/crystal/height 44.4 mm\n"
+        "/scint/crystal/length 55.5 mm\n"
+        f"/scint/crystal/materialSpec {repo / 'materials' / 'NaI_Tl.dat'}\n"
+        "/scint/surface/treatment ground\n"
+        "/scint/surface/wrapping esr\n"
+        "/scint/surface/coupling glue\n"
+        "/run/initialize\n"
+    )
+    result = subprocess.run(
+        [str(binary), str(macro)], capture_output=True, text=True,
+        cwd=repo, env=geant4_env(), timeout=300,
+    )
+    echo = next((l for l in result.stdout.splitlines() if l.startswith("[geometry]")), "")
+    assert echo, f"no geometry echo; stderr tail:\n{result.stderr[-1500:]}"
+
+    for expected in ("box", "33.3", "44.4", "55.5", "ground/esr/glue", "groundvm2000glue"):
+        assert expected in echo, f"{expected!r} missing from geometry echo: {echo}"
+
+
+@pytest.mark.geant4
+def test_unsupported_surface_combination_is_refused_not_substituted(tmp_path):
+    """A wrapping Geant4 cannot model must stop the run, not quietly become another."""
+    import subprocess
+    from pathlib import Path
+
+    from scint.geant4 import geant4_env
+
+    repo = Path(__file__).resolve().parent.parent
+    binary = repo / "build" / "sim" / "scint_optical"
+    if not binary.exists():
+        pytest.skip(f"{binary} not built")
+
+    macro = tmp_path / "bad_surface.mac"
+    macro.write_text(
+        f"/scint/crystal/materialSpec {repo / 'materials' / 'NaI_Tl.dat'}\n"
+        "/scint/surface/treatment polished\n"
+        "/scint/surface/wrapping teflon\n"
+        "/scint/surface/coupling glue\n"   # Geant4 has no teflon+glue table
+        "/run/initialize\n"
+    )
+    result = subprocess.run(
+        [str(binary), str(macro)], capture_output=True, text=True,
+        cwd=repo, env=geant4_env(), timeout=300,
+    )
+    assert result.returncode != 0, "an unsupported wrapping must not run"
+    combined = result.stdout + result.stderr
+    assert "no look-up table" in combined

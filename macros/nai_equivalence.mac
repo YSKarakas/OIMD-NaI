@@ -1,0 +1,30 @@
+# Host-vs-container equivalence test.
+#
+# Same configuration, same seed, run under the local Geant4 (a beta) and under
+# the pinned 11.4.2 container. Agreement makes the container claim credible;
+# disagreement measures what changed between the beta and the release, which is
+# worth knowing either way. Note that the two installations also carry different
+# EM dataset versions (G4EMLOW 8.7 locally, 8.8 in the container).
+
+/random/setSeeds 20260912 1
+
+/scint/crystal/shape cylinder
+/scint/crystal/diameter 76.2 mm
+/scint/crystal/length 76.2 mm
+/scint/crystal/materialSpec materials/NaI_Tl.dat
+
+/scint/surface/treatment polished
+/scint/surface/wrapping teflon
+/scint/surface/coupling air
+/scint/surface/model lut
+
+/scint/coupling/type grease
+/scint/coupling/thickness 0.1 mm
+
+/scint/source/energy 662 keV
+/scint/source/offsetZ -200 mm
+
+/scint/output/format csv
+/run/initialize
+/process/optical/scintillation/setStackPhotons false
+/run/beamOn 20000

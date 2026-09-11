@@ -59,7 +59,9 @@ RUN set -eux; \
     cd / && rm -rf /tmp/g4
 
 ENV PATH=/opt/geant4/bin:$PATH
-ENV CMAKE_PREFIX_PATH=/opt/geant4:$CMAKE_PREFIX_PATH
+ENV CMAKE_PREFIX_PATH=/opt/geant4
+# Geant4 installs shared libraries outside the default loader path.
+ENV LD_LIBRARY_PATH=/opt/geant4/lib
 
 # Capture the dataset locations from the installation's own geant4.sh rather
 # than hard-coding version-numbered paths, which would go stale on an upgrade.

@@ -11,7 +11,7 @@ CeBr3,5.18,src_A,47000,src_A,25,src_A,370,src_A,4.0,src_A,10.0,yes,722,src_A,0.3
 LBC,4.90,src_A,57000,src_A,35,src_A,380,src_A,3.0,src_A,6.4,yes,,,,,"LaBr3-LaCl3 karisim ailesi"
 LYSO,7.20,src_A,30000,src_A,40,src_A,420,src_A,8.4,src_A,,no,2047,src_A,0.12,0.67,"176Lu oz-radyoaktivite; Lu2O3 ~$716/kg (Eyl 2026). DIKKAT: src_A'nin att88 degerleri (0.12/0.67) Geant4 hesabiyla %17-20 celisiyor ve Pr:LuAG satiriyla ayni - muhtemelen hatali. Bizim hesap 511 keV'de lambda=1.208 cm veriyor (PET literaturunun standart degeri). Makale 0 icin somut ornek."
 CsI:Tl,4.51,src_A,54000,src_A,900,src_A,550,src_A,6.5,src_A,12.0,slightly,621,src_A,0.23,1.25,"src_B ayni malzeme icin 61000 ph/MeV ve 1000 ns veriyor - TUTARSIZLIK"
-NaI:Tl,3.67,src_A,38000,src_A,250,src_A,415,src_A,7.0,src_A,9.0,yes,651,src_A,0.35,1.76,
+NaI:Tl,3.67,src_A,38000,src_A,250,src_A,415,src_A,7.0,src_A,9.0,yes,651,src_A,0.35,1.76,"TUTARSIZLIK: src_B ayni malzeme icin 41000 ph/MeV (%7.9 fark) ve 220ns(%96)+1500ns(%4) veriyor - src_A tek 250ns diyor. Bozunum yapisi bile farkli."
 BGO,7.13,src_A,10000,src_A,300,src_A,480,src_A,10.0,src_A,14.4,no,1044,src_A,0.08,0.43,"src_B ayni malzeme icin 8500 ph/MeV veriyor - TUTARSIZLIK. Ayrica src_A'nin att88@200keV degeri (0.43) Geant4 hesabiyla %6.9 celisiyor (bizim: 0.400); 100 keV tutuyor. X0 ve 511 keV zayiflama boyumuz PDG ve PET standardiyla <%1 uyusuyor."
 Ce:GAGG_ceramic,,,65000,src_C_S0925346720303098,,,,,,,,no,,,,,"Seramik; tek kristalden daha iyi afterglow/LY bildirildi"
 Cs2HfCl6,3.90,src_C_OSTI1802760,27000,src_C_OSTI1802760,,,,,,,,no,,,,,"Zeff=58; intrinsic; oz-radyoaktivite yok; higroskopik degil"

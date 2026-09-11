@@ -14,3 +14,5 @@ build/
 data/derived/
 # macOS
 .DS_Store
+runs_scratch/
+build/

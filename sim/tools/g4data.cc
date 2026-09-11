@@ -9,6 +9,7 @@
 //
 // Usage:
 //   g4data version
+//   g4data surfaces [--out <file.csv>]
 //   g4data elements --out <file.csv>
 //   g4data attenuation --name <label> --density <g/cm3> \
 //                      --massfrac "Sym:frac,Sym:frac,..." \
@@ -31,6 +32,8 @@
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4VModularPhysicsList.hh"
 #include "G4Version.hh"
+
+#include "SurfaceCatalogue.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
@@ -138,6 +141,45 @@ int PrintVersion() {
   return 0;
 }
 
+// Export the (treatment, wrapping, coupling) -> Geant4 finish mapping so that
+// the Python test suite can verify the grid is complete and that unsupported
+// combinations are refused rather than silently approximated.
+int DumpSurfaces(const std::map<G4String, G4String>& opts) {
+  std::ostringstream buffer;
+  buffer << "treatment,wrapping,coupling,supported,g4_finish,reason\n";
+
+  const char* treatments[] = {"polished", "etched", "ground"};
+  const char* wrappings[] = {"none", "lumirror", "teflon", "tio", "tyvek", "esr"};
+  const char* couplings[] = {"air", "glue"};
+
+  for (const char* t : treatments) {
+    for (const char* w : wrappings) {
+      for (const char* c : couplings) {
+        scint::SurfaceSpec spec{*scint::ParseTreatment(t), *scint::ParseWrapping(w),
+                                *scint::ParseCoupling(c)};
+        const scint::FinishResolution res = scint::ResolveFinish(spec);
+        buffer << t << "," << w << "," << c << "," << (res.supported ? "true" : "false") << ","
+               << res.name << ",\"" << res.reason << "\"\n";
+      }
+    }
+  }
+
+  const auto it = opts.find("out");
+  if (it == opts.end()) {
+    std::cout << buffer.str();
+    return 0;
+  }
+  std::ofstream f(it->second);
+  if (!f) {
+    std::cerr << "g4data: cannot write " << it->second << "\n";
+    return 1;
+  }
+  f << "# Surface finish catalogue exported from Geant4 " << CleanTag(G4Version) << "\n";
+  f << buffer.str();
+  std::cout << "g4data: wrote " << it->second << "\n";
+  return 0;
+}
+
 int DumpElements(const std::map<G4String, G4String>& opts) {
   const G4String out = Require(opts, "out");
   auto* nist = G4NistManager::Instance();
@@ -232,12 +274,13 @@ int DumpAttenuation(const std::map<G4String, G4String>& opts) {
 
 int main(int argc, char** argv) {
   if (argc < 2) {
-    std::cerr << "usage: g4data <version|elements|attenuation> [--opt value ...]\n";
+    std::cerr << "usage: g4data <version|surfaces|elements|attenuation> [--opt value ...]\n";
     return 2;
   }
   const G4String cmd = argv[1];
   if (cmd == "version") return PrintVersion();
   const auto opts = ParseArgs(argc, argv, 2);
+  if (cmd == "surfaces") return DumpSurfaces(opts);
   if (cmd == "elements") return DumpElements(opts);
   if (cmd == "attenuation") return DumpAttenuation(opts);
   std::cerr << "g4data: unknown command '" << cmd << "'\n";
