@@ -72,10 +72,31 @@ Requires Geant4 11.4.0, ROOT 6.36, CMake ≥ 3.20, a C++17 compiler, Python 3.12
 ```bash
 python3.12 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
+pip install -e . --config-settings editable_mode=compat
+cmake -S sim -B build/sim -DCMAKE_BUILD_TYPE=Release && cmake --build build/sim -j8
+./build/sim/g4data elements --out data/derived/atomic_data.csv
 ```
+
+`editable_mode=compat` is not optional: setuptools' default editable install uses an
+import-hook `.pth` that did not load at interpreter startup on this setup, so scripts
+failed to import `scint` while `python -c` appeared to work (it was picking the package
+up from the working directory). The compat mode writes a plain path entry instead.
 
 A pinned Docker image (`containers/Dockerfile`) reproduces the full toolchain; see
 `containers/README.md`.
+
+### Check your Geant4 before trusting a number
+
+```bash
+./build/sim/g4data version
+```
+
+`geant4-config --version` **cannot tell a beta from a release**: the beta of a series
+already carries the target `G4VERSION_NUMBER`, so both report e.g. `11.4.0`. Only the
+version *tag* discriminates. Every run records the tag and an `is_prerelease` flag in
+`env.json`, and `scripts/validate_layer0.py` prints a warning banner when the toolchain
+is a pre-release build. Attenuation caches are keyed by the tag, so results from one
+Geant4 build are never served to another.
 
 ## Licence
 

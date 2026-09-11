@@ -11,6 +11,7 @@ Run from the repository root:  ./.venv/bin/python scripts/validate_layer0.py
 from __future__ import annotations
 
 from scint.attenuation import attenuation_lengths_cm
+from scint.geant4 import version_info
 from scint.materials import Material, attenuation_depth_cm
 
 PDG = {
@@ -31,6 +32,15 @@ BENCHMARK = [
 
 
 def main() -> None:
+    info = version_info()
+    tag = info.get("tag") or info.get("config_version") or "unknown"
+    print(f"Geant4: {tag}   (reported by geant4-config as {info.get('config_version')})")
+    if info.get("is_prerelease"):
+        print()
+        print("!! This is a PRE-RELEASE Geant4 build. Results from it are for")
+        print("!! development only and must not be published. Rerun in the pinned")
+        print("!! container before quoting any number from this report.")
+    print()
     print("=" * 78)
     print("1. Shower quantities vs PDG Atomic and Nuclear Properties (2024)")
     print("=" * 78)

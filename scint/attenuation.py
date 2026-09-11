@@ -1,6 +1,6 @@
-"""Photon attenuation via Geant4, with an on-disk cache.
+"""Photon attenuation via Geant4, with a version-keyed on-disk cache.
 
-Attenuation coefficients are not computed in Python. They are obtained from the
+Attenuation coefficients are not computed in Python. They come from the
 ``g4data`` helper (``sim/tools/g4data.cc``), which queries Geant4's own EPICS2017
 cross sections through ``G4EmCalculator``. Two reasons:
 
@@ -10,60 +10,32 @@ cross sections through ``G4EmCalculator``. Two reasons:
 2. Consistency. The screening layer and the transport simulation then agree by
    construction; a discrepancy between them can never be a data-version artefact.
 
-Results are cached under ``data/derived/attenuation/`` keyed by a hash of the
-exact query, so repeated screening runs do not re-invoke Geant4.
+The cache key includes the Geant4 version tag, so results from one build are
+never served to another -- the exact mistake that a ``geant4-config`` version
+string, which cannot distinguish a beta from a release, would let through.
 """
 
 from __future__ import annotations
 
 import csv
 import hashlib
-import os
 import subprocess
 from collections.abc import Sequence
 from pathlib import Path
 
+from scint.geant4 import Geant4NotBuiltError, geant4_env, require_g4data, version_key
 from scint.materials import Material
 
+__all__ = ["Geant4NotBuiltError", "attenuation_lengths_cm", "geant4_env"]
+
 _REPO_ROOT = Path(__file__).resolve().parent.parent
-_G4DATA = _REPO_ROOT / "build" / "sim" / "g4data"
 _CACHE_DIR = _REPO_ROOT / "data" / "derived" / "attenuation"
-_GEANT4_DATA_ROOT = Path("/usr/local/share/Geant4/data")
-
-# Geant4 locates its datasets through these variables. geant4.sh does not survive
-# a non-interactive shell reliably, so they are set explicitly for the subprocess.
-_DATASET_ENV = {
-    "G4LEDATA": "G4EMLOW8.7",
-    "G4LEVELGAMMADATA": "PhotonEvaporation6.1",
-    "G4RADIOACTIVEDATA": "RadioactiveDecay6.1.2",
-    "G4PARTICLEXSDATA": "G4PARTICLEXS4.1",
-    "G4PIIDATA": "G4PII1.3",
-    "G4REALSURFACEDATA": "RealSurface2.2",
-    "G4SAIDXSDATA": "G4SAIDDATA2.0",
-    "G4ABLADATA": "G4ABLA3.3",
-    "G4INCLDATA": "G4INCL1.2",
-    "G4ENSDFSTATEDATA": "G4ENSDFSTATE3.0",
-    "G4NEUTRONHPDATA": "G4NDL4.7.1",
-    "G4CHANNELINGDATA": "G4CHANNELING1.0",
-}
-
-
-class Geant4NotBuiltError(RuntimeError):
-    """Raised when the g4data helper has not been compiled."""
-
-
-def geant4_env(base: dict[str, str] | None = None, data_root: Path | None = None) -> dict[str, str]:
-    """Return an environment with Geant4 dataset variables set explicitly."""
-    root = data_root or _GEANT4_DATA_ROOT
-    env = dict(base if base is not None else os.environ)
-    for var, directory in _DATASET_ENV.items():
-        env[var] = str(root / directory)
-    return env
 
 
 def _cache_key(material: Material, energies: Sequence[float]) -> str:
     payload = "|".join(
         [
+            version_key(),
             material.formula,
             f"{material.density_g_cm3!r}",
             material.massfrac_arg(),
@@ -84,19 +56,15 @@ def attenuation_lengths_cm(
     The attenuation length is the total photon mean free path, 1/mu, including
     coherent (Rayleigh) scattering -- the same convention as standard tabulations.
     """
-    if not _G4DATA.exists():
-        raise Geant4NotBuiltError(
-            f"{_G4DATA} not found. Build it with:\n"
-            "    cmake -S sim -B build/sim -DCMAKE_BUILD_TYPE=Release && cmake --build build/sim -j8"
-        )
-
+    binary = require_g4data()
     _CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    cache_file = _CACHE_DIR / f"{material.name}_{_cache_key(material, energies_mev)}.csv"
+    safe_name = material.name.replace(" ", "_").replace("/", "_")
+    cache_file = _CACHE_DIR / f"{safe_name}_{_cache_key(material, energies_mev)}.csv"
 
     if refresh or not cache_file.exists():
         cmd = [
-            str(_G4DATA), "attenuation",
-            "--name", material.name.replace(" ", "_"),
+            str(binary), "attenuation",
+            "--name", safe_name,
             "--density", repr(material.density_g_cm3),
             "--massfrac", material.massfrac_arg(),
             "--energies", ",".join(repr(e) for e in energies_mev),

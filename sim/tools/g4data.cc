@@ -8,6 +8,7 @@
 // download external cross-section tables.
 //
 // Usage:
+//   g4data version
 //   g4data elements --out <file.csv>
 //   g4data attenuation --name <label> --density <g/cm3> \
 //                      --massfrac "Sym:frac,Sym:frac,..." \
@@ -110,6 +111,33 @@ class Physics : public G4VModularPhysicsList {
 };
 
 // ---------- commands ----------
+
+// Strip the CVS-style "$Name: ... $" wrapper Geant4 keeps in its version tag.
+G4String CleanTag(const G4String& raw) {
+  const std::size_t start = raw.find(':');
+  const std::size_t end = raw.rfind('$');
+  if (start == G4String::npos || end == G4String::npos || end <= start + 1) return raw;
+  G4String inner = raw.substr(start + 1, end - start - 1);
+  const std::size_t first = inner.find_first_not_of(" \t");
+  const std::size_t last = inner.find_last_not_of(" \t");
+  if (first == G4String::npos) return raw;
+  return inner.substr(first, last - first + 1);
+}
+
+// geant4-config --version cannot distinguish a beta from a release: the beta of
+// a series already carries the target G4VERSION_NUMBER. The tag string is the
+// only reliable discriminator, so it is exported for the provenance record.
+int PrintVersion() {
+  std::cout << "{\n"
+            << "  \"version_number\": " << G4VERSION_NUMBER << ",\n"
+            << "  \"tag\": \"" << CleanTag(G4VERSION_TAG) << "\",\n"
+            << "  \"build_tag\": \"" << CleanTag(G4Version) << "\",\n"
+            << "  \"date\": \"" << G4Date << "\",\n"
+            << "  \"reference_tag\": " << G4VERSION_REFERENCE_TAG << "\n"
+            << "}\n";
+  return 0;
+}
+
 int DumpElements(const std::map<G4String, G4String>& opts) {
   const G4String out = Require(opts, "out");
   auto* nist = G4NistManager::Instance();
@@ -204,10 +232,11 @@ int DumpAttenuation(const std::map<G4String, G4String>& opts) {
 
 int main(int argc, char** argv) {
   if (argc < 2) {
-    std::cerr << "usage: g4data <elements|attenuation> [--opt value ...]\n";
+    std::cerr << "usage: g4data <version|elements|attenuation> [--opt value ...]\n";
     return 2;
   }
   const G4String cmd = argv[1];
+  if (cmd == "version") return PrintVersion();
   const auto opts = ParseArgs(argc, argv, 2);
   if (cmd == "elements") return DumpElements(opts);
   if (cmd == "attenuation") return DumpAttenuation(opts);

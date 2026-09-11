@@ -65,6 +65,16 @@ def _command_version(*cmd: str) -> str | None:
     return out.stdout.strip() if out.returncode == 0 else None
 
 
+def _geant4_version() -> dict[str, Any]:
+    """Version details from the Geant4 library itself, never fatal."""
+    try:
+        from scint.geant4 import version_info
+
+        return dict(version_info())
+    except Exception as exc:  # a provenance record must never block a run
+        return {"error": f"{type(exc).__name__}: {exc}"}
+
+
 def _installed_packages() -> dict[str, str]:
     try:
         from importlib.metadata import distributions
@@ -91,8 +101,12 @@ def capture_environment(seed: int | None = None) -> dict[str, Any]:
             "branch": _git("rev-parse", "--abbrev-ref", "HEAD"),
             "dirty": bool(status) if status is not None else None,
         },
+        # geant4-config alone is not enough: it reports the same version string
+        # for a series' beta and its release. scint.geant4.version_info reads the
+        # tag out of the library itself and flags pre-release builds.
         "geant4": {
-            "version": _command_version("geant4-config", "--version"),
+            **_geant4_version(),
+            "config_version": _command_version("geant4-config", "--version"),
             "prefix": _command_version("geant4-config", "--prefix"),
         },
         "root": {"version": _command_version("root-config", "--version")},
