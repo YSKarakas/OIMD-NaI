@@ -1,0 +1,16 @@
+# Run outputs — reproducible from configs, never committed
+runs/
+# Generated static site
+site/
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+# C++ / CMake
+build/
+# Derived data caches (regenerable)
+data/derived/
+# macOS
+.DS_Store

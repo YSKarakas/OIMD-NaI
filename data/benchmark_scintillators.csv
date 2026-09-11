@@ -1,0 +1,21 @@
+# Benchmark sintilatör referans tablosu - Makale 0 ve boru hattı doğrulaması için
+# HER DEGER KAYNAKLI. src_A = Bonesini arXiv:2505.06929 Tablo 1 (PDF'ten yerel cikarildi, 2026-09-11)
+# src_B = Roberts et al. arXiv:2403.02668 Tablo I (Geant4 optik parametreler, benchmark edilmis)
+# src_C = diger, sutunda belirtildi
+# BOS HUCRE = henuz dogrulanmadi. ASLA tahminle doldurma.
+material,density_g_cm3,density_src,LY_ph_per_MeV,LY_src,decay_ns,decay_src,peak_emission_nm,emission_src,eres_pct_662keV,eres_src,eres_pct_120keV,hygroscopic,melting_point_C,mp_src,att88pct_cm_100keV,att88pct_cm_200keV,notes
+Pr:LuAG,6.73,src_A,22000,src_A,20,src_A,310,src_A,4.3,src_A,,no,2043,src_A,0.12,0.65,
+Ce:GAGG,6.63,src_A,57000,src_A,88(91%)+258(9%),src_A,520,src_A,5.3,src_A,,no,1850,src_A,0.18,0.91,"Gd3Al2Ga3O12 - HEM Ga HEM Gd iceriyor (CRM riski)"
+LaBr3:Ce,5.08,src_A,75000,src_A,30,src_A,375,src_A,2.9,src_A,6.6,yes,1116,src_A,0.33,1.54,"138La oz-radyoaktivite"
+CeBr3,5.18,src_A,47000,src_A,25,src_A,370,src_A,4.0,src_A,10.0,yes,722,src_A,0.31,1.48,
+LBC,4.90,src_A,57000,src_A,35,src_A,380,src_A,3.0,src_A,6.4,yes,,,,,"LaBr3-LaCl3 karisim ailesi"
+LYSO,7.20,src_A,30000,src_A,40,src_A,420,src_A,8.4,src_A,,no,2047,src_A,0.12,0.67,"176Lu oz-radyoaktivite; Lu2O3 ~$716/kg (Eyl 2026)"
+CsI:Tl,4.51,src_A,54000,src_A,900,src_A,550,src_A,6.5,src_A,12.0,slightly,621,src_A,0.23,1.25,"src_B ayni malzeme icin 61000 ph/MeV ve 1000 ns veriyor - TUTARSIZLIK"
+NaI:Tl,3.67,src_A,38000,src_A,250,src_A,415,src_A,7.0,src_A,9.0,yes,651,src_A,0.35,1.76,
+BGO,7.13,src_A,10000,src_A,300,src_A,480,src_A,10.0,src_A,14.4,no,1044,src_A,0.08,0.43,"src_B ayni malzeme icin 8500 ph/MeV veriyor - TUTARSIZLIK"
+Ce:GAGG_ceramic,,,65000,src_C_S0925346720303098,,,,,,,,no,,,,,"Seramik; tek kristalden daha iyi afterglow/LY bildirildi"
+Cs2HfCl6,3.90,src_C_OSTI1802760,27000,src_C_OSTI1802760,,,,,,,,no,,,,,"Zeff=58; intrinsic; oz-radyoaktivite yok; higroskopik degil"
+CsCu2I3,5.01,src_C_ACS_ChemMater2023,36000,src_C_ACS_ChemMater2023,,,,,,,,no,,,,,"Zeff=50.6; toksik degil; cok dusuk afterglow"
+SrI2:Eu,,,115000,src_C_ACS_ChemMater,,,,,,,,yes,,,,,"Benchmark yuksek LY; higroskopik"
+CsI_cryogenic_104K,4.51,src_A,100000,src_C_arXiv2406.13598,,,,,6.3,src_C_arXiv2406.13598,,slightly,621,src_A,,,"~104 K; CTR 1.84 ns @511 keV; radyasyon boyu paritesinde 3-5x ucuz"
+PbWO4,,,,,,,,,,,,no,,,,,"CMS ECAL; LHC seviyelerinde LY kaybi %1.6-2.4 (arXiv:0912.4300)"
