@@ -1,0 +1,5 @@
+# Heavier dependencies, needed only for the composition-screening stage (Paper 1+).
+# Installed separately so the core pipeline stays quick to set up.
+-r requirements.txt
+pymatgen==2025.6.14
+mp-api==0.45.10

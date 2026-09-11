@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scint"
+version = "0.1.0"
+description = "Cost- and supply-risk-aware scintillator screening with Geant4 validation"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy",
+    "scipy",
+    "pandas",
+    "matplotlib",
+    "PyYAML",
+    "Jinja2",
+]
+
+[tool.setuptools]
+packages = ["scint"]
