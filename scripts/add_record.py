@@ -28,7 +28,8 @@ COLUMNS = [
     "arxiv_id", "doi", "journal_ref", "year", "material", "dopant",
     "ly_value", "ly_unit", "ly_uncertainty", "sample_form", "dimensions_mm",
     "surface_treatment", "wrapping", "coupling", "coupling_index",
-    "photodetector", "pde_stated", "reference_standard", "source_isotope",
+    "photodetector", "pde_stated", "reference_standard", "reference_material",
+    "reference_value_ph_per_MeV", "source_isotope",
     "source_energy_keV", "shaping_time_us", "temperature_K", "notes",
     "extracted_on",
 ]
@@ -48,6 +49,12 @@ VOCAB: dict[str, set[str]] = {
                  "not_stated"},
     "coupling": {"grease", "oil", "air", "glue", "gel", "unclear", "not_stated"},
     "pde_stated": {"yes", "no"},
+    # "absolute" means the paper calibrated its own photon counting rather than
+    # normalising to another crystal. Anything else names the crystal it was
+    # measured against, and reference_value_ph_per_MeV is what that crystal was
+    # assumed to be worth -- which is the number this survey exists to compare.
+    "reference_material": {"absolute", "NaI:Tl", "CsI:Tl", "BGO", "LYSO:Ce", "LSO:Ce",
+                           "YAP:Ce", "other", "not_stated"},
 }
 
 

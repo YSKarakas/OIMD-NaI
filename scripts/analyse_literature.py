@@ -83,6 +83,46 @@ def main() -> None:
     for r in relative:
         print(f"    {r['material']:<14} {r['arxiv_id']:<14} -> {r['reference_standard']}")
 
+    # The sharpest form of the problem, read from the structured columns rather
+    # than parsed out of prose: papers that calibrate against the same reference
+    # crystal do not agree on what that crystal is worth, so two yields quoted in
+    # the same unit were measured with different rulers.
+    #
+    # PUBLISHED is what the compilations and other papers in this project's own
+    # evidence base say for the same material. It is kept next to the assumed
+    # values because the comparison is the point.
+    PUBLISHED = {
+        "BGO": ["8000 (arXiv:1607.05486 Table I)", "8200 (arXiv:1308.3908, measured)",
+                "8500 (Roberts et al. arXiv:2403.02668)", "10000 (Bonesini arXiv:2505.06929)"],
+        "NaI:Tl": ["38000 (Bonesini; also arXiv:1308.3908, measured)",
+                   "40000 (ANAIS arXiv:1703.01262, cited)",
+                   "41000 (Roberts et al. arXiv:2403.02668)"],
+        "LYSO:Ce": ["32000 (arXiv:1607.05486 Table I, same paper)"],
+    }
+    assumed: dict[str, set[str]] = defaultdict(set)
+    for r in rows:
+        material = r.get("reference_material", "")
+        value = r.get("reference_value_ph_per_MeV", "")
+        if material and material not in {"absolute", "not_stated"} and value.isdigit():
+            assumed[material].add(value)
+
+    print()
+    print("=" * 74)
+    print("THE RULER ITSELF -- what the reference crystals were assumed to be worth")
+    print("=" * 74)
+    if not assumed:
+        print("  no relative measurements recorded yet")
+    for material in sorted(set(assumed) | set(PUBLISHED)):
+        values = sorted(assumed.get(material, set()), key=float)
+        if values:
+            lo, hi = float(values[0]), float(values[-1])
+            spread = f"   ({100 * (hi - lo) / lo:.0f} % spread)" if len(values) > 1 else ""
+            print(f"  {material}  assumed here as: {', '.join(values)} ph/MeV{spread}")
+        else:
+            print(f"  {material}")
+        for other in PUBLISHED.get(material, []):
+            print(f"      elsewhere published as {other}")
+
     print()
     print("=" * 74)
     print("SAME MATERIAL, DIFFERENT ANSWERS")
