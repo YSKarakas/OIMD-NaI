@@ -50,3 +50,12 @@
               notably higher, and that Dorenbos' theoretical ceiling is 60,000.
               Integration window is therefore a further axis on which one
               material has several published "light yields".
+2110.01992v2  Ca(Br,I)2 pulse-shape discrimination study. EXCLUDED as a
+              measurement: the light outputs it states (107,000 ph/MeV for CaI2,
+              51,000 for CaBrI, 79,000 for CaBrI:Eu) are carried over from the
+              group's earlier growth paper, not measured here. Worth noting for
+              the survey anyway: the crystals were "connected directly via
+              optical grease (6262A) WITHOUT REFLECTORS" -- an explicit statement
+              of no wrapping, which is rarer than it should be, and which makes
+              those yields not comparable with the wrapped measurements that
+              dominate the literature.
