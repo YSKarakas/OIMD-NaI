@@ -306,6 +306,95 @@ def report(rows: list[dict]) -> dict:
             "variants": {r["label"][4:]: r["lce_mean"] for r in sys_rows},
         }
 
+    # ------------------------------------------------------------------ #
+    # The arrangement's own optical inputs. The material scan above asks what
+    # the crystal's published properties cost; this asks the same question of
+    # the things a published measurement chooses -- how big the crystal is,
+    # what it is coupled with, how its surface was finished. Reporting one
+    # without the other would let a reader conclude that the crystal's
+    # properties dominate, which these runs are what decides.
+    scope_rows = sorted((r for r in rows if r["label"].startswith("SCOPE_")
+                         and r["label"] != "SCOPE_baseline"),
+                        key=lambda r: r["label"])
+    scope_base = by_label.get("SCOPE_baseline")
+    if scope_rows and scope_base:
+        print()
+        print("=" * 78)
+        print("ARRANGEMENT SCAN -- geometry, coupling and surface finish")
+        print("=" * 78)
+        sb = scope_base["lce_mean"]
+        print(f"  {'variant':<20} {'LCE':>9} {'+- sem':>9} {'vs baseline':>13}")
+        print(f"  {'baseline':<20} {sb:>9.4f} {scope_base['lce_sem']:>9.4f} {'--':>13}")
+        groups: dict[str, list[float]] = {}
+        for r in scope_rows:
+            name = r["label"][len("SCOPE_"):]
+            rel = 100 * (r["lce_mean"] - sb) / sb
+            print(f"  {name:<20} {r['lce_mean']:>9.4f} {r['lce_sem']:>9.4f} "
+                  f"{rel:>+12.2f} %")
+            groups.setdefault(name.split("_")[0], []).append(r["lce_mean"])
+
+        # The comparison that matters: is the crystal's optical model the
+        # biggest term, or did we simply not vary the others?
+        material_spread = verdicts.get("systematics", {}).get(
+            "defensible_spread_fraction")
+        print()
+        for family, label in (("geom", "geometry"), ("couple", "readout coupling"),
+                              ("finish", "surface finish")):
+            vals = groups.get(family)
+            if not vals:
+                continue
+            allv = vals + [sb]
+            print(f"  {label:<18} envelope {100 * (max(allv) - min(allv)) / sb:6.1f} % "
+                  f"of baseline  ({min(allv):.4f} .. {max(allv):.4f})")
+        if material_spread is not None:
+            print(f"  {'crystal optics':<18} envelope {100 * material_spread:6.1f} % "
+                  f"of baseline  (defensible models, from the scan above)")
+        print()
+        print("  Read this as scope, not as a ranking: the geometry entries are a")
+        print("  deliberate factor-four in size and the coupling entries span air to")
+        print("  index 1.57, so their envelopes are as wide as the choices made here.")
+        print("  What it establishes is that the crystal's optical model is not being")
+        print("  called dominant by default, having been the only thing varied.")
+
+        # The control pair. A smaller crystal collecting more light is consistent
+        # with the absorption edge removing light in proportion to optical path
+        # -- but a shorter path also means fewer reflector bounces, and the size
+        # comparison alone cannot tell the two apart. Repeating it with the bulk
+        # absorption made flat and long leaves only the non-absorption part.
+        by_scope = {r["label"][len("SCOPE_"):]: r["lce_mean"] for r in scope_rows}
+        if {"ctrl_flatabs_1inch", "ctrl_flatabs_3inch", "geom_1inch"} <= set(by_scope):
+            edge_ratio = by_scope["geom_1inch"] / sb
+            flat_ratio = (by_scope["ctrl_flatabs_1inch"]
+                          / by_scope["ctrl_flatabs_3inch"])
+            print()
+            print("  CONTROL -- is the size dependence really the absorption edge?")
+            print(f"    1\" / 3\" with the measured absorption edge   "
+                  f"{edge_ratio:.3f}")
+            print(f"    1\" / 3\" with flat 2000 mm absorption        "
+                  f"{flat_ratio:.3f}")
+            attributable = (edge_ratio - flat_ratio) / (edge_ratio - 1.0) \
+                if edge_ratio > 1.0 else float("nan")
+            print(f"    fraction of the size effect that disappears when the")
+            print(f"    absorption edge is removed                  "
+                  f"{100 * attributable:.0f} %")
+            verdicts.setdefault("scope_control", {}).update({
+                "size_ratio_edge": edge_ratio,
+                "size_ratio_flat": flat_ratio,
+                "absorption_attributable_fraction": attributable,
+            })
+
+        verdicts["scope"] = {
+            "baseline_lce": sb,
+            "baseline_sem": scope_base["lce_sem"],
+            "variants": {r["label"][len("SCOPE_"):]: r["lce_mean"]
+                         for r in scope_rows},
+            "sem": {r["label"][len("SCOPE_"):]: r["lce_sem"] for r in scope_rows},
+            "envelopes": {
+                family: (max(vals + [sb]) - min(vals + [sb])) / sb
+                for family, vals in groups.items()
+            },
+        }
+
     return verdicts
 
 

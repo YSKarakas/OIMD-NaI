@@ -8,6 +8,7 @@ overwriting the earlier result.
 
     python3 scripts/run_gates.py --set gates        # G2/G3 baseline + G4 wrappings
     python3 scripts/run_gates.py --set systematics  # the optical-input family
+    python3 scripts/run_gates.py --set scope        # geometry, coupling, finish
     python3 scripts/run_gates.py --set all
 
 Gates, and what each is actually testing:
@@ -84,7 +85,11 @@ BASE_GEOMETRY = {
         "coupling": "air",
         "model": "lut",
     },
-    "coupling": {"type": "grease", "thickness_mm": 0.1},
+    # The index is now explicit rather than left at the application's default,
+    # because it is one of the inputs this study varies: a light-collection
+    # correction that fixes the coupling while scanning the crystal is only
+    # half an answer.
+    "coupling": {"type": "grease", "rindex": 1.465, "thickness_mm": 0.1},
     # Detection efficiency is deliberately 1: this study separates light
     # COLLECTION from photodetector quantum efficiency, and mixing them is one of
     # the reasons published light yields are not comparable.
@@ -93,6 +98,49 @@ BASE_GEOMETRY = {
 }
 
 WRAPPINGS = ["none", "teflon", "lumirror", "tyvek", "tio", "esr"]
+
+# The arrangement's own optical inputs: geometry, readout coupling and surface
+# finish. The baseline for all of them is BASE_GEOMETRY, so each of these runs
+# differs from the baseline in exactly one thing, the same discipline the
+# material scan follows.
+#
+# Geometry is here because the absorption result depends on optical path
+# length: an absorption edge that costs a 76.2 mm crystal a great deal should
+# cost a 25.4 mm crystal much less, and if it does not, the model is wrong.
+# Coupling is here because a published measurement of the same crystal with and
+# without optical grease differs by about 80 %, so leaving it fixed while
+# calling the crystal's properties dominant would not be an argument.
+SCOPE_VARIANTS: dict[str, dict[str, dict]] = {
+    # The baseline itself, so the scan is self-contained. Making the coupling
+    # index explicit in BASE_GEOMETRY changed every configuration hash without
+    # changing any physics -- 1.465 is what DetectorConstruction.hh already
+    # defaulted to -- so this run also proves that: it must reproduce the
+    # earlier teflon light-collection efficiency exactly.
+    "baseline":      {},
+    # --- geometry, at fixed aspect ratio ---------------------------------
+    "geom_1inch":    {"crystal": {"diameter_mm": 25.4, "length_mm": 25.4}},
+    "geom_2inch":    {"crystal": {"diameter_mm": 50.8, "length_mm": 50.8}},
+    "geom_4inch":    {"crystal": {"diameter_mm": 101.6, "length_mm": 101.6}},
+    # --- geometry, at fixed diameter: path length alone -------------------
+    "geom_long":     {"crystal": {"length_mm": 152.4}},
+    "geom_short":    {"crystal": {"length_mm": 25.4}},
+    # --- readout coupling -------------------------------------------------
+    "couple_air":    {"coupling": {"type": "air", "rindex": 1.0}},
+    "couple_gel146": {"coupling": {"rindex": 1.46}},
+    "couple_n15":    {"coupling": {"rindex": 1.50}},
+    "couple_n157":   {"coupling": {"rindex": 1.57}},
+    # --- surface finish ---------------------------------------------------
+    "finish_ground": {"surface": {"treatment": "ground"}},
+}
+
+# The control pair described above. Keyed separately because they need a
+# different material file as well as an override, and because they are a
+# diagnostic rather than part of the scan proper.
+SCOPE_CONTROLS: dict[str, tuple[str, dict[str, dict]]] = {
+    "ctrl_flatabs_3inch": ("materials/variants/NaI_Tl_abs_flat2000.dat", {}),
+    "ctrl_flatabs_1inch": ("materials/variants/NaI_Tl_abs_flat2000.dat",
+                           {"crystal": {"diameter_mm": 25.4, "length_mm": 25.4}}),
+}
 
 # Bumped when the simulation's OUTPUT SCHEMA changes, so that runs made with a
 # different set of recorded observables get different identifiers instead of
@@ -115,11 +163,22 @@ def config_for(
     events: int,
     seed: int,
     wrapping: str | None = None,
+    overrides: dict[str, dict] | None = None,
 ) -> dict:
+    """Build one run configuration.
+
+    `overrides` is a shallow per-section update -- {"crystal": {"length_mm":
+    25.4}} -- so that a scan over geometry or coupling needs no new keyword
+    argument here. It is applied to the deep copy, so it changes the hash and
+    therefore the run identity, which is the point: a different configuration
+    must never reuse another one's results.
+    """
     cfg = json.loads(json.dumps(BASE_GEOMETRY))  # deep copy
     cfg["crystal"]["material_spec"] = material_spec
     if wrapping is not None:
         cfg["surface"]["wrapping"] = wrapping
+    for section, values in (overrides or {}).items():
+        cfg[section].update(values)
     # The label is deliberately NOT part of the configuration: the run id is a
     # hash of the physics, so two gates that ask for the same physics resolve to
     # the same run and the second is reused rather than recomputed.
@@ -148,6 +207,7 @@ def macro_for(cfg: dict, output_stem: Path) -> str:
 /scint/surface/model {s['model']}
 
 /scint/coupling/type {k['type']}
+/scint/coupling/rindex {k['rindex']}
 /scint/coupling/thickness {k['thickness_mm']} mm
 
 /scint/readout/efficiency {r['efficiency']}
@@ -220,12 +280,29 @@ def gather(set_name: str, events: int, seed: int) -> list[dict]:
                 material_spec=str(spec.relative_to(ROOT)),
                 events=events, seed=seed,
             ))
+    if set_name in ("scope", "all"):
+        # Everything in SCOPE_VARIANTS is an optical input of the arrangement
+        # rather than of the crystal. They are scanned for the same reason the
+        # material properties are: a study that varies the crystal's optical
+        # properties while holding the surface, the coupling and the geometry
+        # fixed cannot say the crystal's properties are what matters.
+        for label, overrides in SCOPE_VARIANTS.items():
+            configs.append(config_for(
+                label=f"SCOPE_{label}", material_spec="materials/NaI_Tl.dat",
+                events=events, seed=seed, overrides=overrides,
+            ))
+        for label, (spec, overrides) in SCOPE_CONTROLS.items():
+            configs.append(config_for(
+                label=f"SCOPE_{label}", material_spec=spec,
+                events=events, seed=seed, overrides=overrides,
+            ))
     return configs
 
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--set", default="all", choices=["gates", "systematics", "all"])
+    ap.add_argument("--set", default="all",
+                    choices=["gates", "systematics", "scope", "all"])
     ap.add_argument("--events", type=int, default=2000)
     ap.add_argument("--seed", type=int, default=20260912)
     ap.add_argument("--jobs", type=int, default=6)
