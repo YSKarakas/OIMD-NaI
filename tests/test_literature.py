@@ -107,3 +107,34 @@ def test_extracted_papers_were_all_in_the_screened_corpus():
         assert base in corpus, (
             f"{row['arxiv_id']} was extracted but is not in the screened corpus"
         )
+
+
+def test_no_record_hedges_its_own_value():
+    """A caveat in a notes field is still a number in a data file.
+
+    Three rows were entered in one session with the doubt written into the notes
+    -- "placeholder for the order of magnitude", "do not use until re-read" --
+    and each had to be removed again. The analysis does not read notes, so a
+    hedged row counts exactly like a confident one. Uncertain values go to
+    ly_records.csv.pending; add_record.py now refuses them, and this checks the
+    file directly in case a row arrives by some other route.
+    """
+    add_record = _module("add_record")
+    for i, row in enumerate(rows(), start=1):
+        lowered = row["notes"].lower()
+        for hedge in add_record.HEDGES if hasattr(add_record, "HEDGES") else (
+            "provisional", "placeholder", "do not use", "needs re-read",
+        ):
+            assert hedge not in lowered, (
+                f"row {i} ({row['arxiv_id']}, {row['material']}) hedges its own "
+                f"value with {hedge!r} -- it belongs in the pending file"
+            )
+
+
+def test_pending_file_exists_and_explains_itself():
+    """Deferrals must be recorded, or "not extracted" is indistinguishable from
+    "not noticed"."""
+    pending = ROOT / "data" / "literature" / "ly_records.csv.pending"
+    assert pending.exists()
+    text = pending.read_text()
+    assert "NOT recorded" in text or "EXCLUDED" in text

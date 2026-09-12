@@ -58,6 +58,12 @@ VOCAB: dict[str, set[str]] = {
 }
 
 
+# Words that mean the extractor is not sure. A row carrying any of them is
+# refused: uncertainty belongs in ly_records.csv.pending, where nothing counts it.
+HEDGES = ("provisional", "placeholder", "do not use", "needs re-read",
+          "needs re-reading", "before this row is used", "not established")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     for column in COLUMNS:
@@ -67,7 +73,20 @@ def main() -> None:
     args = vars(ap.parse_args())
     args["extracted_on"] = dt.date.today().isoformat()
 
+    # A value the extractor is unsure of does not belong here at all. Three times
+    # in one session a row was entered with the uncertainty written into the
+    # notes -- "placeholder for the order of magnitude", "do not use until
+    # re-read" -- and each had to be taken out again. A caveat in a notes field
+    # is still a number in a data file, and the analysis does not read notes.
+    # Put it in ly_records.csv.pending instead.
     problems = []
+    lowered = f"{args['notes']} {args['ly_value']}".lower()
+    for hedge in HEDGES:
+        if hedge in lowered:
+            problems.append(
+                f"notes contain {hedge!r}: a value you are not sure of belongs in "
+                "data/literature/ly_records.csv.pending, not in the records file"
+            )
     for field, allowed in VOCAB.items():
         if args[field] not in allowed:
             problems.append(f"{field}={args[field]!r} not one of {sorted(allowed)}")

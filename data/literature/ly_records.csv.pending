@@ -59,3 +59,10 @@
               of no wrapping, which is rarer than it should be, and which makes
               those yields not comparable with the wrapped measurements that
               dominate the literature.
+2110.06618v1  GAGG(Ce) response to charged particles. NOT recorded: the 40,000
+              ph/MeV in the text is the value the paper quotes for NaI(Tl) as a
+              comparison, not the GAGG(Ce) yield this work measures. Needs
+              re-reading. Worth returning to: the crystal surface is FROSTED and
+              wrapped in 65 micron ESR film, and the shaping time is scanned
+              over 0.5, 1.0 and 2.0 microseconds rather than fixed -- both axes
+              this survey cares about, both explicitly reported.
