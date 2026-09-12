@@ -207,3 +207,12 @@
               direct contact without the use of optical grease", and wrapped in
               100 micron aluminized Mylar -- both stated, which is more than
               most.
+1612.05507v1  A new technique for infrared scintillation measurements,
+              Pr:LuYAG. NOT recorded: the yield is obtained by luminescence
+              comparison against a Pr:(Lu,Y)3Al5O12 reference whose assumed
+              value is not given in the sections read. The paper's premise is
+              itself on-theme -- that the VISIBLE light yield quoted for such a
+              device depends on the PMT's spectral response, and that infrared
+              emission is simply missed by conventional photodetectors.
+2409.17002v1  Nonreciprocal scintillation with magneto-optical photonic
+              crystals. EXCLUDED: theoretical, no measured crystal.
