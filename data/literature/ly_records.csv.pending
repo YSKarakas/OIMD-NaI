@@ -180,3 +180,30 @@
               what is measured.
 2504.16421v3  GAGG time-of-flight beam monitor. NOT recorded: a detector
               development paper, no absolute yield measured.
+2102.08499v5  "Test Beam Study of SiPM-on-Tile Configurations", Fermilab.
+              EXCLUDED from the records: the tiles are PLASTIC (polystyrene
+              SCSN-81 and polyvinyltoluene EJ-200), outside a protocol about
+              inorganic crystals. But it is the strongest methodological support
+              in the corpus for this project's premise, because it varies
+              exactly the parameters this study varies and measures the result:
+                * ESR against Tyvek changes the light yield by a FACTOR OF 2 TO 4,
+                  depending on the other tile parameters;
+                * light yield is approximately inversely proportional to the
+                  SQUARE ROOT OF THE TILE AREA -- an explicit measured geometric
+                  scaling law;
+                * light yield rises much less than linearly with thickness, by an
+                  amount that itself depends on size and wrapping;
+                * the hole diameter in the reflective wrapper matters, because
+                  fewer photons reflect back through a larger gap;
+                * a section is devoted to the REPRODUCIBILITY of the optical
+                  coupling, with responses within 10 percent of the average.
+              And their Geant4 optical simulation "agrees well with the light
+              yield and uniformity measured in test beam data across the
+              different tiles" -- evidence that the simulated correction this
+              project depends on can be made to work when the inputs are known.
+2308.01148v1  PbF2 beam test. EXCLUDED: PbF2 is a Cherenkov radiator rather than
+              a scintillator here, and no yield is reported. Noted for one
+              detail: the crystals were "optically coupled to the SiPMs by
+              direct contact without the use of optical grease", and wrapped in
+              100 micron aluminized Mylar -- both stated, which is more than
+              most.
