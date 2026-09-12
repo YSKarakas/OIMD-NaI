@@ -136,3 +136,20 @@
               the literature; this work measures thermally stimulated
               luminescence. Samples were 5x5x1 mm plates polished to optical
               grade.
+#
+# Bulk exclusion: noble-liquid and noble-gas scintillators. These report real
+# absolute yields but are outside the protocol, which is about solid inorganic
+# scintillators where geometry, surface finish and wrapping are the variables
+# under study. A liquid has no surface treatment to report.
+0803.2888v1   liquid xenon        EXCLUDED (not a solid)
+1004.0373v3   liquid argon        EXCLUDED (not a solid)
+1102.1825v2   gaseous/liquid Ar   EXCLUDED (not a solid)
+1204.0580v2   gaseous/liquid Ar   EXCLUDED (not a solid)
+1308.3658v2   liquid argon        EXCLUDED (not a solid)
+1410.6496v1   liquid argon        EXCLUDED (not a solid)
+1110.6370v2   liquid argon        EXCLUDED (not a solid; an analytic LY estimate)
+1212.4050v1   high-pressure xenon EXCLUDED (not a solid)
+1301.6403v3   LAB liquid scint.   EXCLUDED (organic liquid)
+1210.6734v1   air fluorescence    EXCLUDED (not a scintillator crystal at all --
+                                  the 5.61 photons/MeV is the fluorescence yield
+                                  of nitrogen in air)
