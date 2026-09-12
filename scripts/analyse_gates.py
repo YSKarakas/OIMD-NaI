@@ -88,6 +88,10 @@ def summarise(run) -> dict | None:
         "material": run.config["crystal"]["material_spec"],
         "wrapping": run.config["surface"]["wrapping"],
         "events": run.config["run"]["events"],
+        # Runs made with different recorded observables are kept apart: they are
+        # the same physics but not the same dataset, and averaging them would
+        # hide the fact that only the later schema can answer some questions.
+        "schema": int(run.config["run"].get("schema", 1)),
         "photopeak_events": int(n),
         "yield_ratio_mean": float(ratio.mean()),
         "yield_ratio_sem": float(ratio.std(ddof=1) / math.sqrt(ratio.size)),
@@ -242,10 +246,15 @@ def report(rows: list[dict]) -> dict:
                     continue
                 print(f"  {name:<22} {gen_nm:>9.2f} {det_nm:>9.2f} {det_nm - gen_nm:>+9.2f} nm")
 
-        print(f"\n  spread over published practice  {100 * spread:.1f} % of baseline LCE")
+        print(f"\n  spread over published practice  {100 * spread:.1f} % of baseline LCE"
+              f"   [{len(values)} variants]")
         print("    (includes the flat absorption lengths that appear in the literature)")
-        print(f"  spread over defensible models   {100 * defensible_spread:.1f} % of baseline LCE")
+        print(f"  spread over defensible models   {100 * defensible_spread:.1f} % of baseline LCE"
+              f"   [{len(defensible)} variants]")
         print("    (flat absorption dropped: the 365 nm transmittance measurement excludes it)")
+        if len(values) < 11:
+            print("    NOTE: this is a SUBSET of the variant family, so these spreads are")
+            print("    narrower than the full scan by construction -- not a different answer.")
         print("  Neither is reducible by running more events. Both measure what the state")
         print("  of the published optical inputs costs, not what the simulation costs.")
         verdicts["systematics"] = {
@@ -261,12 +270,23 @@ def report(rows: list[dict]) -> dict:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--json", type=Path, default=None)
+    ap.add_argument("--schema", type=int, default=None,
+                    help="analyse only runs with this output schema (default: the newest "
+                         "schema that has a baseline run)")
     args = ap.parse_args()
 
     rows = [s for s in (summarise(run) for run in iter_runs(RUNS_DIR)) if s]
     if not rows:
         raise SystemExit(f"no completed runs under {RUNS_DIR}")
-    print(f"{len(rows)} completed runs\n")
+
+    available = sorted({r["schema"] for r in rows})
+    schema = args.schema if args.schema is not None else max(available)
+    chosen = [r for r in rows if r["schema"] == schema]
+    if not chosen:
+        raise SystemExit(f"no runs with schema {schema}; available: {available}")
+    print(f"{len(chosen)} completed runs, output schema {schema} "
+          f"(schemas on disk: {available})\n")
+    rows = chosen
     verdicts = report(rows)
 
     if args.json:
