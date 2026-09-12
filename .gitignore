@@ -35,3 +35,8 @@ paper/*.spl
 paper/*.toc
 paper/*.synctex.gz
 paper/build.log
+
+# Elsevier's Guide for Authors, kept locally while preparing the submission.
+# Third-party copyrighted material: it must not travel with a repository that
+# is going to be published and archived under a DOI.
+Guide for authors*.pdf
