@@ -1,0 +1,52 @@
+# Papers read but not yet recorded, and why. Kept so that "not extracted" is a
+# decision on the record rather than an oversight.
+#
+2103.13106v2  PbWO4, 4 crystals 25x25x10 mm3, in the LCE-correcting subset.
+              Text gives yields only as "few hundred photons/MeV"; per-crystal
+              values are in a table that needs re-reading. A placeholder was
+              briefly entered and removed: no guessed number belongs in the
+              records file. Notable regardless -- only the COUPLING FACE is
+              stated to be polished, the other five faces are not described, and
+              the crystals are attached to the photocathode without the coupling
+              medium being named.
+1806.02461v2  SoLid detector optimisation. EXCLUDED at full text: the
+              scintillator is PVT plastic, which the protocol excludes. The
+              title/abstract screen did not catch it.
+1411.6246v1   CsI cryogenic study. EXCLUDED at full text: quotes other people's
+              absolute yields (60,000 and 100,000 ph/MeV) but measures only
+              relative temperature dependence.
+0910.4414v1   CaWO4 non-proportionality. EXCLUDED: relative light yield in keVee
+              at millikelvin temperatures, no absolute photon yield.
+0805.2446v1   PANDA PWO thesis. EXCLUDED: the 10 and 20 phe/MeV figures are
+              quoted as "approximate properties" of the supplied crystals, not
+              measured in the work.
+1203.1172v2   NaI and NaI(Tl) at low temperature. EXCLUDED: light yield reported
+              only relative to its own room-temperature value.
+2605.28414v1  GYGAG / Gd2-xYxSi2O7 ceramics for neutrinoless double beta decay.
+              NOT recorded: the ~57,000 photons/MeV figure appears as motivation
+              quoted from the literature for GPS, and I could not establish from
+              the sections read that the ceramic samples of this work were
+              measured to it. Attributing it would be a guess. Worth returning
+              to -- the paper is otherwise informative, and notes that the Teflon
+              tape was REMOVED from the top surface for the alpha measurements,
+              so one crystal was measured in two reflector configurations within
+              a single paper.
+1509.07822v2  Cs2NaRBr3I3 elpasolites. NOT recorded yet: the light yield was
+              measured by coupling a sample to a Hamamatsu R6321-100 PMT and
+              recording pulse-height spectra, but the sections read do not say
+              what it was normalised against. Needs the reference standard
+              before a row can be honest about reference_material.
+2408.11070v1  Sc/Y silicate, intrinsic RL 12,000 ph/MeV. NOT recorded yet: same
+              reason -- the normalisation is not established from the sections
+              read. The paper is separately interesting because its subject is
+              that the yield DEPENDS ON EXCITATION DENSITY (a 20x beam flux
+              change shifts it), which is another axis on which a single
+              "light yield" is not a single number.
+1612.06071v2  CsI(Na) at low temperature. EXCLUDED: absolute yields quoted are
+              other people's (under 5,000 ph/MeV at RT, 100,000 at 77 K).
+2410.09371v1  Thin GAGG:Ce plates. NOT recorded yet, but note for the paper: it
+              states LuAG:Ce measured "within the 1 microsecond time window is
+              as low as 12,500 ph/MeV" while the integrated radioluminescence is
+              notably higher, and that Dorenbos' theoretical ceiling is 60,000.
+              Integration window is therefore a further axis on which one
+              material has several published "light yields".
