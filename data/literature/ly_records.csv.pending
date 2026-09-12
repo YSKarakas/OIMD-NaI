@@ -169,3 +169,14 @@
               for the material class, and the work measures temperature
               dependence. Setup well described though: 3-inch Hamamatsu 6233-100
               super-bialkali PMT, packaged crystal coupled with optical grease.
+2409.10823v1  UV cross-luminescence in ternary chlorides. NOT recorded: reports
+              emission and timing rather than an absolute yield. Setup states a
+              1 microsecond shaping time and optical coupling to an R7207-01 PMT.
+2607.00112v1  Fast bright scintillators for ultrafast X-ray diagnostics. NOT
+              recorded: a system-level review of converters. Its framing is
+              close to this project's: "At the system level, the problem is
+              inherently coupled", and it lists the optical windows, their
+              refractive index and thickness among the things that determine
+              what is measured.
+2504.16421v3  GAGG time-of-flight beam monitor. NOT recorded: a detector
+              development paper, no absolute yield measured.
