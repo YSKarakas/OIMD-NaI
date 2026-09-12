@@ -66,3 +66,37 @@
               wrapped in 65 micron ESR film, and the shaping time is scanned
               over 0.5, 1.0 and 2.0 microseconds rather than fixed -- both axes
               this survey cares about, both explicitly reported.
+1904.03640v2  Ce:La-GPS pulse-shape discrimination. EXCLUDED as a measurement:
+              Table 1 is headed "Basic properties of La-GPS:Ce [5]" and is
+              cited, not measured here. Kept in the notes because of HOW it is
+              cited: the light output of the material is given as a RANGE,
+              "38,000 - 48,000 photons/MeV", a 26 percent band presented as a
+              basic property of the material. The setup is otherwise well
+              described (Hamamatsu R9869 PMT, Shin-Etsu KF-96H-100 optical
+              grease).
+2507.09765v2  CRYSP total-body PET with cryogenic CsI. NOT recorded: a design
+              and simulation paper rather than a yield measurement. Useful for
+              its explicitness about geometry: monolithic crystals 48x48x37 mm3,
+              ALL surfaces polished, FIVE OF SIX faces wrapped in PTFE for
+              reflectivity above 95 percent, and the wrapping itself adds about
+              2 mm to the transverse dimensions. The authors state plainly that
+              "full wrapping with a good reflector is a must for energy
+              resolution".
+2001.06672v1  Ce and Pr doped lutetium silicates, trapping study. NOT recorded:
+              the 26,000-30,000 ph/MeV quoted is background from the literature,
+              and the work measures trapping rather than absolute yield.
+2203.13322v1  Blue-emitting scintillating fibres, timing study. EXCLUDED: no
+              absolute yield; fibres are diamond polished and read by SiPMs.
+1710.11233v3  Light guides and wavelength-shifting plates for liquid argon.
+              EXCLUDED: the 40,000 photons/MeV figure is an ASSUMED input to
+              simulations, cited to four references, not a measurement.
+2609.09640v1  Simulated gamma spectroscopy with CeBr3. EXCLUDED as a
+              measurement, but a clean illustration of the circularity this
+              survey is about: it SETS the intrinsic yield to 6.0e4 photons/MeV
+              because that is "reported for bare crystals", then models the
+              crystal with a PTFE-like diffuse wrapping of about 94 percent
+              reflectivity. A simulation takes a published yield as input; the
+              published yield depended on somebody's wrapping.
+1008.2175v1   Structure and optical properties of halide scintillators.
+              EXCLUDED: an electronic-structure paper; the ~100,000 ph/MeV and
+              55,000 ph/MeV figures are quoted from others.
