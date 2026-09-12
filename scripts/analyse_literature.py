@@ -97,13 +97,20 @@ def main() -> None:
         "NaI:Tl": ["38000 (Bonesini; also arXiv:1308.3908, measured)",
                    "40000 (ANAIS arXiv:1703.01262, cited)",
                    "41000 (Roberts et al. arXiv:2403.02668)"],
-        "LYSO:Ce": ["32000 (arXiv:1607.05486 Table I, same paper)"],
+        "LYSO:Ce": ["26000 (arXiv:1309.3736, simulation input)",
+                    "32000 (arXiv:1607.05486 Table I, same paper that assumes 33000)"],
+        "GSO:Ce": ["11000 (arXiv:2104.07568, assumed)",
+                   "12500 (arXiv:1607.05486 Table I)"],
     }
     assumed: dict[str, set[str]] = defaultdict(set)
     for r in rows:
         material = r.get("reference_material", "")
         value = r.get("reference_value_ph_per_MeV", "")
-        if material and material not in {"absolute", "not_stated"} and value.isdigit():
+        # "other" is a bucket of DIFFERENT reference materials, so a spread
+        # computed across it would compare a plastic scintillator with a
+        # silicate and report a meaningless number. Those rows are listed
+        # individually below instead.
+        if material and material not in {"absolute", "not_stated", "other"} and value.isdigit():
             assumed[material].add(value)
 
     print()
@@ -122,6 +129,14 @@ def main() -> None:
             print(f"  {material}")
         for other in PUBLISHED.get(material, []):
             print(f"      elsewhere published as {other}")
+
+    others = [(r["material"], r["reference_standard"]) for r in rows
+              if r.get("reference_material") == "other"]
+    if others:
+        print("\n  references outside the common set (listed, not pooled --")
+        print("  a spread across different materials would mean nothing):")
+        for material, standard in sorted(set(others)):
+            print(f"    {material:<26} -> {standard}")
 
     print()
     print("=" * 74)

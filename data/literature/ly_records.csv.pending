@@ -100,3 +100,39 @@
 1008.2175v1   Structure and optical properties of halide scintillators.
               EXCLUDED: an electronic-structure paper; the ~100,000 ph/MeV and
               55,000 ph/MeV figures are quoted from others.
+1611.05862v1  Lead halide perovskite X-ray scintillation. NOT recorded: the
+              ~9,000 photons/MeV for (EDBE)PbCl4 at 300 K is derived from a
+              pulse-height spectrum described in Supplementary Fig. S7, which is
+              not in the arXiv text, so the calibration standard cannot be
+              established from what is available. The paper also reports
+              >120,000 photons/MeV at low temperature.
+2202.09154v2  Visible-light emission in liquid argon. NOT recorded: a liquid,
+              not a solid crystal, and outside the protocol.
+1702.07614v2  "Non proportionality dependence on shaping time", CdWO4, BGO and
+              NaI(Tl). EXCLUDED as a yield measurement -- it reports RELATIVE
+              light yield curves, not absolute ph/MeV -- but it is the strongest
+              single citation for one column of this survey. Its whole subject
+              is that the shaping time used to process the scintillation signal
+              CHANGES the measured non-proportionality curve, and with it the
+              attainable energy resolution; the effect goes in opposite
+              directions for iodide and oxide crystals. Twenty-nine percent of
+              the records extracted here do not state a shaping time.
+1709.04020v2  Undoped CsI at cryogenic temperatures. NOT recorded: the yields are
+              given as "detected photons/keV" on a figure axis rather than in the
+              text, and are a detected rather than an intrinsic quantity. Method
+              worth citing though: multiple photon counting coincidence (MPCC),
+              which the authors present precisely as "measurement of the light
+              yield INDEPENDENT OF ANY SHAPING TIME of the pulse" -- an explicit
+              attempt to remove one of the axes this survey counts. All sides
+              polished, Hamamatsu R7056 PMTs, no optical filters.
+1309.3736v1   LYSO pixel simulation study. EXCLUDED as a measurement: it takes
+              LYSO:Ce at 26,000 photons/MeV as a simulation INPUT. Note the
+              number: with 32,000 in the table of arXiv:1607.05486 and 33,000
+              assumed in that paper's own text, LYSO -- the reference crystal
+              that a whole group's yields are normalised to -- appears at 26,000,
+              32,000 and 33,000 ph/MeV across three papers, a 27 percent spread.
+1211.1256v1   Ce-doped (Lu,Y,Gd)3(Ga,Al)5O12 trapping study. NOT recorded: the
+              25,000 ph/MeV mentioned is quoted for heavily Ce-doped LuAG from
+              the literature; this work measures thermally stimulated
+              luminescence. Samples were 5x5x1 mm plates polished to optical
+              grade.
