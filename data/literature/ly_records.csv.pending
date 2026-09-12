@@ -153,3 +153,19 @@
 1210.6734v1   air fluorescence    EXCLUDED (not a scintillator crystal at all --
                                   the 5.61 photons/MeV is the fluorescence yield
                                   of nitrogen in air)
+2308.06759v1  Non-linearity of the gamma-ray response. NOT recorded as a yield:
+              the ~50,000 photons/MeV quoted is background for the material, and
+              the work measures proportionality. Useful for the taxonomy it
+              gives: "excess" scintillators whose yield rises around 100 keV,
+              "deficit" ones such as LSO:Ce that drop sharply below 100 keV, and
+              "quasi-proportional" ones such as LaBr3:Ce within a few percent.
+              A single light yield quoted at 662 keV says nothing about any of
+              this.
+2101.03264v1  Undoped cryogenic CsI response to nuclear recoils. NOT recorded:
+              reports light yield ratios between nuclear recoils and electrons,
+              not an absolute photon yield.
+1912.11504v1  Tl2LiYCl6:Ce thermal characterisation. NOT recorded: the
+              20,000-60,000 photons/MeV in the introduction is a range quoted
+              for the material class, and the work measures temperature
+              dependence. Setup well described though: 3-inch Hamamatsu 6233-100
+              super-bialkali PMT, packaged crystal coupled with optical grease.

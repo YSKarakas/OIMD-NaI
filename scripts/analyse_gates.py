@@ -198,6 +198,31 @@ def report(rows: list[dict]) -> dict:
         for r in order:
             rel = f"{r['lce_mean'] / bare['lce_mean']:.3f}x" if bare else "n/a"
             print(f"  {r['wrapping']:<12} {r['lce_mean']:>9.4f} {r['lce_sem']:>9.4f} {rel:>10}")
+        # An external control for the ordering, from the literature survey.
+        # arXiv:1602.02983 measured ONE undoped CsI crystal with three different
+        # wrappings, which is the controlled comparison this gate needs and which
+        # simulation alone cannot provide. Their numbers are photoelectrons per
+        # MeV on a different material and a different geometry, so only the
+        # ORDER and the rough size of the steps are comparable -- not the values.
+        MEASURED = {
+            "aluminium": 79.0,   # specular metal
+            "tyvek": 89.0,
+            "teflon": 91.0,
+        }
+        print()
+        print("  measured on one CsI crystal by arXiv:1602.02983, for comparison:")
+        base = MEASURED["aluminium"]
+        for name, value in sorted(MEASURED.items(), key=lambda kv: -kv[1]):
+            print(f"    {name:<12} {value:>9.0f} p.e./MeV  {value / base:.3f}x aluminium")
+        ours = {r["wrapping"]: r["lce_mean"] for r in wraps.values()}
+        if "teflon" in ours and "tyvek" in ours:
+            theirs = MEASURED["teflon"] / MEASURED["tyvek"]
+            mine = ours["teflon"] / ours["tyvek"]
+            print(f"    teflon/tyvek: measured {theirs:.3f}, simulated here {mine:.3f}")
+            print("    Same sign. The measured gap is the larger one, and our two")
+            print("    diffuse reflectors sit closer together than theirs do.")
+        print()
+
         if bare is None:
             # Distinguish "the reference point could not be computed" from "the
             # reflectors lost". The unwrapped configuration is not tractable here:
@@ -207,10 +232,13 @@ def report(rows: list[dict]) -> dict:
             # removes them. Three attempts (3000, 250 and 25 events) were all
             # abandoned; the same crystal with a Teflon wrap runs at 0.65 s/event.
             print("  VERDICT                       INCOMPLETE -- no unwrapped reference")
-            print("  The bare polished crystal could not be simulated to any useful")
-            print("  statistics (see the kill_reason in its run directory). The ordering")
-            print("  among the reflectors below stands on its own; the comparison against")
-            print("  bare does not, and is NOT claimed.")
+            print("  This run set has no bare-crystal point. Under the look-up-table")
+            print("  surface model it could not be produced at all: Geant4 ships no table")
+            print("  for a bare surface and hangs instead of saying so. That is fixed --")
+            print("  bare surfaces are now resolved analytically and run in 108 s -- so a")
+            print("  newer schema has the point. Analyse that schema for a verdict; the")
+            print("  ordering among the reflectors here stands on its own, but the")
+            print("  comparison against bare is NOT claimed from this set.")
             ok = None
         else:
             ok = all(r["lce_mean"] > bare["lce_mean"]
