@@ -30,6 +30,16 @@ G4  LIGHT-COLLECTION ORDERING.  LCE across the supported wrappings.  Absolute LC
     a specular reflector (ESR) and diffuse reflectors (Teflon, Lumirror, Tyvek,
     TiO2) must all collect more light than an unwrapped crystal.
 
+    What "unwrapped" means here needs saying, because it is not obviously the
+    worst case. The crystal is POLISHED and the world is air, so a photon outside
+    the critical angle is totally internally reflected with no loss at all, and in
+    a cylinder a skew ray preserves its angle to the wall -- such a photon is
+    trapped until the bulk absorbs it or it reaches the readout face, where the
+    grease coupling opens the critical angle and lets it out. A bare polished
+    crystal is therefore a light pipe, not a sieve. Whether that beats a diffuse
+    wrap is a question for the simulation, not an assumption; the gate states the
+    conventional expectation so that a violation is visible rather than absorbed.
+
 The systematics set varies one optical input at a time over the family generated
 by scripts/make_material_variants.py, holding geometry and surface fixed.  Its
 output is not a number but a spread.
@@ -216,13 +226,26 @@ def main() -> None:
     ap.add_argument("--events", type=int, default=2000)
     ap.add_argument("--seed", type=int, default=20260912)
     ap.add_argument("--jobs", type=int, default=6)
+    ap.add_argument("--only", default=None,
+                    help="comma-separated substrings; run only labels containing one of them")
+    ap.add_argument("--binary", type=Path, default=None,
+                    help="override the simulation binary (e.g. a build with a newer output schema)")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
+
+    
+
+    if args.binary is not None:
+        global BINARY
+        BINARY = args.binary.resolve()
 
     if not BINARY.exists():
         raise SystemExit(f"{BINARY} not built -- run cmake --build build/sim first")
 
     configs = gather(args.set, args.events, args.seed)
+    if args.only:
+        wanted = [w.strip() for w in args.only.split(",") if w.strip()]
+        configs = [c for c in configs if any(w in c["label"] for w in wanted)]
     runs: list[tuple[str, Run]] = []
     seen: dict[str, str] = {}
     for item in configs:

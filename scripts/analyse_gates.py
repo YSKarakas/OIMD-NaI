@@ -216,13 +216,42 @@ def report(rows: list[dict]) -> dict:
                   f"{100 * (r['lce_mean'] - b) / b:>+12.2f} %")
         values = [b] + [r["lce_mean"] for r in sys_rows]
         spread = (max(values) - min(values)) / b
-        print(f"\n  full spread of the family     {100 * spread:.1f} % of baseline LCE")
-        print("  This is the systematic uncertainty that the optical inputs impose on")
-        print("  any light-collection number for this crystal. It is not reducible by")
-        print("  running more events.")
+
+        # Two spreads, because they answer different questions. The wider one is
+        # over everything the literature actually does, flat absorption lengths
+        # included. The narrower one drops the flat-absorption variants, which the
+        # Mao et al. 365 nm transmittance measurement excludes, and so is the
+        # spread that survives after using the evidence that already exists.
+        defensible = [b] + [r["lce_mean"] for r in sys_rows
+                            if not r["label"].startswith("SYS_abs_flat")]
+        defensible_spread = (max(defensible) - min(defensible)) / b
+
+        # Where the schema records it, show what the crystal does to its own
+        # spectrum: light that reaches the readout is redder than light emitted,
+        # because the blue side of the band runs into the absorption edge.
+        reddening = [(r["label"][4:], r) for r in sys_rows if r.get("mean_detected_nm")]
+        if baseline.get("mean_detected_nm"):
+            reddening.insert(0, ("baseline", baseline))
+        if reddening:
+            print()
+            print("  Self-absorption seen directly -- mean wavelength, emitted vs detected:")
+            print(f"  {'variant':<22} {'emitted':>9} {'detected':>9} {'shift':>9}")
+            for name, r in reddening:
+                gen_nm, det_nm = r["mean_generated_nm"], r["mean_detected_nm"]
+                if gen_nm is None or det_nm is None:
+                    continue
+                print(f"  {name:<22} {gen_nm:>9.2f} {det_nm:>9.2f} {det_nm - gen_nm:>+9.2f} nm")
+
+        print(f"\n  spread over published practice  {100 * spread:.1f} % of baseline LCE")
+        print("    (includes the flat absorption lengths that appear in the literature)")
+        print(f"  spread over defensible models   {100 * defensible_spread:.1f} % of baseline LCE")
+        print("    (flat absorption dropped: the 365 nm transmittance measurement excludes it)")
+        print("  Neither is reducible by running more events. Both measure what the state")
+        print("  of the published optical inputs costs, not what the simulation costs.")
         verdicts["systematics"] = {
             "baseline_lce": b,
             "spread_fraction": spread,
+            "defensible_spread_fraction": defensible_spread,
             "variants": {r["label"][4:]: r["lce_mean"] for r in sys_rows},
         }
 
