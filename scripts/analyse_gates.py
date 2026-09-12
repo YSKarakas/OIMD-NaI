@@ -196,14 +196,28 @@ def report(rows: list[dict]) -> dict:
         bare = wraps.get("none")
         order = sorted(wraps.values(), key=lambda r: -r["lce_mean"])
         for r in order:
-            rel = f"{r['lce_mean'] / bare['lce_mean']:.3f}x" if bare else "-"
+            rel = f"{r['lce_mean'] / bare['lce_mean']:.3f}x" if bare else "n/a"
             print(f"  {r['wrapping']:<12} {r['lce_mean']:>9.4f} {r['lce_sem']:>9.4f} {rel:>10}")
-        ok = bare is not None and all(
-            r["lce_mean"] > bare["lce_mean"] for r in wraps.values() if r["wrapping"] != "none"
-        )
-        print(f"  VERDICT                       {'PASS' if ok else 'FAIL'}"
-              f"  (every reflector must beat the unwrapped crystal)")
-        verdicts["G4"] = {"pass": bool(ok),
+        if bare is None:
+            # Distinguish "the reference point could not be computed" from "the
+            # reflectors lost". The unwrapped configuration is not tractable here:
+            # at a bare polished surface with air outside, total internal
+            # reflection is lossless and a skew ray in a cylinder preserves its
+            # angle to the wall, so photons are trapped until bulk absorption
+            # removes them. Three attempts (3000, 250 and 25 events) were all
+            # abandoned; the same crystal with a Teflon wrap runs at 0.65 s/event.
+            print("  VERDICT                       INCOMPLETE -- no unwrapped reference")
+            print("  The bare polished crystal could not be simulated to any useful")
+            print("  statistics (see the kill_reason in its run directory). The ordering")
+            print("  among the reflectors below stands on its own; the comparison against")
+            print("  bare does not, and is NOT claimed.")
+            ok = None
+        else:
+            ok = all(r["lce_mean"] > bare["lce_mean"]
+                     for r in wraps.values() if r["wrapping"] != "none")
+            print(f"  VERDICT                       {'PASS' if ok else 'FAIL'}"
+                  f"  (every reflector must beat the unwrapped crystal)")
+        verdicts["G4"] = {"pass": ok,
                           "lce": {r["wrapping"]: r["lce_mean"] for r in wraps.values()}}
 
     print()
