@@ -1,0 +1,56 @@
+# Paper 0 light-yield survey -- one row per reported measurement.
+#
+# WHAT THIS FILE IS FOR.  A reported scintillator light yield is not a property
+# of the material alone: it is the joint output of material, geometry, surface,
+# wrapping, coupling, photodetector and shaping. This file records, for each
+# published measurement, WHICH of those the paper actually states. The headline
+# result of the survey is the completeness statistic that falls out of it --
+# how large a fraction of the literature reports enough to reproduce, or even to
+# correct, the number it publishes.
+#
+# HOW IT IS FILLED.  By reading. Every row is extracted from the full text by
+# hand (see scripts/collect_literature.py for why this is not automated). The
+# corpus and screening decisions are in candidates.json and screening.csv, so
+# the sample is reproducible even though the extraction is a judgement.
+#
+# THE ONE RULE.  `not_stated` means the paper does not say. It never means "the
+# usual value" or "probably polished". Guessing here would destroy the only
+# thing this file measures. Where a paper states something ambiguously, record
+# what it literally says in `notes` and use `unclear` rather than inventing a
+# category.
+#
+# COLUMNS
+#   arxiv_id, doi, journal_ref, year   provenance of the paper
+#   material                           as named by the paper
+#   dopant                             activator and concentration, or not_stated
+#   ly_value, ly_unit, ly_uncertainty  the reported number; unit matters --
+#                                      photons/MeV and photoelectrons/MeV are
+#                                      different quantities and are often mixed
+#   sample_form                        single_crystal | ceramic | powder |
+#                                      thin_film | composite | not_stated
+#   dimensions_mm                      as stated, e.g. "25.4x25.4x25.4" or
+#                                      "d10x10"; not_stated if absent
+#   surface_treatment                  polished | ground | saw_cut | etched |
+#                                      as_grown | unclear | not_stated
+#   wrapping                           teflon | esr | tyvek | painted | none |
+#                                      unclear | not_stated
+#   coupling                           grease | air | glue | unclear | not_stated
+#   coupling_index                     refractive index if given
+#   photodetector                      model as stated, or type, or not_stated
+#   pde_stated                         yes | no  -- whether the quantum
+#                                      efficiency or PDE used is given
+#   reference_standard                 what the yield was normalised against
+#                                      (material and assumed value), or absolute,
+#                                      or not_stated
+#   source_isotope, source_energy_keV  the excitation
+#   shaping_time_us                    critical for slow components; not_stated
+#                                      is common and consequential
+#   temperature_K                      not_stated usually means room temperature
+#                                      but the paper does not say so
+#   notes                              anything ambiguous, quoted
+#   extracted_on                       date of extraction
+#
+arxiv_id,doi,journal_ref,year,material,dopant,ly_value,ly_unit,ly_uncertainty,sample_form,dimensions_mm,surface_treatment,wrapping,coupling,coupling_index,photodetector,pde_stated,reference_standard,source_isotope,source_energy_keV,shaping_time_us,temperature_K,notes,extracted_on
+1607.05486v2,10.1063/1.4962004,"J. Appl. Phys. 120, 093105 (2016)",2016,Tl2LaCl5,Ce 10 mol%,51000,photons_per_MeV,5000,single_crystal,d8x2,not_stated,teflon,grease,not_stated,Hamamatsu R6233 PMT,no,LYSO:Ce assumed 33000 ph/MeV,Cs-137,662,not_stated,room temperature (value not given),"Calibrated against LYSO. The text assumes LYSO = 33,000 ph/MeV (p.120) but the paper's own Table I lists LYSO = 32,000 ph/MeV -- a 3 percent internal inconsistency in the reference the measurement depends on. The same Table I lists BGO at 8,000 ph/MeV. Samples were cut from the ingot; no surface preparation is described. Shaping time is said to be varied and 'listed in Table I', but Table I contains no shaping time.",2026-09-12
+1503.03759v1,10.1016/j.nima.2015.03.016,"Nucl. Instrum. Meth. A 788, 62-68 (2015)",2015,Li2B4O7,undoped,600,photons_per_MeV,not_stated,single_crystal,10x10x20,polished,not_stated,not_stated,not_stated,Hamamatsu PMA-11 photonic multichannel analyser (CCD spectrometer),yes,"BGO 10x10x30 mm polished, assumed ~6000 ph/MeV","X-ray tube, Cu target 50 kV 30 mA",50 kVp continuum,time-integrated (spectral),room temperature (value not given),"Two different 'light yields' in one paper, measured in two different configurations. This row is the radioluminescence value: light taken at 90 degrees through a quartz fibre, so wrapping and coupling are not described (and matter less). The same paper separately reports a photoelectron yield of 21.2 (undoped) and 23.8 (Cu) phe/MeV from a quite different setup -- 1 cm thick crystal, 2-inch PMT at each end, OKEN6262 silicone grease, aluminium foil wrap, 1.1 us gate. Surface is 'polished to the optical grade on the whole surface or on the four of six planes'; which sample got which is not said. Reference BGO is assumed at ~6000 ph/MeV, against 8000 in arXiv:1607.05486, 8500 in Roberts et al. and 10000 in Bonesini.",2026-09-12
+1503.03759v1,10.1016/j.nima.2015.03.016,"Nucl. Instrum. Meth. A 788, 62-68 (2015)",2015,Li2B4O7,Cu+ 0.07 wt% Cu2O,760,photons_per_MeV,not_stated,single_crystal,10x10x20,polished,not_stated,not_stated,not_stated,Hamamatsu PMA-11 photonic multichannel analyser (CCD spectrometer),yes,"BGO 10x10x30 mm polished, assumed ~6000 ph/MeV","X-ray tube, Cu target 50 kV 30 mA",50 kVp continuum,time-integrated (spectral),room temperature (value not given),"Two different 'light yields' in one paper, measured in two different configurations. This row is the radioluminescence value: light taken at 90 degrees through a quartz fibre, so wrapping and coupling are not described (and matter less). The same paper separately reports a photoelectron yield of 21.2 (undoped) and 23.8 (Cu) phe/MeV from a quite different setup -- 1 cm thick crystal, 2-inch PMT at each end, OKEN6262 silicone grease, aluminium foil wrap, 1.1 us gate. Surface is 'polished to the optical grade on the whole surface or on the four of six planes'; which sample got which is not said. Reference BGO is assumed at ~6000 ph/MeV, against 8000 in arXiv:1607.05486, 8500 in Roberts et al. and 10000 in Bonesini.",2026-09-12

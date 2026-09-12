@@ -16,3 +16,9 @@ data/derived/
 .DS_Store
 runs_scratch/
 build/
+
+# Literature corpus: PDFs are copyrighted, and the extracted text is a
+# derivative of them. Both are rebuildable from scripts/collect_literature.py,
+# so only the metadata index and the hand-extracted records are committed.
+data/literature/cache/pdf/
+data/literature/cache/txt/

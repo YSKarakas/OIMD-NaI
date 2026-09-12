@@ -1,0 +1,57 @@
+# Full-text screening: what KIND of light yield each paper reports.
+# Produced by scripts/scan_yields.py -- mechanical, rebuildable.
+# photons/MeV, photoelectrons/MeV and relative yields are different
+# quantities; the counts are how many numeric mentions of each appear.
+arxiv_id,year,klass,title,journal_ref,doi,photons_per_mev,photons_per_kev,photoelectrons,relative
+0705.3703v1,2007,none,Branching Transport Model of Alkali-Halide Scintillators,"Nucl.Instrum.Meth.A586:432-438,2008",10.1016/j.nima.2007.12.010,0,0,0,0
+0706.2422v1,2007,relative,Pulse-shape discrimination with PbWO$_4$ crystal scintillators,"Nucl.Instrum.Meth.A584:129-134,2008",10.1016/j.nima.2007.10.021,0,0,0,8
+0707.0766v1,2007,none,Interpretation of Light-Quenching Factor Measurements,"Astropart.Phys.28:489-493,2007",10.1016/j.astropartphys.2007.09.006,0,0,0,0
+0803.2888v1,2008,absolute,Scintillation yield of liquid xenon at room temperature,"Nucl.Instrum.Meth.A594:148-154,2008",10.1016/j.nima.2008.06.017,0,7,0,1
+0805.2446v1,2008,detected,Test and Developments of Crystals for a High-Resolution Electromagnetic Calorimeter for PANDA,,,0,0,2,1
+0806.4483v3,2008,none,Future use of silicon photomultiplier for KAOS at MAMI and PANDA at FAIR,"Nucl. Instrum. Meth. 610:358-361, 2009",10.1016/j.nima.2009.05.119,0,0,0,0
+0910.4414v1,2009,none,Scintillator Non-Proportionality and Gamma Quenching in CaWO4,,,0,0,0,0
+1002.0560v2,2010,none,First test of a cryogenic scintillation module with a CaWO4 scintillator and a low-temperature photomultiplier down to 6 K,Nucl. Instr. Meth. A (2010),10.1016/j.nima.2010.05.008,0,0,0,0
+1004.0373v3,2010,absolute,Measurement of scintillation efficiency for nuclear recoils in liquid argon,,10.1103/PhysRevC.85.065811,0,1,1,0
+1008.2175v1,2010,absolute,Structure and optical properties of high light output halide scintillators,"Phys. Rev. B 82, 155145 (2010)",10.1103/PhysRevB.82.155145,3,0,0,0
+1009.1321v1,2010,none,Scintillation properties of ceramics based on zinc oxide,Radiation Measurements 42 (2007) 549,,0,0,0,0
+1102.1825v2,2011,absolute,Infrared scintillation yield in gaseous and liquid argon,"Europhys.Lett.94:52001,2011",10.1209/0295-5075/94/52001,12,0,0,0
+1110.6370v2,2011,absolute,An analytic technique for the estimation of the light yield of a scintillation detector,2012 JINST 7 P05008,10.1088/1748-0221/7/05/P05008,0,2,0,0
+1111.2147v1,2011,relative,Novel Scintillation Material - ZnO Transparent Ceramics,,10.1109/TNS.2012.2189896,0,0,0,1
+1203.1172v2,2012,none,Low temperature light yield measurements in NaI and NaI(Tl),"Eur. Phys. J. C 72:2061, 2012",10.1140/epjc/s10052-012-2061-7,0,0,0,0
+1204.0580v2,2012,absolute,Study of infrared scintillations in gaseous and liquid argon - Part II: light yield and possible applications,"JINST 7:P06014,2012",10.1088/1748-0221/7/06/P06014,11,0,0,0
+1210.3755v1,2012,absolute,Scintillation properties of pure and Ce$^{3+}$-doped SrF$_2$ crystals,,10.1016/j.radmeas.2013.01.054,15,0,0,5
+1210.6734v1,2012,absolute,Precise measurement of the absolute fluorescence yield of the 337 nm band in atmospheric gases,,10.1016/j.astropartphys.2012.12.006,8,0,0,0
+1211.1256v1,2012,absolute,"Deep trapping states in Cerium doped (Lu,Y,Gd)3(Ga,Al)5O12 single crystal scintillators",,,1,0,0,0
+1212.4050v1,2012,detected,Suitability of high-pressure xenon as scintillator for gamma ray spectroscopy,,10.1016/j.nima.2013.03.008,0,0,1,0
+1301.6403v3,2013,detected,Measurement of the proton light response of various LAB based scintillators and its implication for supernova neutrino detection via neutrino-proton scattering,Eur. Phys. J. C (2013) 73:2390,10.1140/epjc/s10052-013-2390-1,0,0,1,0
+1303.5952v1,2013,absolute,Application of the Monte-Carlo refractive index matching (MCRIM) technique to the determination of the absolute light yield of a calcium molybdate scintillator,,10.1088/1748-0221/8/06/P06002,0,10,0,0
+1305.1560v2,2013,relative,New Approaches for Improvement of TOF-PET,,10.1016/j.nima.2013.05.028,0,0,0,1
+1308.3658v2,2013,absolute,The Effects of Dissolved Methane upon Liquid Argon Scintillation Light,2013 JINST 8 P12015,10.1088/1748-0221/8/12/P12015,1,0,0,0
+1308.3908v1,2013,absolute,Absolute light yield measurements on SrF$_{2}$ and BaF$_{2}$ doped with rare earth ions,,10.1109/TNS.2013.2290311,8,0,8,0
+1308.6085v1,2013,none,Characterization of Large Volume 3.5 x 8 inches LaBr3:Ce Detectors,,10.1016/j.nima.2013.07.084,0,0,0,0
+1309.3736v1,2013,absolute,Optimum performance investigation of LYSO crystal pixels: A comparison between GATE simulation and experimental data,,,1,0,0,0
+1404.7846v1,2014,none,Impact of geometry on light collection efficiency of scintillation detectors for cryogenic rare event searches,,10.1016/j.nimb.2014.06.015,0,0,0,0
+1410.6496v1,2014,absolute,"Scalability, scintillation readout and charge drift in a kilogram scale solid xenon particle detector",,,0,1,0,0
+1411.6246v1,2014,absolute,Luminescence and scintillation properties of CsI -- a potential cryogenic scintillator,,10.1002/pssb.201451464,3,0,0,0
+1502.03931v2,2015,none,A First Comparison of the responses of a He4-based fast-neutron detector and a NE-213 liquid-scintillator reference detector,,10.1016/j.nima.2015.04.058,0,0,0,0
+1503.00132v1,2015,relative,Performance assessment of CsI(Tl) screens on various substrates for X-ray imaging,,,0,0,0,2
+1503.03544v1,2015,none,Design Optimization of a Small-animal SPECT System Using LGSO Continuous Crystal and a Micro Parallel-hole Collimator,,,0,0,0,0
+1503.03759v1,2015,absolute,Scintillation characteristics of undoped and Cu+-doped Li2B4O7 single crystals,"Problemy Spektroskopii i Spektrometrii (Problems of Spectroscopy and Spectrometry, Ekaterinburg, UrFU) 34(2015)71-89",,14,0,4,1
+1504.05489v1,2015,relative,Temperature dependence of scintillation properties of SrMoO4,,10.1016/j.nima.2015.04.018,0,0,0,3
+1507.08305v1,2015,none,Test of Lightguides for the J-PET Detector,,,0,0,0,0
+1509.07822v2,2015,absolute,"Scintillation Properties and Electronic Structure of Intrinsic and Extrinsic Mixed Elpasolites Cs2NaRBr3I3 (R = La, Y)","Phys. Rev. Applied 5, 024008 (2016)",10.1103/PhysRevApplied.5.024008,6,0,0,0
+1510.03030v1,2015,none,Tests of Scintillator+WLS strips for Muon System at Future Colliders,,,0,0,0,0
+1510.05787v1,2015,relative,Low-Temperature Scintillation Properties of CaWO4 Crystals for Rare-Event Searches,,,0,0,0,5
+1511.08424v2,2015,none,"Temperature dependence of alpha-induced scintillation in the 1,1,4,4-tetraphenyl-1,3-butadiene wavelength shifter",2016 JINST 11 P06003,10.1088/1748-0221/11/06/P06003,0,0,0,0
+1512.06729v3,2015,none,Time and Position Resolution of the Scintillator Strips for a Muon System at Future Colliders,"Nuclear Inst. and Methods in Physics Research, A823 (2016), pp. 120-125",10.1016/j.nima.2016.03.091,0,0,0,0
+1602.02983v1,2016,detected,Performance study of single undoped CsI crystals for the Mu2e experiment,,10.1393/ncc/i2016-16276-y,0,0,7,0
+1604.04128v1,2016,none,A measurement method of a detector response function for monochromatic electrons based on the Compton scattering,"NIM A821, 13 (2016)",10.1016/j.nima.2016.03.054,0,0,0,0
+1607.05486v2,2016,absolute,Tl2LaCl5 (Ce3+): New Fast and Efficient Scintillator for X- and γ-ray detection,,10.1016/j.jlumin.2017.02.042,5,0,0,0
+1607.08783v1,2016,absolute,Scintillation Characterizations of Tl2LiLuCl6: Ce3+ Single Crystal,,10.1016/j.jlumin.2017.03.051,5,0,0,0
+1608.07556v1,2016,relative,Radiation Hardness of 30 cm Long CsI(Tl) Crystals,S. Longo and J.M. Roney 2016 JINST 11 P08017,10.1088/1748-0221/11/08/P08017,0,0,0,9
+1608.08778v2,2016,none,The light-yield response of a NE-213 liquid-scintillator detector measured using 2 -- 6 MeV tagged neutrons,Nucl. Instr. and Meth. in Phys. Res. A 840 (2016) 121,10.1016/j.nima.2016.10.011,0,0,0,0
+1611.00241v2,2016,none,Effect of Low Electric Fields on Alpha Scintillation Light Yield in Liquid Argon,P. Agnes et al 2017 JINST 12 P01021,10.1088/1748-0221/12/01/P01021,0,0,0,0
+1611.05862v1,2016,absolute,X-ray Scintillation in Lead Halide Perovskite Crystals,Scientific Reports 6 (2016) 37254,10.1038/srep37254,19,0,0,0
+1612.02918v1,2016,absolute,New Tl2LaBr5: Ce3+ Crystal Scintillator for γ-Rays Detection,,10.1016/j.nima.2017.01.012,6,0,0,0
+1612.05507v1,2016,absolute,A new technique for infrared scintillation measurements,,10.1016/j.nima.2017.01.063,1,0,0,0
+1612.06071v2,2016,absolute,The low temperature performance of CsI(Na) crystals for WIPMs direct searches,,,2,0,0,0
