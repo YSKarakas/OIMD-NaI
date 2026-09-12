@@ -250,20 +250,43 @@ void DetectorConstruction::AttachSurfaces(G4VPhysicalVolume* crystal, G4VPhysica
   if (!wrapCoupling) throw std::runtime_error("unknown surface coupling '" + fWrapCoupling + "'");
   if (!model) throw std::runtime_error("unknown surface model '" + fSurfaceModel + "'");
 
-  const FinishResolution resolution = ResolveFinish({*treatment, *wrapping, *wrapCoupling});
+  // An unwrapped surface is handled analytically whatever model was asked for.
+  // Geant4 ships no look-up table for a bare surface and does not say so: it
+  // hangs inside G4OpBoundaryProcess::DielectricLUT() instead, at full CPU and
+  // without an error. Fresnel and Snell describe a bare dielectric interface
+  // exactly, so the UNIFIED model is not an approximation here -- it is the
+  // right calculation. The substitution is echoed in the geometry line so that
+  // a reader of the output can see that this configuration used a different
+  // surface model from the wrapped ones.
+  const bool bare = (*wrapping == Wrapping::None);
+  G4OpticalSurfaceModel effectiveModel = *model;
+  FinishResolution resolution;
+  if (bare) {
+    resolution = ResolveBareFinish({*treatment, *wrapping, *wrapCoupling});
+    effectiveModel = unified;
+  } else {
+    resolution = ResolveFinish({*treatment, *wrapping, *wrapCoupling});
+  }
   if (!resolution.supported) throw std::runtime_error(resolution.reason);
   fResolvedFinish = resolution.name;
+  fEffectiveModel = (effectiveModel == unified)  ? "unified"
+                    : (effectiveModel == DAVIS)  ? "davis"
+                    : (effectiveModel == LUT)    ? "lut"
+                                                 : "glisur";
+  if (effectiveModel != *model) {
+    fEffectiveModel += " (requested '" + fSurfaceModel + "', substituted)";
+  }
 
   auto* wrapped = new G4OpticalSurface("WrappedSurface");
   wrapped->SetType(dielectric_LUT);
-  wrapped->SetModel(*model);
+  wrapped->SetModel(effectiveModel);
   wrapped->SetFinish(resolution.finish);
-  if (*model == unified) {
+  if (effectiveModel == unified) {
     // The look-up-table finishes carry their own roughness; only UNIFIED takes
     // an explicit micro-facet spread, and it must be given in radians.
     wrapped->SetType(dielectric_dielectric);
     wrapped->SetSigmaAlpha(fSigmaAlpha * deg);
-  } else if (*model == DAVIS) {
+  } else if (effectiveModel == DAVIS) {
     wrapped->SetType(dielectric_LUTDAVIS);
   }
   new G4LogicalBorderSurface("CrystalToWorld", crystal, world, wrapped);
@@ -304,7 +327,7 @@ G4String DetectorConstruction::Describe() const {
   }
   out << " L=" << fLength / mm << "mm"
       << " surface=" << fTreatment << "/" << fWrapping << "/" << fWrapCoupling
-      << " (" << fResolvedFinish << ", model=" << fSurfaceModel << ")"
+      << " (" << fResolvedFinish << ", model=" << fEffectiveModel << ")"
       << " coupling=" << fCouplingType << " n=" << fCouplingIndex
       << " readout=" << (fReadoutDiameter > 0 ? fReadoutDiameter / mm : fDiameter / mm) << "mm";
   return out.str();

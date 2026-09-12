@@ -66,6 +66,16 @@ def supported_options() -> tuple[SurfaceOption, ...]:
     return tuple(option for option in catalogue() if option.supported)
 
 
+def resolve(treatment: str, wrapping: str, coupling: str) -> SurfaceOption:
+    """One point of the grid by name, so a caller can read its refusal reason."""
+    for option in catalogue():
+        if (option.treatment, option.wrapping, option.coupling) == (
+            treatment, wrapping, coupling
+        ):
+            return option
+    raise KeyError(f"{treatment}/{wrapping}/{coupling} is not on the grid")
+
+
 def sweep_axis() -> list[str]:
     """Supported combinations as ``treatment/wrapping/coupling`` sweep values."""
     return [option.label for option in supported_options()]

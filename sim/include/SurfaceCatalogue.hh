@@ -8,8 +8,11 @@
 // combinations Geant4 has no look-up table for rather than silently substituting
 // a neighbour.
 //
-// The supported grid is 3 treatments x 6 air-coupled wrappings, plus the 3 x 2
-// glue-coupled cases Geant4 provides, i.e. 24 combinations in total.
+// The supported grid is 21 look-up-table combinations, NOT 24: the three bare
+// (unwrapped) finishes polishedair / etchedair / groundair exist as enumerators
+// but have no data behind them, and selecting one makes Geant4 hang. See the
+// long comment in SurfaceCatalogue.cc. Bare surfaces are handled analytically
+// instead, through ResolveBareFinish.
 
 #ifndef SCINT_SURFACE_CATALOGUE_HH
 #define SCINT_SURFACE_CATALOGUE_HH 1
@@ -65,6 +68,13 @@ struct FinishResolution {
 /// returns supported == false with an explanation. Silently substituting a
 /// different wrapping would corrupt exactly the comparison this study makes.
 FinishResolution ResolveFinish(const SurfaceSpec& spec);
+
+/// Resolve an unwrapped surface to an analytic (UNIFIED-model) finish.
+///
+/// Bare surfaces cannot use the look-up-table model: Geant4 ships no table for
+/// them and hangs if asked. Fresnel and Snell describe a bare dielectric
+/// interface exactly, so nothing is lost by computing it instead.
+FinishResolution ResolveBareFinish(const SurfaceSpec& spec);
 
 /// Every combination Geant4 supports, in a stable order.
 std::vector<SurfaceSpec> SupportedSpecs();

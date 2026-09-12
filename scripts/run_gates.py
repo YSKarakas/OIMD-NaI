@@ -102,7 +102,10 @@ WRAPPINGS = ["none", "teflon", "lumirror", "tyvek", "tio", "esr"]
 #   1: event, edep, generated, detected, first/mean detection time
 #   2: + scintillation/Cerenkov split of the generated photons,
 #        mean generated wavelength, mean detected wavelength
-CONFIG_SCHEMA = 2
+#   3: + photons removed by the optical step cap; and bare surfaces are now
+#        resolved analytically rather than through a look-up table that does
+#        not exist, which is what made the unwrapped configuration hang
+CONFIG_SCHEMA = 3
 
 
 def config_for(

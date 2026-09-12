@@ -18,13 +18,34 @@ struct Key {
   }
 };
 
-// The full set Geant4 ships look-up tables for. Teflon, TiO and Tyvek exist only
-// in air-coupled form; Geant4 provides no glue-coupled tables for them, and this
-// table therefore omits them rather than inventing a substitute.
+// The full set Geant4 ships look-up tables for -- 21 entries, verified against
+// G4OpticalSurface::ReadLUTFile in Geant4 11.4.2 and against the contents of the
+// RealSurface2.2 dataset, not against the enum.
+//
+// Teflon, TiO and Tyvek exist only in air-coupled form; Geant4 provides no
+// glue-coupled tables for them, and this table omits them rather than inventing
+// a substitute.
+//
+// The BARE surface finishes -- polishedair, etchedair, groundair -- are absent
+// too, and their absence is not cosmetic. They exist as enumerators, but
+// ReadLUTFile has no case for them: it falls through to `default: return;`, no
+// file is loaded, and the angular distribution stays empty. G4OpBoundaryProcess
+// then reaches DielectricLUT(), whose inner loop is
+//
+//     do { ... angularDistVal = GetAngularDistributionValue(...); }
+//     while(!G4BooleanRand(angularDistVal));
+//
+// and with angularDistVal identically zero that loop never terminates. The
+// result is not an error and not a warning: the simulation hangs inside a single
+// step, at full CPU, indefinitely. This cost three abandoned runs (5h51m, 2h17m
+// and 11 minutes) and an incorrect physical explanation before it was found.
+//
+// A bare dielectric surface needs no look-up table anyway; Fresnel and Snell
+// describe it exactly, which is what the UNIFIED model computes. Bare surfaces
+// are therefore routed to the analytic model instead of being refused outright.
 const std::map<Key, std::pair<G4OpticalSurfaceFinish, const char*>>& Table() {
   static const std::map<Key, std::pair<G4OpticalSurfaceFinish, const char*>> table = {
       // --- polished -------------------------------------------------------
-      {{Treatment::Polished, Wrapping::None, Coupling::Air}, {polishedair, "polishedair"}},
       {{Treatment::Polished, Wrapping::Lumirror, Coupling::Air}, {polishedlumirrorair, "polishedlumirrorair"}},
       {{Treatment::Polished, Wrapping::Teflon, Coupling::Air}, {polishedteflonair, "polishedteflonair"}},
       {{Treatment::Polished, Wrapping::TiO, Coupling::Air}, {polishedtioair, "polishedtioair"}},
@@ -33,7 +54,6 @@ const std::map<Key, std::pair<G4OpticalSurfaceFinish, const char*>>& Table() {
       {{Treatment::Polished, Wrapping::Lumirror, Coupling::Glue}, {polishedlumirrorglue, "polishedlumirrorglue"}},
       {{Treatment::Polished, Wrapping::ESR, Coupling::Glue}, {polishedvm2000glue, "polishedvm2000glue"}},
       // --- etched ---------------------------------------------------------
-      {{Treatment::Etched, Wrapping::None, Coupling::Air}, {etchedair, "etchedair"}},
       {{Treatment::Etched, Wrapping::Lumirror, Coupling::Air}, {etchedlumirrorair, "etchedlumirrorair"}},
       {{Treatment::Etched, Wrapping::Teflon, Coupling::Air}, {etchedteflonair, "etchedteflonair"}},
       {{Treatment::Etched, Wrapping::TiO, Coupling::Air}, {etchedtioair, "etchedtioair"}},
@@ -42,7 +62,6 @@ const std::map<Key, std::pair<G4OpticalSurfaceFinish, const char*>>& Table() {
       {{Treatment::Etched, Wrapping::Lumirror, Coupling::Glue}, {etchedlumirrorglue, "etchedlumirrorglue"}},
       {{Treatment::Etched, Wrapping::ESR, Coupling::Glue}, {etchedvm2000glue, "etchedvm2000glue"}},
       // --- ground ---------------------------------------------------------
-      {{Treatment::Ground, Wrapping::None, Coupling::Air}, {groundair, "groundair"}},
       {{Treatment::Ground, Wrapping::Lumirror, Coupling::Air}, {groundlumirrorair, "groundlumirrorair"}},
       {{Treatment::Ground, Wrapping::Teflon, Coupling::Air}, {groundteflonair, "groundteflonair"}},
       {{Treatment::Ground, Wrapping::TiO, Coupling::Air}, {groundtioair, "groundtioair"}},
@@ -58,6 +77,18 @@ const std::map<Key, std::pair<G4OpticalSurfaceFinish, const char*>>& Table() {
 
 FinishResolution ResolveFinish(const SurfaceSpec& spec) {
   FinishResolution out;
+  if (spec.wrapping == Wrapping::None) {
+    out.supported = false;
+    out.reason =
+        "Geant4 has no look-up table for a bare surface. polishedair, etchedair "
+        "and groundair exist as enumerators, but G4OpticalSurface::ReadLUTFile "
+        "has no case for them and falls through to its default, so no data is "
+        "loaded and G4OpBoundaryProcess::DielectricLUT() spins forever on an "
+        "all-zero angular distribution -- silently, at full CPU. Use the "
+        "analytic UNIFIED model for a bare surface (ResolveBareFinish); Fresnel "
+        "and Snell describe it exactly.";
+    return out;
+  }
   const auto it = Table().find({spec.treatment, spec.wrapping, spec.coupling});
   if (it == Table().end()) {
     out.supported = false;
@@ -70,6 +101,34 @@ FinishResolution ResolveFinish(const SurfaceSpec& spec) {
   out.finish = it->second.first;
   out.name = it->second.second;
   return out;
+}
+
+FinishResolution ResolveBareFinish(const SurfaceSpec& spec) {
+  FinishResolution out;
+  if (spec.wrapping != Wrapping::None || spec.coupling != Coupling::Air) {
+    out.reason = "ResolveBareFinish applies only to an unwrapped, air-coupled surface";
+    return out;
+  }
+  switch (spec.treatment) {
+    case Treatment::Polished:
+      out.supported = true;
+      out.finish = polished;
+      out.name = "polished (analytic, UNIFIED model)";
+      return out;
+    case Treatment::Ground:
+      out.supported = true;
+      out.finish = ground;
+      out.name = "ground (analytic, UNIFIED model, sigma_alpha)";
+      return out;
+    case Treatment::Etched:
+    default:
+      out.reason =
+          "An etched bare surface has no analytic counterpart: Geant4's non-LUT "
+          "finishes are polished and ground only. Representing 'etched' as "
+          "'ground' with a chosen sigma_alpha would be a fit, not a measurement, "
+          "so it is refused.";
+      return out;
+  }
 }
 
 std::vector<SurfaceSpec> SupportedSpecs() {

@@ -108,6 +108,7 @@ void EventAction::EndOfEventAction(const G4Event* event) {
   analysis->FillNtupleIColumn(column++, fData.scintillation);
   analysis->FillNtupleIColumn(column++, fData.cherenkov);
   analysis->FillNtupleIColumn(column++, fData.detected);
+  analysis->FillNtupleIColumn(column++, fData.killedAtStepLimit);
   analysis->FillNtupleDColumn(column++, firstTime < 0 ? -1.0 : firstTime / ns);
   analysis->FillNtupleDColumn(column++, meanTime < 0 ? -1.0 : meanTime / ns);
   // Mean wavelength emitted and mean wavelength detected. The gap between them
@@ -158,8 +159,32 @@ G4ClassificationOfNewTrack StackingAction::ClassifyNewTrack(const G4Track* track
 // Stepping: energy deposition and photon detection
 // --------------------------------------------------------------------------- //
 
+SteppingAction::SteppingAction(EventAction* eventAction) : fEventAction(eventAction) {
+  DefineCommands();
+}
+
+SteppingAction::~SteppingAction() { delete fMessenger; }
+
+void SteppingAction::DefineCommands() {
+  fMessenger = new G4GenericMessenger(this, "/scint/optical/", "Optical photon transport");
+  fMessenger->DeclareProperty(
+      "maxSteps", fMaxOpticalSteps,
+      "kill an optical photon after this many steps (0 = no limit); the number "
+      "killed is recorded per event so the bias can be measured");
+}
+
 void SteppingAction::UserSteppingAction(const G4Step* step) {
   EventData& data = fEventAction->Data();
+
+  // The step cap, applied before anything else so that a capped photon cannot
+  // also be counted as detected in the same step.
+  if (fMaxOpticalSteps > 0 &&
+      step->GetTrack()->GetDefinition() == G4OpticalPhoton::Definition() &&
+      step->GetTrack()->GetCurrentStepNumber() >= fMaxOpticalSteps) {
+    data.killedAtStepLimit += 1;
+    const_cast<G4Track*>(step->GetTrack())->SetTrackStatus(fStopAndKill);
+    return;
+  }
 
   const G4VPhysicalVolume* volume = step->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
   if (volume != nullptr && volume->GetName() == "Crystal" &&
@@ -196,6 +221,7 @@ RunAction::RunAction() {
   analysis->CreateNtupleIColumn("photons_scintillation");
   analysis->CreateNtupleIColumn("photons_cherenkov");
   analysis->CreateNtupleIColumn("photons_detected");
+  analysis->CreateNtupleIColumn("photons_killed_steplimit");
   analysis->CreateNtupleDColumn("first_detection_ns");
   analysis->CreateNtupleDColumn("mean_detection_ns");
   analysis->CreateNtupleDColumn("mean_generated_nm");

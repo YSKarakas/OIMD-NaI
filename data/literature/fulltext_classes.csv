@@ -55,3 +55,83 @@ arxiv_id,year,klass,title,journal_ref,doi,photons_per_mev,photons_per_kev,photoe
 1612.02918v1,2016,absolute,New Tl2LaBr5: Ce3+ Crystal Scintillator for γ-Rays Detection,,10.1016/j.nima.2017.01.012,6,0,0,0
 1612.05507v1,2016,absolute,A new technique for infrared scintillation measurements,,10.1016/j.nima.2017.01.063,1,0,0,0
 1612.06071v2,2016,absolute,The low temperature performance of CsI(Na) crystals for WIPMs direct searches,,,2,0,0,0
+1702.07614v2,2017,absolute,Non proportionality dependence on shaping time,,10.1088/1748-0221/12/04/P04007,1,0,0,1
+1703.01262v1,2017,absolute,Light yield determination in large sodium iodide detectors applied in the search for dark matter,,10.1016/j.astropartphys.2017.06.005,2,2,2,0
+1709.04020v2,2017,absolute,Particle detection at cryogenic temperatures with undoped CsI,,10.1016/j.nima.2018.05.066,0,7,0,0
+1709.04975v1,2017,absolute,The Characterization of new Eu2+ doped TlSr2I5 Scintillator Crystals,,,6,0,0,0
+1710.11233v3,2017,absolute,A Novel Use of Light Guides and Wavelength Shifting Plates for the Detection of Scintillation Photons in Large Liquid Argon Detectors,,10.1016/j.nima.2018.06.050,6,0,0,0
+1801.07909v2,2018,none,First scintillating bolometer tests of a CLYMENE R&D on Li$_2$MoO$_4$ scintillators towards a large-scale double-beta decay experiment,Nucl. Instrum. Meth. Phys. Res. A 891 (2018) 87-91,10.1016/j.nima.2018.02.101,0,0,0,0
+1802.08247v1,2018,detected,Quality Assurance on Un-Doped CsI Crystals for the Mu2e Experiment,"IEEE TRANSACTIONS ON NUCLEAR SCIENCE, VOL. 65, NO. 2, FEBRUARY 2018",10.1109/TNS.2017.2786081,0,0,5,0
+1806.02461v2,2018,absolute,Optimisation of the scintillation light collection and uniformity for the SoLid experiment,,10.1088/1748-0221/13/09/P09005,1,0,0,1
+1807.06390v1,2018,absolute,"Ce-doped Gd${}_{3}$Al${}_{2}$Ga${}_{3}$O${}_{12}$ scintillator for compact, effective and high time resolution detector of the fast neutrons",,,1,0,0,0
+1809.10840v2,2018,detected,Characterization and Performance of PADME's Cherenkov-Based Small-Angle Calorimeter,Nucl. Instrum. Methods Phys. Res. A 919 (2019) 89-97,10.1016/j.nima.2018.12.035,0,0,5,0
+1904.03640v2,2019,absolute,Pulse-shape discrimination potential of new scintillator material: La-GPS:Ce,2019 JINST 14 P06037,10.1088/1748-0221/14/06/P06037,2,0,0,0
+1904.09362v1,2019,absolute,GaAs as a bright cryogenic scintillator for the direct dark matter detection,,,0,10,0,1
+1906.09296v2,2019,none,Production and characterization of a PbMoO$_4$ cryogenic detector from archaeological Pb,"Eur. Phys. J. A 56, (2020) 38",,0,0,0,0
+1907.10856v3,2019,absolute,Characterization of Light Production and Transport in Tellurium Dioxide Crystals,JINST 14 (2019) P10032,10.1088/1748-0221/14/10/P10032,13,0,0,0
+1909.02994v1,2019,relative,The CUPID-Mo experiment for neutrinoless double-beta decay: performance and prospects,,10.1140/epjc/s10052-019-7578-6,0,0,0,3
+1911.02076v1,2019,absolute,Advanced High-Performance Large Diameter Cs2HfCl6 (CHC) and Mixed Halides Scintillator,,10.1016/j.jcrysgro.2019.125473,9,0,0,6
+1911.03611v1,2019,absolute,Thallium Strontium Iodide: A High Efficiency Scintillator for Gamma-ray Detection,,10.1016/j.optmat.2019.109624,10,0,0,2
+1911.13217v1,2019,none,Na-based crystal scintillators for next-generation rare event searches,,10.1016/j.nima.2020.164160,0,0,0,0
+1912.11504v1,2019,absolute,Thermal Characterization of Tl$_2$LiYCl$_6$:Ce (TLYC),,10.1109/TNS.2020.2972529,2,0,0,1
+2001.06672v1,2020,absolute,Electron and hole trapping in the Ce3+ and Pr3+ doped lutetium pyrosilicate scintillator crystals studied by electron paramagnetic resonance,"Phys. Rev. Applied 13, 044060 (2020)",10.1103/PhysRevApplied.13.044060,2,0,0,0
+2001.07518v2,2020,none,Value-assigned pulse shape discrimination for neutron detectors,,10.1109/TNS.2021.3091126,0,0,0,0
+2002.06415v1,2020,none,Optimization study of scintillator shape of electromagnetic calorimeter for Higgs factories,,,0,0,0,0
+2003.01485v2,2020,none,Performance recovery of long CsI(Tl) scintillator crystals with APD-based readout,"Nuclear Instruments and Methods in Physics Research A, 965 (2020) 163845",10.1016/j.nima.2020.163845,0,0,0,0
+2005.09087v1,2020,none,Optical properties of YAG:Ce and GGG:Ce scintillation crystals irradiated with a high fluence proton beam,"Physics of Particles and Nuclei Letters, 17(6), 878-881 (2020)",10.1134/S154747712006014X,0,0,0,0
+2005.11659v1,2020,relative,Scintillation properties of $({\rm Zn}_{0.9} {\rm Pb}_{0.1})({\rm W}_{0.9} {\rm Mo}_{0.1}){\rm O}_4$ and $({\rm Zn}_{0.9} {\rm Cd}_{0.1})({\rm W}_{0.9} {\rm Mo}_{0.1}){\rm O}_4$ mixed crystals,,10.1088/1748-0221/15/07/C07028,0,0,0,3
+2101.03264v1,2021,absolute,Response of undoped cryogenic CsI to low-energy nuclear recoils,"Phys. Rev. C 104, 014612 (2021)",10.1103/PhysRevC.104.014612,0,3,1,0
+2102.08499v5,2021,absolute,Test Beam Study of SiPM-on-Tile Configurations,,10.1088/1748-0221/16/07/P07022,0,2,0,0
+2103.11267v1,2021,absolute,Advanced Inorganic Halide Ceramic Scintillators,,10.1016/j.optmat.2021.111307,11,0,0,2
+2103.13106v2,2021,absolute,Scintillating properties of today available lead tungstate crystals,,10.1088/1748-0221/16/08/P08040,1,0,0,0
+2104.07568v2,2021,absolute,"Crystal growth and optical properties of Ce-doped (La,Y)$_2$Si$_2$O$_7$ single crystal",,10.1016/j.jcrysgro.2021.126252,5,0,0,0
+2107.11571v1,2021,none,Performance of ZnSe-based scintillators at low temperatures,,10.1016/j.jlumin.2021.118360,0,0,0,0
+2108.13929v3,2021,none,Scintillation light increase of carbontetrafluoride gas at low temperature,JINST (2021) 16 P12033,10.1088/1748-0221/16/12/P12033,0,0,0,0
+2109.07362v1,2021,none,Performance evaluation of GAGG(Ce)/LFS scintillator + MPPC array readout with ASIC,NIM A 986 (2021) 164811,10.1016/j.nima.2020.164811,0,0,0,0
+2110.01992v2,2021,absolute,"Comparative pulse shape discrimination study for Ca(Br, I)$_2$ scintillators using machine learning and conventional methods","Nuclear Instruments and Methods in Physics Research Section A: Accelerators, Spectrometers, Detectors and Associated Equipment, 1045(2023) 167626",10.1016/j.nima.2022.167626,4,0,0,0
+2110.03306v1,2021,none,Scintillation characteristics of a NaI(Tl) crystal at low-temperature with silicon photomultiplier,,10.1088/1748-0221/17/02/P02027,0,0,0,0
+2110.06618v1,2021,absolute,Response of the GAGG(Ce) scintillator to charged particles compared with the CsI(Tl) scintillator,"Journal of Instrumentation 16, P10012 (2021)",10.1088/1748-0221/16/10/P10012,2,0,0,11
+2110.13482v1,2021,absolute,"Temperature dependence and quenching characteristics of (La, Gd)$_2$Si$_2$O$_7$ scintillators at various Ce concentrations",,,5,0,0,0
+2111.03660v2,2021,none,Scintillator Tile Batch Test of CEPC AHCAL,,10.1088/1748-0221/17/05/P05006,0,0,0,0
+2112.04990v1,2021,absolute,The optical simulation model of the DarkSide-20k Veto detector,,,0,1,0,0
+2202.09154v2,2022,absolute,Study of visible-light emission in pure and methane-doped liquid argon,JINST 17 (2022) P09009,10.1088/1748-0221/17/09/P09009,13,0,0,0
+2203.13322v1,2022,absolute,Timing Properties of Blue-emitting Scintillating Fibers,,10.1088/1748-0221/17/12/P12020,2,0,0,1
+2207.05496v1,2022,none,A high-performance custom photodetection system to probe the light yield enhancement in oriented crystals,J. Phys.: Conf. Ser. 2374 012112 (2022),10.1088/1742-6596/2374/1/012112,0,0,0,0
+2209.02885v3,2022,absolute,Testing the Gallium Anomaly,,10.1103/PhysRevD.107.096011,4,0,1,0
+2212.04342v1,2022,none,"Development of a large-mass, low-threshold detector system with simultaneous measurements of athermal phonons and scintillation light",,10.1016/j.nima.2023.168374,0,0,0,0
+2212.11515v3,2022,detected,Reactor neutrino physics potentials of cryogenic pure-CsI crystal,,,0,0,1,0
+2212.13054v3,2022,detected,Developing a single phase liquid argon detector with SiPM readout,,,0,0,1,0
+2308.01148v1,2023,detected,"Beam test, simulation, and performance evaluation of PbF$_2$ and PWO-UF crystals with SiPM readout for a semi-homogeneous calorimeter prototype with longitudinal segmentation",,,0,0,2,0
+2308.06759v1,2023,absolute,Measurement of the non-linearity in the gamma-ray response of the GAGG:Ce inorganic scintillator,"Nuclear Inst. and Methods in Physics Research, A 1056 (2023) 168587",10.1016/j.nima.2023.168587,1,0,0,0
+2312.07957v3,2023,detected,Scintillation characteristics of an undoped CsI crystal at low-temperature for dark matter search,,10.1016/j.astropartphys.2025.103150,0,0,1,2
+2401.00226v2,2023,relative,The Intrinsic Energy Resolution of LaBr$_3$(Ce) Crystal for GECAM,,,0,0,0,2
+2402.05026v5,2024,relative,Characterization and Optimization of a Cryogenic Pure CsI Detector with Remarkable Light Yield and Unprecedented Energy Resolution for CLOVERS Experiment,,10.1007/s41365-025-01651-1,0,0,0,2
+2408.01340v1,2024,none,On the origin of the light yield enhancement in polymeric composite scintillators loaded with dense nanoparticles,,,0,0,0,0
+2408.11070v1,2024,absolute,Nonlinear scintillation effects in the intrinsic luminescence from Sc$_{1.318}$Y$_{0.655}$Si$_{1.013}$O$_{4.987}$ crystal excited by electrons and gamma-quanta,,,3,0,0,0
+2409.10823v1,2024,absolute,Ultraviolet cross-luminescence in ternary chlorides of alkali and alkaline-earth metals,Optical Materials: X 12 (2021) 100103,10.1016/j.omx.2021.100103,2,0,0,0
+2409.17002v1,2024,absolute,Nonreciprocal scintillation using one-dimensional magneto-optical photonic crystals,,,1,0,0,0
+2410.07141v1,2024,none,Large-scale self-assembled nanophotonic scintillators for X-ray imaging,,10.1038/s41467-025-60953-5,0,0,0,0
+2410.09371v1,2024,absolute,Development and performance evaluation of a thin GAGG:Ce scintillator plate for high resolution synchrotron radiation X-ray imaging,,10.1088/1748-0221/19/10/P10030,6,0,0,0
+2410.22863v2,2024,none,Impact of extreme ultraviolet radiation on the scintillation of pure and xenon-doped liquid argon,"Phys.Rev.D 111 (2025) 10, 102001",10.1103/PhysRevD.111.102001,0,0,0,0
+2412.02516v2,2024,absolute,Ultrafast Superradiant Scintillation from Weakly Confined CsPbBr3 Nanocrystals,,,6,0,0,0
+2503.13013v2,2025,absolute,A custom experimental setup for scintillator characterization: application to a Ce-doped GAGG crystal,"Eur. Phys. J. Plus 140, 415 (2025)",10.1140/epjp/s13360-025-06350-9,2,0,0,1
+2504.16421v3,2025,absolute,Development of the Beam Monitor Detectors for the Low-E Beamline at the CERN SPS H2 Line,,,1,0,0,0
+2505.01961v1,2025,none,Pre-study of a Li2MoO4 based bolometer for 100Mo neutrinoless double beta decay experiment in China,,,0,0,0,0
+2507.09765v2,2025,absolute,CRYSP: a Total-Body PET based on cryogenic cesium iodide crystals,Phys. Med. Biol. 71 025001 (2026),10.1088/1361-6560/ae35c8,3,2,0,0
+2508.15513v1,2025,relative,Modeling of Light Production in Inorganic Scintillators,,,0,0,0,2
+2509.17528v1,2025,detected,Performance of a Large-Volume Cryogenic Pure CsI Detector for CEνNS and Low-Energy Rare-Event Searches,,,0,0,1,0
+2509.20390v4,2025,none,Optical characterization of wavelength-shifting and scintillating-wavelength-shifting fibers,,,0,0,0,0
+2509.26416v3,2025,absolute,Scintillating properties of Cs${_2}$ZrCl${_6}$ crystals in the temperature range of 5-300 K,,,15,0,0,0
+2511.20210v1,2025,relative,Drastic reduction of the slow scintillation component in highly luminescent Ce3+ and Mg2+ doped Lu2.5Gd0.5Ga2Al3O12 garnet powders,"Radiation Measurements, Volume 189, 2025, 107542, ISSN 1350-4487",10.1016/j.radmeas.2025.107542,0,0,0,1
+2512.04965v3,2025,absolute,Characterization of thin optical filters for high purity Cherenkov light readout from scintillating crystals,JINST 21 P03025 (2026),10.1088/1748-0221/21/03/P03025,2,0,6,1
+2603.06429v2,2026,none,"Comprehensive characterization of a YAG:Ce scintillator: light yield, alpha quenching and pulse-shape discrimination",,,0,0,0,0
+2604.14060v2,2026,absolute,Observation of light production by charged particles in WLS fibers,,,2,0,0,1
+2605.28414v1,2026,absolute,Performance evaluation of GYGAG crystals for neutrinoless double beta decay search,,,4,0,0,1
+2606.16007v1,2026,none,Dosimetric characterization of a nanophotonic scintillator and applications to real-time in-vivo total body irradiation dosimetry,,,0,0,0,0
+2607.00112v1,2026,absolute,Fast and bright scintillators for ultrafast materials dynamics using 4th generation synchrotron,,,0,1,0,0
+2608.11303v1,2026,detected,Temperature-Dependent Performance of NaI(Tl) Crystal with Dual-Channel SiPM Readout for Low-Mass Dark Matter Searches,,,0,0,1,0
+2608.14959v1,2026,none,Development of a 10 mol% Rubidium-doped CsI Crystal for $^{87}$Rb Beta-Spectroscopy and Sterile Neutrino Searches,,,0,0,0,0
+2608.21171v1,2026,absolute,Preventing quart-NaI adhesion in Bridgman growth using ammonium iodide,,,2,0,0,0
+2608.21397v2,2026,none,Optical characterization and ionizing-radiation response of the BCF-20XL scintillating-wavelength-shifting fiber,,,0,0,0,0
+2609.09640v1,2026,absolute,Spectral Discrimination of Deposited Gamma-Ray Energies in a Simulated CeBr$_3$ Scintillator,,,3,0,0,0
+2609.10116v1,2026,absolute,Development of Ultrafast and Radiation-Hard GAGG for the Next-Generation of High-Energy Physics Calorimeters,,,9,0,0,0

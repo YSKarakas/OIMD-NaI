@@ -59,11 +59,26 @@ class StackingAction : public G4UserStackingAction {
 
 class SteppingAction : public G4UserSteppingAction {
  public:
-  explicit SteppingAction(EventAction* eventAction) : fEventAction(eventAction) {}
+  explicit SteppingAction(EventAction* eventAction);
+  ~SteppingAction() override;
   void UserSteppingAction(const G4Step* step) override;
 
  private:
+  void DefineCommands();
   EventAction* fEventAction;
+  G4GenericMessenger* fMessenger = nullptr;
+
+  /// Hard cap on the number of steps one optical photon may take, 0 = no cap.
+  ///
+  /// A bare polished crystal in air is a light pipe: total internal reflection
+  /// at the side wall is lossless, and in a cylinder a skew ray preserves its
+  /// angle to the wall, so a photon can be neither absorbed nor able to leave
+  /// and will bounce until the bulk finally removes it. That configuration
+  /// could not be simulated at all without this -- three attempts were
+  /// abandoned after hours. The cap makes it finite, and the photons it removes
+  /// are counted so that the approximation it introduces can be measured
+  /// instead of assumed: scan the cap and show the answer stops moving.
+  G4int fMaxOpticalSteps = 0;
 };
 
 class RunAction : public G4UserRunAction {

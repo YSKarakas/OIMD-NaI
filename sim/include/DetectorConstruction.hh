@@ -92,6 +92,11 @@ class DetectorConstruction : public G4VUserDetectorConstruction {
   G4String fPdeFile;                 ///< optional wavelength/efficiency table
 
   G4String fResolvedFinish;          ///< filled in during Construct()
+  /// The model actually used, which is not always the one asked for: a bare
+  /// surface is forced to UNIFIED because no look-up table exists for it. The
+  /// echo prints this rather than the request, so a substitution cannot happen
+  /// silently -- the whole point of printing the geometry at all.
+  G4String fEffectiveModel;
 };
 
 }  // namespace scint

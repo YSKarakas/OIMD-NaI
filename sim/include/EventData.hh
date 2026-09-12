@@ -14,6 +14,7 @@ struct EventData {
   G4int scintillation = 0;                ///< of those, from Scintillation
   G4int cherenkov = 0;                    ///< of those, from Cerenkov
   G4int detected = 0;                     ///< photons registering at the readout
+  G4int killedAtStepLimit = 0;            ///< photons removed by the step cap
   std::vector<G4double> detectionTimes;   ///< arrival times of detected photons
   std::vector<G4double> detectionEnergies;///< photon energies at detection
 
@@ -31,6 +32,7 @@ struct EventData {
     scintillation = 0;
     cherenkov = 0;
     detected = 0;
+    killedAtStepLimit = 0;
     detectionTimes.clear();
     detectionEnergies.clear();
     generatedWavelengthSum = 0.0;
