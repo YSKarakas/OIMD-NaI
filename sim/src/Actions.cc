@@ -16,11 +16,21 @@
 #include "G4Step.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
+#include "G4VProcess.hh"
 
 #include <numeric>
 
 namespace scint {
 namespace {
+
+/// Photon energy (Geant4 units) to wavelength in nm.
+///
+/// The constant is CODATA hc in eV nm, the same value MaterialLibrary.cc uses to
+/// convert the material tables the other way. They must agree, or a wavelength
+/// reported here would not line up with the table that produced the photon.
+constexpr G4double kHcEvNm = 1239.841984;
+
+G4double WavelengthNm(G4double energy) { return kHcEvNm / (energy / eV); }
 
 /// Locate the boundary process once; Geant4 offers no direct accessor.
 G4OpBoundaryProcess* BoundaryProcess() {
@@ -95,9 +105,23 @@ void EventAction::EndOfEventAction(const G4Event* event) {
   analysis->FillNtupleIColumn(column++, event->GetEventID());
   analysis->FillNtupleDColumn(column++, fData.edep / keV);
   analysis->FillNtupleIColumn(column++, fData.generated);
+  analysis->FillNtupleIColumn(column++, fData.scintillation);
+  analysis->FillNtupleIColumn(column++, fData.cherenkov);
   analysis->FillNtupleIColumn(column++, fData.detected);
   analysis->FillNtupleDColumn(column++, firstTime < 0 ? -1.0 : firstTime / ns);
   analysis->FillNtupleDColumn(column++, meanTime < 0 ? -1.0 : meanTime / ns);
+  // Mean wavelength emitted and mean wavelength detected. The gap between them
+  // is bulk self-absorption: the blue side of the emission band runs into the
+  // crystal's own absorption edge, so the light that survives to the readout is
+  // redder than the light that was emitted. -1 marks "no photons".
+  analysis->FillNtupleDColumn(
+      column++, fData.generated > 0
+                    ? fData.generatedWavelengthSum / static_cast<G4double>(fData.generated)
+                    : -1.0);
+  analysis->FillNtupleDColumn(
+      column++, fData.detected > 0
+                    ? fData.detectedWavelengthSum / static_cast<G4double>(fData.detected)
+                    : -1.0);
   analysis->AddNtupleRow();
 }
 
@@ -107,7 +131,25 @@ void EventAction::EndOfEventAction(const G4Event* event) {
 
 G4ClassificationOfNewTrack StackingAction::ClassifyNewTrack(const G4Track* track) {
   if (track->GetDefinition() == G4OpticalPhoton::Definition() && track->GetParentID() > 0) {
-    fEventAction->Data().generated += 1;
+    EventData& data = fEventAction->Data();
+    data.generated += 1;
+    data.generatedWavelengthSum += WavelengthNm(track->GetTotalEnergy());
+    // Optical photons are not all scintillation photons. G4OpticalPhysics also
+    // enables Cerenkov, and in NaI (n ~ 1.85) the Cerenkov threshold for
+    // electrons is about 95 keV, which Compton electrons from a 662 keV gamma
+    // pass easily. Counting "optical photons" as "scintillation photons" would
+    // therefore overstate the light yield -- by a little here, by much more in a
+    // dense high-index crystal or at higher energy. They are separated so that
+    // the photon-budget gate tests what it claims to test.
+    const G4VProcess* creator = track->GetCreatorProcess();
+    if (creator != nullptr) {
+      const G4String& name = creator->GetProcessName();
+      if (name == "Scintillation") {
+        data.scintillation += 1;
+      } else if (name == "Cerenkov") {
+        data.cherenkov += 1;
+      }
+    }
   }
   return fUrgent;
 }
@@ -135,6 +177,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step) {
   data.detected += 1;
   data.detectionTimes.push_back(step->GetPostStepPoint()->GetGlobalTime());
   data.detectionEnergies.push_back(step->GetTrack()->GetTotalEnergy());
+  data.detectedWavelengthSum += WavelengthNm(step->GetTrack()->GetTotalEnergy());
 }
 
 // --------------------------------------------------------------------------- //
@@ -150,9 +193,13 @@ RunAction::RunAction() {
   analysis->CreateNtupleIColumn("event");
   analysis->CreateNtupleDColumn("edep_keV");
   analysis->CreateNtupleIColumn("photons_generated");
+  analysis->CreateNtupleIColumn("photons_scintillation");
+  analysis->CreateNtupleIColumn("photons_cherenkov");
   analysis->CreateNtupleIColumn("photons_detected");
   analysis->CreateNtupleDColumn("first_detection_ns");
   analysis->CreateNtupleDColumn("mean_detection_ns");
+  analysis->CreateNtupleDColumn("mean_generated_nm");
+  analysis->CreateNtupleDColumn("mean_detected_nm");
   analysis->FinishNtuple();
 }
 

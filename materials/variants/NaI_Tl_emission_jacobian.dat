@@ -4,12 +4,14 @@
 # in scint/optical.py.  Do not edit by hand: regenerate instead, so that the
 # provenance notes below cannot drift away from the code that made the numbers.
 #
-# VARIANT: baseline
-# Li 1976 dispersion + measured-anchor absorption edge (E_U = 0.175 eV, the
-# midpoint of the scanned range) + 65 nm Gaussian band. Li rather than
-# Jellison is the baseline because it is what the field's reference
-# compilation actually uses, so this baseline is comparable with published
-# work; Jellison is carried as the systematic variation.
+# VARIANT: emission band Jacobian-corrected
+# Same 415 nm / 65 nm Gaussian, but tabulated so that the distribution Geant4
+# SAMPLES is that Gaussian in wavelength. Geant4 builds the emission CDF by
+# integrating the table over photon energy, so writing a wavelength-space
+# curve down directly -- what digitising a published figure produces -- makes
+# the sampled band 3.8 nm bluer than the curve drawn. Verified in simulation:
+# the uncorrected table gives a mean emitted wavelength of 411.25 nm against
+# the 415 nm written, matching the analytic expectation of 411.24 nm.
 #
 # PROVENANCE OF THE NON-OPTICAL PARAMETERS
 #
@@ -156,138 +158,136 @@ resolution_scale = 1.0
 # the underlying data sits behind an IEEE DataPort subscription, and the LBNL
 # scintillator library lists the peak only. The width is therefore scanned
 # (55/65/75 nm) rather than claimed. It is entangled with the absorption edge:
-# the blue side of this band runs straight into it. AS TABULATED: the values
-# are written straight down as a Gaussian in wavelength, which is what
-# digitising a published emission curve produces. Geant4 integrates the table
-# over photon ENERGY, so the band it samples is blue-shifted by 3.8 nm
-# relative to the curve written here (measured: mean 411.25 nm against the 415
-# nm written). This is the baseline because it is what current practice
-# produces; the jacobian variant shows what the choice costs.
+# the blue side of this band runs straight into it. JACOBIAN-CORRECTED: the
+# tabulated values are multiplied by (lambda/lambda_0)^2 so that the
+# distribution Geant4 actually samples is the Gaussian in wavelength written
+# above. Geant4 integrates the table over photon energy, so without this
+# factor the sampled band is blue-shifted by 2 sigma^2 / lambda_0 = 3.8 nm.
 [SCINTILLATIONCOMPONENT1]
-300    0.000170173
-305    0.000356053
-310    0.000720922
-315    0.00141258
-320    0.00267846
-325    0.00491484
-330    0.00872737
-335    0.0149971
-340    0.0249392
-345    0.0401334
-350    0.0625
-355    0.0941899
-360    0.137366
-365    0.193867
-370    0.264775
-375    0.349947
-380    0.447586
-385    0.553989
-390    0.663553
-395    0.769131
-400    0.862731
-405    0.936483
-410    0.983728
+300    8.89277e-05
+305    0.000192317
+310    0.000402268
+315    0.000813836
+320    0.00159254
+325    0.00301426
+330    0.00551843
+335    0.0097724
+340    0.0167395
+345    0.0277363
+350    0.0444549
+355    0.0689231
+360    0.103368
+365    0.149966
+370    0.210467
+375    0.285738
+380    0.375273
+385    0.476789
+390    0.586015
+395    0.696784
+400    0.801492
+405    0.891895
+410    0.960167
 415    1
-420    0.983728
-425    0.936483
-430    0.862731
-435    0.769131
-440    0.663553
-445    0.553989
-450    0.447586
-455    0.349947
-460    0.264775
-465    0.193867
-470    0.137366
-475    0.0941899
-480    0.0625
-485    0.0401334
-490    0.0249392
-495    0.0149971
-500    0.00872737
-505    0.00491484
-510    0.00267846
-515    0.00141258
-520    0.000720922
-525    0.000356053
-530    0.000170173
-535    7.87077e-05
-540    3.52285e-05
-545    1.52588e-05
-550    6.39583e-06
-555    2.59432e-06
-560    1.01836e-06
-565    3.86836e-07
-570    1.42201e-07
-575    5.0586e-08
-580    1.74144e-08
-585    5.80142e-09
-590    1.8703e-09
-595    5.83497e-10
-600    1.76163e-10
+420    1.00758
+425    0.982159
+430    0.926224
+435    0.845051
+440    0.745907
+445    0.636979
+450    0.526266
+455    0.420657
+460    0.32531
+465    0.243396
+470    0.176189
+475    0.123394
+480    0.0836116
+485    0.0548142
+490    0.0347678
+495    0.0213364
+500    0.0126686
+505    0.00727773
+510    0.00404511
+515    0.00217535
+520    0.00113188
+525    0.000569819
+530    0.000277553
+535    0.000130806
+540    5.96465e-05
+545    2.63158e-05
+550    1.12338e-05
+555    4.63995e-06
+560    1.8543e-06
+565    7.17014e-07
+570    2.68261e-07
+575    9.71113e-08
+580    3.40147e-08
+585    1.15279e-08
+590    3.78024e-09
+595    1.19943e-09
+600    3.68232e-10
 
 # --- Emission spectrum (2) ---------------------------------------------------
 # The two decay components are given the same emission spectrum: no source
 # reports a different band for the slow component of NaI:Tl.
 [SCINTILLATIONCOMPONENT2]
-300    0.000170173
-305    0.000356053
-310    0.000720922
-315    0.00141258
-320    0.00267846
-325    0.00491484
-330    0.00872737
-335    0.0149971
-340    0.0249392
-345    0.0401334
-350    0.0625
-355    0.0941899
-360    0.137366
-365    0.193867
-370    0.264775
-375    0.349947
-380    0.447586
-385    0.553989
-390    0.663553
-395    0.769131
-400    0.862731
-405    0.936483
-410    0.983728
+300    8.89277e-05
+305    0.000192317
+310    0.000402268
+315    0.000813836
+320    0.00159254
+325    0.00301426
+330    0.00551843
+335    0.0097724
+340    0.0167395
+345    0.0277363
+350    0.0444549
+355    0.0689231
+360    0.103368
+365    0.149966
+370    0.210467
+375    0.285738
+380    0.375273
+385    0.476789
+390    0.586015
+395    0.696784
+400    0.801492
+405    0.891895
+410    0.960167
 415    1
-420    0.983728
-425    0.936483
-430    0.862731
-435    0.769131
-440    0.663553
-445    0.553989
-450    0.447586
-455    0.349947
-460    0.264775
-465    0.193867
-470    0.137366
-475    0.0941899
-480    0.0625
-485    0.0401334
-490    0.0249392
-495    0.0149971
-500    0.00872737
-505    0.00491484
-510    0.00267846
-515    0.00141258
-520    0.000720922
-525    0.000356053
-530    0.000170173
-535    7.87077e-05
-540    3.52285e-05
-545    1.52588e-05
-550    6.39583e-06
-555    2.59432e-06
-560    1.01836e-06
-565    3.86836e-07
-570    1.42201e-07
-575    5.0586e-08
-580    1.74144e-08
-585    5.80142e-09
-590    1.8703e-09
-595    5.83497e-10
-600    1.76163e-10
+420    1.00758
+425    0.982159
+430    0.926224
+435    0.845051
+440    0.745907
+445    0.636979
+450    0.526266
+455    0.420657
+460    0.32531
+465    0.243396
+470    0.176189
+475    0.123394
+480    0.0836116
+485    0.0548142
+490    0.0347678
+495    0.0213364
+500    0.0126686
+505    0.00727773
+510    0.00404511
+515    0.00217535
+520    0.00113188
+525    0.000569819
+530    0.000277553
+535    0.000130806
+540    5.96465e-05
+545    2.63158e-05
+550    1.12338e-05
+555    4.63995e-06
+560    1.8543e-06
+565    7.17014e-07
+570    2.68261e-07
+575    9.71113e-08
+580    3.40147e-08
+585    1.15279e-08
+590    3.78024e-09
+595    1.19943e-09
+600    3.68232e-10

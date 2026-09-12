@@ -38,9 +38,11 @@ databases and published measurements, always with stated uncertainty.
 
 ```
 docs/      Strategy and literature documents (Turkish)
-scint/     Python package: materials, cost/CRM, run registry, runner, reporting
+scint/     Python package: materials, optical models, cost/CRM, run registry, runner, reporting
 sim/       Geant4 C++ application and helper tools
+scripts/   Derivations and drivers — each one re-runnable and self-documenting
 configs/   Run and sweep configurations (YAML)
+materials/ Geant4 material specifications (GENERATED — see below)
 data/      Sourced input data — every numeric value carries a source and a date
 runs/      Run outputs (git-ignored; regenerable from configs)
 site/      Generated static report (git-ignored)
@@ -64,6 +66,30 @@ it is regenerable by construction.
 
 **Data provenance rule:** no unsourced number enters `data/`. A value without a source and a
 quotation date is recorded as `null` and surfaces as missing in reports.
+
+**Material files are generated, not written.** `materials/*.dat` comes out of
+`scripts/make_material_variants.py`, which builds each optical property from a named model in
+`scint/optical.py` and writes that model's full provenance into the file beside the numbers.
+Editing a `.dat` by hand is caught by the test suite, because the provenance comment and the
+value it describes must not be able to drift apart.
+
+**Where a value has no single trustworthy source, it is scanned, not chosen.** Three of the
+optical inputs for NaI:Tl are in that position: the refractive index descends from a single
+1923 measurement and a 2012 direct measurement disagrees with it by 1.6 % at the emission
+peak; the bulk absorption length has exactly one usable published anchor; and no
+machine-readable emission spectrum exists in the open literature at all. Rather than pick a
+number, the study runs a family of variants that brackets what the literature asserts and
+reports the resulting spread as a systematic. See `docs/05_OPTIK_GIRDILER.md` and
+`data/literature/optical_provenance.csv`.
+
+### Running the validation gates
+
+```bash
+python3 scripts/derive_nai_abslength.py       # the absorption-length derivation, from the paper's own numbers
+python3 scripts/make_material_variants.py     # regenerate materials/ from scint/optical.py
+python3 scripts/run_gates.py --set all        # G2-G4 plus the optical systematics family
+python3 scripts/analyse_gates.py              # verdicts
+```
 
 ## Setup
 

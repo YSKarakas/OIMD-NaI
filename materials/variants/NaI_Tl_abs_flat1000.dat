@@ -4,12 +4,8 @@
 # in scint/optical.py.  Do not edit by hand: regenerate instead, so that the
 # provenance notes below cannot drift away from the code that made the numbers.
 #
-# VARIANT: baseline
-# Li 1976 dispersion + measured-anchor absorption edge (E_U = 0.175 eV, the
-# midpoint of the scanned range) + 65 nm Gaussian band. Li rather than
-# Jellison is the baseline because it is what the field's reference
-# compilation actually uses, so this baseline is comparable with published
-# work; Jellison is carried as the systematic variation.
+# VARIANT: absorption = flat 1000 mm
+# No absorption edge -- a published flat value.
 #
 # PROVENANCE OF THE NON-OPTICAL PARAMETERS
 #
@@ -99,55 +95,53 @@ resolution_scale = 1.0
 700    1.76231
 
 # --- Bulk absorption length --------------------------------------------------
-# Urbach-form absorption edge, E_U = 0.175 eV (ASSUMED -- scanned systematic,
-# not measured), anchored to L_abs(365 nm) = 59 mm derived in
-# scripts/derive_nai_abslength.py from the 50 % cut-off wavelength reported by
-# Mao, Zhang and Zhu, IEEE TNS 55, 2425 (2008), Section III; far from the edge
-# it saturates at L_bulk = 2000 mm.
+# Flat 1000 mm. A value that appears in published Geant4 scintillator setups.
+# Flat absorption cannot represent an absorption edge that cuts into the
+# emission band; included to compare against the edge model.
 [ABSLENGTH_mm]
-280    0.167787
-290    0.401454
-300    0.906134
-310    1.94007
-320    3.95866
-330    7.72859
-340    14.483
-350    26.1138
-360    45.3742
-370    76.0227
-380    122.772
-390    190.844
-400    284.92
-410    407.504
-420    557.135
-430    727.426
-440    907.851
-450    1086.28
-460    1252.08
-470    1398.17
-480    1521.57
-490    1622.52
-500    1703.25
-510    1766.84
-520    1816.49
-530    1855.07
-540    1885.03
-550    1908.31
-560    1926.46
-570    1940.66
-580    1951.83
-590    1960.66
-600    1967.68
-610    1973.29
-620    1977.81
-630    1981.45
-640    1984.42
-650    1986.84
-660    1988.83
-670    1990.48
-680    1991.84
-690    1992.98
-700    1993.94
+280    1000
+290    1000
+300    1000
+310    1000
+320    1000
+330    1000
+340    1000
+350    1000
+360    1000
+370    1000
+380    1000
+390    1000
+400    1000
+410    1000
+420    1000
+430    1000
+440    1000
+450    1000
+460    1000
+470    1000
+480    1000
+490    1000
+500    1000
+510    1000
+520    1000
+530    1000
+540    1000
+550    1000
+560    1000
+570    1000
+580    1000
+590    1000
+600    1000
+610    1000
+620    1000
+630    1000
+640    1000
+650    1000
+660    1000
+670    1000
+680    1000
+690    1000
+700    1000
 
 # --- Emission spectrum (1) ---------------------------------------------------
 # Gaussian band, peak 415 nm (src_A), FWHM 65 nm. The peak position is well

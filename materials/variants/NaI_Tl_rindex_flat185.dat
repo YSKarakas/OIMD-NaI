@@ -4,12 +4,8 @@
 # in scint/optical.py.  Do not edit by hand: regenerate instead, so that the
 # provenance notes below cannot drift away from the code that made the numbers.
 #
-# VARIANT: baseline
-# Li 1976 dispersion + measured-anchor absorption edge (E_U = 0.175 eV, the
-# midpoint of the scanned range) + 65 nm Gaussian band. Li rather than
-# Jellison is the baseline because it is what the field's reference
-# compilation actually uses, so this baseline is comparable with published
-# work; Jellison is carried as the systematic variation.
+# VARIANT: rindex = flat 1.85
+# The datasheet value, with no dispersion at all.
 #
 # PROVENANCE OF THE NON-OPTICAL PARAMETERS
 #
@@ -43,60 +39,53 @@ time_constant_2_ns          = 1500      # src_B
 resolution_scale = 1.0
 
 # --- Refractive index --------------------------------------------------------
-# H. H. Li, 'Refractive index of alkali halides and its wavelength and
-# temperature derivatives', J. Phys. Chem. Ref. Data 5, 329-528 (1976),
-# doi:10.1063/1.555536; coefficients as tabulated by refractiveindex.info
-# (database/data/main/NaI/nk/Li.yml, CC0), verified by reproducing the
-# classical sodium-D-line value n(589.3 nm) = 1.7745. The database entry
-# itself records that the fit 'is based on a single data point'; Jellison et
-# al. (2012) identify that point as Spangenberg, Z. Kristallogr. 57, 494-534
-# (1923). This is the model used by Mao, Zhang and Zhu, IEEE TNS 55, 2425
-# (2008), which in turn is the source cited for NaI:Tl by the Geant4 parameter
-# compilation of Roberts et al., arXiv:2403.02668 (Fig. 8b).
+# The single value quoted for NaI:Tl on essentially every manufacturer
+# datasheet and in most simulation papers. Kept as a variant because it is
+# what the field does, not because it is a measurement.
 [RINDEX]
-280    1.97595
-290    1.95244
-300    1.93251
-310    1.91541
-320    1.90061
-330    1.88769
-340    1.87633
-350    1.86627
-360    1.85731
-370    1.84929
-380    1.84208
-390    1.83556
-400    1.82965
-410    1.82427
-420    1.81936
-430    1.81486
-440    1.81072
-450    1.80691
-460    1.80339
-470    1.80013
-480    1.79711
-490    1.7943
-500    1.79168
-510    1.78923
-520    1.78695
-530    1.78481
-540    1.7828
-550    1.78091
-560    1.77914
-570    1.77747
-580    1.77589
-590    1.7744
-600    1.773
-610    1.77166
-620    1.7704
-630    1.7692
-640    1.76807
-650    1.76699
-660    1.76596
-670    1.76498
-680    1.76405
-690    1.76316
-700    1.76231
+280    1.85
+290    1.85
+300    1.85
+310    1.85
+320    1.85
+330    1.85
+340    1.85
+350    1.85
+360    1.85
+370    1.85
+380    1.85
+390    1.85
+400    1.85
+410    1.85
+420    1.85
+430    1.85
+440    1.85
+450    1.85
+460    1.85
+470    1.85
+480    1.85
+490    1.85
+500    1.85
+510    1.85
+520    1.85
+530    1.85
+540    1.85
+550    1.85
+560    1.85
+570    1.85
+580    1.85
+590    1.85
+600    1.85
+610    1.85
+620    1.85
+630    1.85
+640    1.85
+650    1.85
+660    1.85
+670    1.85
+680    1.85
+690    1.85
+700    1.85
 
 # --- Bulk absorption length --------------------------------------------------
 # Urbach-form absorption edge, E_U = 0.175 eV (ASSUMED -- scanned systematic,
