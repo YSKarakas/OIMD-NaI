@@ -22,3 +22,16 @@ build/
 # so only the metadata index and the hand-extracted records are committed.
 data/literature/cache/pdf/
 data/literature/cache/txt/
+
+# LaTeX intermediates. The PDF and the .docx ARE committed -- they are what
+# gets read and emailed, and tests/test_paper.py fails if the PDF is older
+# than the source -- but nothing below is worth a diff.
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*.spl
+paper/*.toc
+paper/*.synctex.gz
+paper/build.log
