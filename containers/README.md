@@ -30,30 +30,42 @@ installation should be aligned with it before any results are published.
 ## Equivalence: what is and is not reproducible
 
 Measured on 2026-09-12, 20 000 events, 662 keV into 3" x 3" NaI(Tl), identical
-configuration and seed.
+configuration and seed; the optical columns re-read on 2026-09-13 after a
+referee asked where the runs had been made.
 
 | Comparison | Result |
 |---|---|
 | Same build, same seed, run twice | **byte-identical** (host and container both) |
 | Host beta vs container release, event by event | 61 % of events differ |
-| Host vs container, photopeak efficiency | 0.61090 vs 0.61060 — **0.05 %**, 0.1 sigma |
-| Host vs container, total interaction probability | 0.87945 vs 0.87285 — 0.75 %, about 2.9 sigma |
+| Host vs container, photopeak efficiency | 0.61090 vs 0.61060 -- 0.05 %, 0.1 sigma |
+| Host vs container, total interaction probability | 0.87945 vs 0.87285 -- 0.75 %, about 2.9 sigma |
+| **Host vs container, photons detected per full-energy event** | **release collects 4.3 % more -- 4.8 sigma over 7477 events** |
+| **Host vs container, mean detection time** | **3.415 ns vs 2.215 ns -- the release is a third shorter, 70 sigma** |
 
-Byte-identity **across** Geant4 versions is impossible by construction: different
-model implementations consume random numbers differently, and the two
+An earlier version of this section compared only the two EM quantities, found
+them in agreement, and concluded "physics agreement". That conclusion was wrong
+for the quantity this project actually measures. The beta and the release
+differ in optical transport itself, consistent with the refactoring of
+G4OpBoundaryProcess during the 11.4 cycle noted in the Dockerfile. It also said
+the host should be aligned with the release "before any results are
+published"; that was not done for the first campaign, and a referee found it.
+
+Consequences, in force since 2026-09-13:
+
+1. **Every published run is made in this container** through
+   `scripts/run_in_container.sh`, which records `in_container: true`, the
+   release tag `geant4-11-04-patch-02`, and the host's git state (the image has
+   no git, so the launcher passes it in through the environment).
+2. Runs made with the pre-release are config schema 3 and earlier; release runs
+   are schema 4. The analysis refuses to compare across schemas.
+3. `/etc/geant4.env`, which the entrypoint sources, is **empty** in the image as
+   built (the `grep` in the Dockerfile matched nothing), so `LD_LIBRARY_PATH`
+   and the dataset variables are unset for any command run directly. The
+   launcher sources `/opt/geant4/bin/geant4.sh` itself. The Dockerfile should
+   be fixed at the next rebuild; it is not rebuilt now because the image on
+   disk is the one the published runs used.
+
+Byte-identity **across** Geant4 versions is impossible by construction:
+different model implementations consume random numbers differently, and the two
 installations also carry different EM datasets (G4EMLOW 8.7 on the host, 8.8 in
-the container). An earlier draft of this file claimed host and container should
-produce identical bytes; that was wrong.
-
-The two claims worth making are therefore:
-
-1. **Reproducibility** — a given build reproduces its own results exactly. Verified.
-2. **Physics agreement** — the beta and the release agree on the photopeak
-   efficiency to 0.05 %. The 0.75 % difference in total interaction probability
-   sits at about 2.9 sigma and is plausibly the EM dataset change, since it moves
-   "any interaction" without moving full-energy deposition, as a Rayleigh or
-   low-energy cross-section update would. More statistics are needed before
-   claiming it is real rather than a fluctuation.
-
-`env.json` records `platform.in_container` and the Geant4 tag for every run, so
-results from the two builds can always be told apart after the fact.
+the container).
