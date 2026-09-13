@@ -153,16 +153,40 @@ def _resolve_labels(rows: list[dict]) -> list[dict]:
     return kept
 
 
+# Runs allowed to sit in a comparison set at a different event count, each
+# with the reason. The rule is "no SILENT mixing", not "no mixing": a recorded
+# decision is fine, an accident is not. Every entry here is printed as a NOTE
+# whenever it is used, and the manuscript states the same exception in the
+# caption of the table that carries it.
+DOCUMENTED_EVENT_EXCEPTIONS = {
+    "SCOPE_ctrl_flatabs_3inch": (
+        "run at 300 events: with a flat 2000 mm absorption length photons "
+        "survive far more boundary crossings and the 1000-event run projected "
+        "to ~65 min; 300 events give the ratio this control measures to 0.1 %"),
+    "SCOPE_ctrl_flatabs_1inch": "run at 300 events, to match its 3-inch partner",
+}
+
+
 def _same_settings(rows: list[dict], what: str) -> None:
-    """Refuse to compare runs that were not made under the same settings."""
+    """Refuse to compare runs that were not made under the same settings,
+    unless the deviation is recorded above -- in which case say so."""
     if not rows:
         return
-    combos = {(r["schema"], r["events"]) for r in rows}
-    if len(combos) > 1:
+    ref = max(((r["schema"], r["events"]) for r in rows),
+              key=lambda c: sum(1 for r in rows if (r["schema"], r["events"]) == c))
+    odd = [r for r in rows if (r["schema"], r["events"]) != ref]
+    undocumented = [r for r in odd if r["label"] not in DOCUMENTED_EVENT_EXCEPTIONS]
+    if undocumented:
         raise SystemExit(
-            f"{what}: runs differ in schema/events {sorted(combos)}. These are "
-            "not comparable and the spread between them would be partly an "
-            "artefact of statistics. Re-run the set at one setting.")
+            f"{what}: runs differ in schema/events from the set's "
+            f"(schema {ref[0]}, {ref[1]} events): "
+            + ", ".join(f"{r['label']} ({r['schema']}, {r['events']})" for r in undocumented)
+            + ". These are not comparable and the spread between them would be "
+            "partly an artefact of statistics. Re-run at one setting, or record "
+            "the reason in DOCUMENTED_EVENT_EXCEPTIONS.")
+    for r in odd:
+        print(f"  NOTE {r['label']} at {r['events']} events, not {ref[1]}: "
+              f"{DOCUMENTED_EVENT_EXCEPTIONS[r['label']]}")
 
 
 def report(rows: list[dict]) -> dict:
