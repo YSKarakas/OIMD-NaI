@@ -62,7 +62,11 @@ def summarise(run) -> dict | None:
                  if "photons_cherenkov" in data else None)
 
     mask = photopeak(data)
-    gen = gen_all[mask]
+    # Light COLLECTION is scintillation photons detected over scintillation
+    # photons generated. Cherenkov photons are 0.1 % of the total and used to
+    # sit in this denominator by accident -- the yield gate already excluded
+    # them, the LCE did not. Schema 1 cannot separate them and says so.
+    gen = gen_scint[mask]
     det = np.asarray(data["photons_detected"], dtype=float)[mask]
     if gen.size < 30:
         return None
@@ -97,6 +101,7 @@ def summarise(run) -> dict | None:
         "yield_ratio_sem": float(ratio.std(ddof=1) / math.sqrt(ratio.size)),
         "yield_ratio_events": int(ratio.size),
         "yield_is_scintillation_only": bool(scint_only),
+        "lce_denominator": "scintillation" if scint_only else "all optical photons (schema 1)",
         "cherenkov_mean": float(cherenkov[full].mean()) if cherenkov is not None and full.any() else None,
         "mean_generated_nm": float(np.asarray(data["mean_generated_nm"])[full].mean())
         if "mean_generated_nm" in data and full.any() else None,
