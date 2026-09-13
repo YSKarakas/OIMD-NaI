@@ -301,6 +301,7 @@ def report(rows: list[dict]) -> dict:
     print("OPTICAL INPUT SYSTEMATICS -- LCE under one-at-a-time variation")
     print("=" * 78)
     sys_rows = [r for r in rows if r["label"].startswith("SYS_")]
+    _same_settings(sys_rows, "optical-systematics set")
     if baseline is not None and sys_rows:
         b = baseline["lce_mean"]
         print(f"  {'variant':<22} {'LCE':>9} {'+- sem':>9} {'vs baseline':>13}")
@@ -447,6 +448,8 @@ def report(rows: list[dict]) -> dict:
                          and r["label"] != "SCOPE_baseline"),
                         key=lambda r: r["label"])
     scope_base = by_label.get("SCOPE_baseline")
+    if scope_base:
+        _same_settings(scope_rows + [scope_base], "arrangement-scan set")
     if scope_rows and scope_base:
         print()
         print("=" * 78)
