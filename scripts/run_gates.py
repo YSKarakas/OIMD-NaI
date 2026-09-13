@@ -281,10 +281,12 @@ def gather(set_name: str, events: int, seed: int) -> list[dict]:
                 events=events, seed=seed,
             ))
     if set_name in ("measured", "all"):
-        # The digitised transmittance curve and its two digitisation-error
-        # bounds, run against the same baseline as the arrangement scan so the
-        # three are directly comparable: same schema, same seed, same events.
+        # The digitised transmittance curve and its four digitisation-error
+        # bounds -- two per axis, transmittance and wavelength -- run against the
+        # same baseline as the arrangement scan so all of them are directly
+        # comparable: same schema, same seed, same events.
         for label in ("abs_measured", "abs_measured_hi", "abs_measured_lo",
+                      "abs_measured_lamhi", "abs_measured_lamlo",
                       "meas_rindex_jellison", "meas_rindex_flat185",
                       "meas_fwhm55", "meas_fwhm75"):
             configs.append(config_for(

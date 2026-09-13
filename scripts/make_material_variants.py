@@ -196,6 +196,11 @@ FLAT_185 = constant_dispersion(1.85, source=(
 MEASURED = MeasuredAttenuation()
 MEASURED_HI = MeasuredAttenuation(sigma=+1.0)
 MEASURED_LO = MeasuredAttenuation(sigma=-1.0)
+# The wavelength axis is the other half of the digitisation error, and below
+# 390 nm it is the larger half. Kept as a separate pair because the two axes
+# are independent: they are combined in quadrature at the end, not stacked.
+MEASURED_LAMHI = MeasuredAttenuation(sigma_lam=+1.0)
+MEASURED_LAMLO = MeasuredAttenuation(sigma_lam=-1.0)
 
 FLAT_2000 = constant_absorption(
     2000.0,
@@ -290,15 +295,29 @@ VARIANTS: list[tuple[str, str, str, Dispersion, object, float, bool]] = [
     ),
     (
         "materials/variants/NaI_Tl_abs_measured_hi.dat",
-        "absorption = measured, +1 sigma of the digitisation error",
-        "Upper bound of the measured curve.",
+        "absorption = measured, +1 sigma of the transmittance digitisation error",
+        "Transmittance-axis upper bound of the measured curve.",
         LI_1976, MEASURED_HI, EMISSION_FWHM_NM, False,
     ),
     (
         "materials/variants/NaI_Tl_abs_measured_lo.dat",
-        "absorption = measured, -1 sigma of the digitisation error",
-        "Lower bound of the measured curve.",
+        "absorption = measured, -1 sigma of the transmittance digitisation error",
+        "Transmittance-axis lower bound of the measured curve.",
         LI_1976, MEASURED_LO, EMISSION_FWHM_NM, False,
+    ),
+    (
+        "materials/variants/NaI_Tl_abs_measured_lamhi.dat",
+        "absorption = measured, wavelength axis +1 sigma",
+        "Wavelength-axis bound: the curve moved 3.72 nm to the red, which is "
+        "the residual left by the third calibration handle. At 365 nm this "
+        "reproduces the analytic inversion of the stated cut-off.",
+        LI_1976, MEASURED_LAMHI, EMISSION_FWHM_NM, False,
+    ),
+    (
+        "materials/variants/NaI_Tl_abs_measured_lamlo.dat",
+        "absorption = measured, wavelength axis -1 sigma",
+        "Wavelength-axis bound: the curve moved 3.72 nm to the blue.",
+        LI_1976, MEASURED_LAMLO, EMISSION_FWHM_NM, False,
     ),
     (
         "materials/variants/NaI_Tl_abs_flat2000.dat", "absorption = flat 2000 mm",

@@ -118,7 +118,55 @@ def summarise(run) -> dict | None:
     }
 
 
+def _resolve_labels(rows: list[dict]) -> list[dict]:
+    """Keep one run per label, and say out loud which one and why.
+
+    A label is not unique: the same configuration re-run at a different event
+    count is a different run with the same name, and `{r["label"]: r}` would
+    have silently kept whichever happened to be last on disk. For a paper whose
+    subject is exactly this kind of untracked provenance, that is not an
+    acceptable failure mode. The rule is explicit -- prefer the newest output
+    schema, then the most events -- and every collapse is printed.
+    """
+    groups: dict[str, list[dict]] = {}
+    for r in rows:
+        groups.setdefault(r["label"], []).append(r)
+    kept, notes = [], []
+    for label, g in groups.items():
+        if len(g) == 1:
+            kept.append(g[0])
+            continue
+        g = sorted(g, key=lambda r: (r["schema"], r["events"]), reverse=True)
+        kept.append(g[0])
+        notes.append((label, g[0], g[1:]))
+    if notes:
+        print("=" * 78)
+        print("DUPLICATE LABELS -- one run kept per label, the rest ignored")
+        print("=" * 78)
+        for label, win, rest in sorted(notes):
+            print(f"  {label:<28} keep {win['id'][:12]} "
+                  f"(schema {win['schema']}, {win['events']} events)")
+            for r in rest:
+                print(f"  {'':<28} drop {r['id'][:12]} "
+                      f"(schema {r['schema']}, {r['events']} events)")
+        print()
+    return kept
+
+
+def _same_settings(rows: list[dict], what: str) -> None:
+    """Refuse to compare runs that were not made under the same settings."""
+    if not rows:
+        return
+    combos = {(r["schema"], r["events"]) for r in rows}
+    if len(combos) > 1:
+        raise SystemExit(
+            f"{what}: runs differ in schema/events {sorted(combos)}. These are "
+            "not comparable and the spread between them would be partly an "
+            "artefact of statistics. Re-run the set at one setting.")
+
+
 def report(rows: list[dict]) -> dict:
+    rows = _resolve_labels(rows)
     by_label = {r["label"]: r for r in rows}
     verdicts: dict[str, dict] = {}
 
@@ -321,6 +369,7 @@ def report(rows: list[dict]) -> dict:
         print("=" * 78)
         print("MEASURED ATTENUATION CURVE -- digitised from Mao et al. Fig. 2")
         print("=" * 78)
+        _same_settings(meas_rows + [meas_base], "measured-attenuation set")
         mb = meas_base["lce_mean"]
         print(f"  {'variant':<22} {'LCE':>9} {'+- sem':>9} {'vs baseline':>13}")
         print(f"  {'baseline (edge model)':<22} {mb:>9.4f} "
@@ -331,14 +380,27 @@ def report(rows: list[dict]) -> dict:
             vals[name] = r["lce_mean"]
             print(f"  {name:<22} {r['lce_mean']:>9.4f} {r['lce_sem']:>9.4f} "
                   f"{100*(r['lce_mean']-mb)/mb:>+12.2f} %")
-        if {"abs_measured", "abs_measured_hi", "abs_measured_lo"} <= set(vals):
+        if {"abs_measured", "abs_measured_hi", "abs_measured_lo",
+            "abs_measured_lamhi", "abs_measured_lamlo"} <= set(vals):
             c = vals["abs_measured"]
             hi, lo = vals["abs_measured_hi"], vals["abs_measured_lo"]
-            band = abs(hi - lo) / 2.0
+            lhi, llo = vals["abs_measured_lamhi"], vals["abs_measured_lamlo"]
+            # Two independent digitisation errors, one per axis of the figure,
+            # each run as its own coherent +-1 sigma pair. They are independent
+            # of each other -- one is set by the stroke width, the other by the
+            # axis calibration handles -- so they combine in quadrature. The
+            # wavelength term was missing from an earlier version of this
+            # analysis and it is the larger of the two.
+            band_t = abs(hi - lo) / 2.0
+            band_l = abs(lhi - llo) / 2.0
+            band = math.hypot(band_t, band_l)
             print()
             print(f"  light-collection efficiency from the measured curve:")
-            print(f"      {c:.4f} +- {band:.4f}  "
-                  f"({100*band/c:.1f} % from the digitisation error alone)")
+            print(f"      {c:.4f} +- {band:.4f}  ({100*band/c:.1f} %)")
+            print(f"        transmittance axis  +- {band_t:.4f} "
+                  f"({100*band_t/c:.1f} %)")
+            print(f"        wavelength axis     +- {band_l:.4f} "
+                  f"({100*band_l/c:.1f} %)")
             sysd = verdicts.get("systematics", {})
             if sysd:
                 print(f"  for comparison, the scanned-slope family spanned "
@@ -346,8 +408,13 @@ def report(rows: list[dict]) -> dict:
             verdicts["measured"] = {
                 "baseline_lce": mb,
                 "lce": c, "lce_hi": hi, "lce_lo": lo,
+                "lce_lamhi": lhi, "lce_lamlo": llo,
                 "half_band": band,
+                "half_band_transmittance": band_t,
+                "half_band_wavelength": band_l,
                 "half_band_fraction": band / c,
+                "half_band_fraction_transmittance": band_t / c,
+                "half_band_fraction_wavelength": band_l / c,
                 "vs_baseline_pct": 100*(c-mb)/mb,
             }
             # The envelope over everything built ON the measured attenuation:

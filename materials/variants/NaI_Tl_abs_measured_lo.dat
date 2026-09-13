@@ -4,8 +4,8 @@
 # in scint/optical.py.  Do not edit by hand: regenerate instead, so that the
 # provenance notes below cannot drift away from the code that made the numbers.
 #
-# VARIANT: absorption = measured, -1 sigma of the digitisation error
-# Lower bound of the measured curve.
+# VARIANT: absorption = measured, -1 sigma of the transmittance digitisation error
+# Transmittance-axis lower bound of the measured curve.
 #
 # PROVENANCE OF THE NON-OPTICAL PARAMETERS
 #
@@ -104,8 +104,8 @@ resolution_scale = 1.0
 # % cut-off against the 365 nm stated in the text. This is an EFFECTIVE
 # attenuation: a single-beam transmittance does not separate absorption from
 # scattering, so implementing it as ABSLENGTH overestimates the loss by
-# whatever fraction is scattering. Shifted by -1 sigma of the digitisation
-# error (0.0055 in transmittance) to bound the curve.
+# whatever fraction is scattering. Shifted by -1 sigma of the transmittance
+# digitisation error (0.0055 in T) to bound the curve.
 [ABSLENGTH_mm]
 280    8.66196
 290    8.66196

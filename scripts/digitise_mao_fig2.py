@@ -27,9 +27,15 @@ What it does
 6. Inverts T to an effective attenuation length using the same expression the
    paper uses for its own theoretical limit.
 
-Two independent checks are printed, and both must pass for the output to mean
-anything: the calibration check in step 4, and the recovered cut-off
-wavelength against the 365 nm the paper states in its text.
+Three checks are printed, and all must pass for the output to mean anything:
+the calibration check in step 4; the recovered cut-off wavelength against the
+365 nm the paper states in its text, within a tolerance chosen so that the
+rejected column-wise trace fails it; and the residual that check leaves against
+the wavelength-axis systematic the analysis propagates. The last of these is
+the point of the exercise. The residual is 3.7 nm, it is not negligible -- at
+365 nm it is worth a factor 1.8 in attenuation length, against 2.6 % for the
+transmittance error -- and it is carried as an uncertainty rather than
+explained away.
 
 The paper's PDF is not redistributed with this repository. It is available
 from the authors' institutional page; the URL and checksum are recorded in
@@ -79,6 +85,17 @@ SAMPLE_LENGTH_MM = 38.8
 
 # The paper's own stated cut-off for NaI(Tl), used as the second check.
 STATED_CUTOFF_NM = 365.0
+
+# How far the recovered cut-off may sit from the stated one. This is not a
+# comfort margin: it is the discriminator between this tracing method and the
+# one that was rejected. Traced row-wise, the residual is 3.7 nm; traced
+# column-wise throughout -- the first thing this script got wrong -- it was
+# 8.0 nm. A tolerance of 5 nm passes the first and fails the second, which is
+# the whole point of having the check. Whatever residual does survive is not
+# waved away either: it is carried into the analysis as the wavelength-axis
+# systematic DIGITISATION_SIGMA_LAM_NM in scint/optical.py, and that constant
+# and this measurement are checked against each other below.
+CUTOFF_TOLERANCE_NM = 5.0
 
 
 def render(pdf: Path, workdir: Path) -> np.ndarray:
@@ -219,9 +236,21 @@ def main() -> int:
     print(f"  recovered  : {cutoff:.1f} nm")
     print(f"  stated     : {STATED_CUTOFF_NM:.0f} nm      "
           f"difference {cutoff - STATED_CUTOFF_NM:+.1f} nm")
-    if abs(cutoff - STATED_CUTOFF_NM) > 8.0:
-        raise SystemExit("recovered cut-off disagrees with the stated value by "
-                         "more than the stroke width; do not use this output")
+    residual = STATED_CUTOFF_NM - cutoff
+    if abs(residual) > CUTOFF_TOLERANCE_NM:
+        raise SystemExit(
+            f"recovered cut-off is {residual:+.1f} nm from the stated value, "
+            f"past the {CUTOFF_TOLERANCE_NM:.0f} nm tolerance. That is the size "
+            "of error the rejected column-wise trace produced; do not use this "
+            "output.")
+    from scint.optical import DIGITISATION_SIGMA_LAM_NM
+    print(f"  residual   : {residual:+.2f} nm, carried as the wavelength-axis "
+          f"systematic")
+    if abs(abs(residual) - DIGITISATION_SIGMA_LAM_NM) > 0.1:
+        raise SystemExit(
+            f"the residual measured here ({abs(residual):.2f} nm) no longer "
+            f"matches DIGITISATION_SIGMA_LAM_NM ({DIGITISATION_SIGMA_LAM_NM:.2f} "
+            "nm) in scint/optical.py, which the paper propagates. Update it.")
 
     rows = []
     for lm, t in zip(lam, tr):
