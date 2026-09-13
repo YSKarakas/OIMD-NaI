@@ -88,6 +88,8 @@ void DetectorConstruction::DefineCommands() {
                                      "none, lumirror, teflon, tio, tyvek or esr");
   fSurfaceMessenger->DeclareProperty("coupling", fWrapCoupling, "air or glue");
   fSurfaceMessenger->DeclareProperty("model", fSurfaceModel, "unified, lut or davis");
+  fSurfaceMessenger->DeclareProperty("reflectivity", fWrapReflectivity,
+                                     "reflectance of the wrapping (0-1); REQUIRED for a wrapped crystal");
   fSurfaceMessenger->DeclareProperty("sigmaAlpha", fSigmaAlpha,
                                      "micro-facet spread in degrees (UNIFIED model only)");
 
@@ -277,6 +279,25 @@ void DetectorConstruction::AttachSurfaces(G4VPhysicalVolume* crystal, G4VPhysica
     fEffectiveModel += " (requested '" + fSurfaceModel + "', substituted)";
   }
 
+  // The DAVIS model has its own finish enumerators (Polished_LUT, RoughTeflon_LUT,
+  // ...) and its own reader, G4OpticalSurface::ReadLUTDAVISFile, with the same
+  // silent `default: return;` as the LBNL one. The finish resolved above is an
+  // LBNL enumerator, so handing it to DAVIS loads no table and the DAVIS
+  // rejection loop hangs exactly as Appendix A describes -- for every wrapping,
+  // not only the bare one. Until the catalogue maps DAVIS finishes it is refused.
+  if (effectiveModel == DAVIS) {
+    throw std::runtime_error(
+        "surface model 'davis' is not wired to the DAVIS finish table; the LBNL "
+        "finish would be passed to ReadLUTDAVISFile, load nothing, and hang. Use 'lut'.");
+  }
+  // A bare ground surface under UNIFIED with sigma_alpha = 0 is a polished
+  // surface with a misleading name: G4OpBoundaryProcess::GetFacetNormal returns
+  // the flat normal unchanged. Refuse it rather than mislabel it.
+  if (bare && *treatment == Treatment::Ground && fSigmaAlpha <= 0.0) {
+    throw std::runtime_error(
+        "a bare 'ground' surface needs /scint/surface/sigmaAlpha > 0; at 0 it is polished");
+  }
+
   auto* wrapped = new G4OpticalSurface("WrappedSurface");
   wrapped->SetType(dielectric_LUT);
   wrapped->SetModel(effectiveModel);
@@ -286,8 +307,21 @@ void DetectorConstruction::AttachSurfaces(G4VPhysicalVolume* crystal, G4VPhysica
     // an explicit micro-facet spread, and it must be given in radians.
     wrapped->SetType(dielectric_dielectric);
     wrapped->SetSigmaAlpha(fSigmaAlpha * deg);
-  } else if (effectiveModel == DAVIS) {
-    wrapped->SetType(dielectric_LUTDAVIS);
+  }
+  if (!bare) {
+    // Without a REFLECTIVITY property G4OpBoundaryProcess initialises
+    // fReflectivity to 1 and the look-up-table branch's only loss path,
+    // `if (rand > fReflectivity)`, can never be taken: the wrapper becomes a
+    // perfect mirror and bulk absorption the only sink. That is not a choice
+    // anyone would defend, so the value is required and echoed.
+    if (fWrapReflectivity < 0.0 || fWrapReflectivity > 1.0) {
+      throw std::runtime_error(
+          "set /scint/surface/reflectivity in [0,1] for a wrapped crystal; Geant4's "
+          "silent default of 1.0 is a lossless mirror and is not accepted implicitly");
+    }
+    auto* wrapTable = new G4MaterialPropertiesTable();
+    AddFlatProperty(wrapTable, "REFLECTIVITY", fWrapReflectivity);
+    wrapped->SetMaterialPropertiesTable(wrapTable);
   }
   new G4LogicalBorderSurface("CrystalToWorld", crystal, world, wrapped);
 
@@ -327,6 +361,7 @@ G4String DetectorConstruction::Describe() const {
   }
   out << " L=" << fLength / mm << "mm"
       << " surface=" << fTreatment << "/" << fWrapping << "/" << fWrapCoupling
+      << " reflectivity=" << fWrapReflectivity
       << " (" << fResolvedFinish << ", model=" << fEffectiveModel << ")"
       << " coupling=" << fCouplingType << " n=" << fCouplingIndex
       << " readout=" << (fReadoutDiameter > 0 ? fReadoutDiameter / mm : fDiameter / mm) << "mm";

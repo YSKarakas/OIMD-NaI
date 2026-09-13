@@ -21,7 +21,10 @@ from functools import lru_cache
 from pathlib import Path
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent
-G4DATA_BIN = _REPO_ROOT / "build" / "sim" / "g4data"
+# The version tool must be the one built against the toolkit actually in use.
+# Inside the container that is build/container/g4data, not the host build, and
+# the launcher says so through the environment; the default is the host build.
+G4DATA_BIN = Path(os.environ.get("SCINT_G4DATA_BIN", str(_REPO_ROOT / "build" / "sim" / "g4data")))
 GEANT4_DATA_ROOT = Path(os.environ.get("SCINT_G4_DATA_ROOT", "/usr/local/share/Geant4/data"))
 
 PRERELEASE_MARKERS = ("beta", "alpha", "rc", "cand", "ref")

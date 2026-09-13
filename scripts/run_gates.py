@@ -84,6 +84,7 @@ BASE_GEOMETRY = {
         "wrapping": "teflon",
         "coupling": "air",
         "model": "lut",
+        "reflectivity": 0.99,   # REFLECTANCE_440NM["teflon"]; kept in step below
     },
     # The index is now explicit rather than left at the application's default,
     # because it is one of the inputs this study varies: a light-collection
@@ -98,6 +99,29 @@ BASE_GEOMETRY = {
 }
 
 WRAPPINGS = ["none", "teflon", "lumirror", "tyvek", "tio", "esr"]
+
+# Reflectance of each wrapping, as a flat number applied through REFLECTIVITY.
+#
+# Without it Geant4 treats every reflector as a perfect mirror -- the property
+# defaults to 1.0 when absent, and the look-up-table models carry angular
+# distributions only -- which is how an earlier campaign of this study ran. A
+# referee found it. The values are the reflection coefficients at 440 nm in
+# Table I of M. Janecek, IEEE Trans. Nucl. Sci. 59 (2012) 490, read from the
+# printed table (the LBNL look-up tables these wrappings use come from the same
+# group's measurements). 440 nm is the nearest tabulated wavelength to the
+# 415 nm emission peak, and the same paper says which of these fail inside the
+# band: ESR's reflectivity drops sharply below 395 nm and TiO2's below 420 nm,
+# and PTFE reaches its value in 380-500 nm only above 0.5 mm thickness. A flat
+# number therefore overstates ESR and TiO2 in the blue tail, and the
+# reflectance scan in the scope set bounds what that is worth.
+REFLECTANCE_440NM = {
+    "teflon": 0.99,      # ACE Teflon tape (matte), n x 0.06 mm
+    "esr": 0.985,        # 3M ESR film, 0.065 mm
+    "lumirror": 0.98,    # Toray Lumirror, 0.24 mm
+    "tyvek": 0.97,       # DuPont Tyvek paper, n x 0.11 mm
+    "tio": 0.955,        # Saint-Gobain titanium dioxide paint, 0.14-0.18 mm
+    "none": None,        # bare: no wrapper, nothing to reflect
+}
 
 # The arrangement's own optical inputs: geometry, readout coupling and surface
 # finish. The baseline for all of them is BASE_GEOMETRY, so each of these runs
@@ -131,6 +155,13 @@ SCOPE_VARIANTS: dict[str, dict[str, dict]] = {
     "couple_n157":   {"coupling": {"rindex": 1.57}},
     # --- surface finish ---------------------------------------------------
     "finish_ground": {"surface": {"treatment": "ground"}},
+    # --- wrapping reflectance ---------------------------------------------
+    # The input the earlier campaign left at Geant4's default. 1.00 is that
+    # default, a lossless mirror; 0.95 and 0.90 bracket a worn or thin Teflon
+    # tape and the in-band cut-offs Janecek reports for ESR and TiO2.
+    "reflectance_100": {"surface": {"reflectivity": 1.00}},
+    "reflectance_095": {"surface": {"reflectivity": 0.95}},
+    "reflectance_090": {"surface": {"reflectivity": 0.90}},
 }
 
 # The control pair described above. Keyed separately because they need a
@@ -153,7 +184,12 @@ SCOPE_CONTROLS: dict[str, tuple[str, dict[str, dict]]] = {
 #   3: + photons removed by the optical step cap; and bare surfaces are now
 #        resolved analytically rather than through a look-up table that does
 #        not exist, which is what made the unwrapped configuration hang
-CONFIG_SCHEMA = 3
+#   4: surface.reflectivity is a REQUIRED input and part of the hash. Every run
+#      before schema 4 was made with Geant4's silent default of a lossless
+#      wrapper, and with a pre-release toolkit; schema 4 runs are made in the
+#      container against the 11.4.2 release. Bumping the schema is what keeps
+#      the two campaigns from ever being averaged or compared by accident.
+CONFIG_SCHEMA = 4
 
 
 def config_for(
@@ -177,8 +213,11 @@ def config_for(
     cfg["crystal"]["material_spec"] = material_spec
     if wrapping is not None:
         cfg["surface"]["wrapping"] = wrapping
+        cfg["surface"]["reflectivity"] = REFLECTANCE_440NM[wrapping]
     for section, values in (overrides or {}).items():
         cfg[section].update(values)
+    if cfg["surface"]["wrapping"] == "none":
+        cfg["surface"]["reflectivity"] = None
     # The label is deliberately NOT part of the configuration: the run id is a
     # hash of the physics, so two gates that ask for the same physics resolve to
     # the same run and the second is reused rather than recomputed.
@@ -205,6 +244,7 @@ def macro_for(cfg: dict, output_stem: Path) -> str:
 /scint/surface/wrapping {s['wrapping']}
 /scint/surface/coupling {s['coupling']}
 /scint/surface/model {s['model']}
+{f"/scint/surface/reflectivity {s['reflectivity']}" if s.get('reflectivity') is not None else "# bare crystal: no wrapping reflectance"}
 
 /scint/coupling/type {k['type']}
 /scint/coupling/rindex {k['rindex']}

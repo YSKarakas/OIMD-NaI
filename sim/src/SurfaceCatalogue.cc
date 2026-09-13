@@ -19,7 +19,7 @@ struct Key {
 };
 
 // The full set Geant4 ships look-up tables for -- 21 entries, verified against
-// G4OpticalSurface::ReadLUTFile in Geant4 11.4.2 and against the contents of the
+// G4OpticalSurface::ReadLUTFile in Geant4 geant4-11-04-beta-01 and against the contents of the
 // RealSurface2.2 dataset, not against the enum.
 //
 // Teflon, TiO and Tyvek exist only in air-coupled form; Geant4 provides no

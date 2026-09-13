@@ -94,13 +94,26 @@ def capture_environment(seed: int | None = None) -> dict[str, Any]:
     not reproducible from the recorded commit alone, and reports flag it.
     """
     status = _git("status", "--porcelain")
+    git = {
+        "commit": _git("rev-parse", "HEAD"),
+        "branch": _git("rev-parse", "--abbrev-ref", "HEAD"),
+        "dirty": bool(status) if status is not None else None,
+    }
+    # The container has no git, so a run made inside it would record nothing
+    # about the tree it came from -- the one fact this record exists to keep.
+    # The host-side launcher therefore captures the state before entering the
+    # container and passes it through the environment; the record says which
+    # route it came by, so the two are never confused.
+    if git["commit"] is None and os.environ.get("SCINT_GIT_COMMIT"):
+        git = {
+            "commit": os.environ["SCINT_GIT_COMMIT"],
+            "branch": os.environ.get("SCINT_GIT_BRANCH"),
+            "dirty": os.environ.get("SCINT_GIT_DIRTY") == "1",
+            "source": "captured on the host before entering the container",
+        }
     return {
         "captured_at": datetime.now(timezone.utc).isoformat(),
-        "git": {
-            "commit": _git("rev-parse", "HEAD"),
-            "branch": _git("rev-parse", "--abbrev-ref", "HEAD"),
-            "dirty": bool(status) if status is not None else None,
-        },
+        "git": git,
         # geant4-config alone is not enough: it reports the same version string
         # for a series' beta and its release. scint.geant4.version_info reads the
         # tag out of the library itself and flags pre-release builds.

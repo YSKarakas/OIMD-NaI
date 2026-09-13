@@ -79,6 +79,12 @@ class DetectorConstruction : public G4VUserDetectorConstruction {
   G4String fWrapCoupling = "air";
   G4String fSurfaceModel = "lut";
   G4double fSigmaAlpha = 0.0;        ///< degrees, UNIFIED model only
+  /// Reflectance of the wrapping, applied as a flat REFLECTIVITY on the wrapped
+  /// surface. Geant4's default when the property is absent is 1.0 -- a lossless
+  /// mirror -- and the look-up-table models carry angular distributions only,
+  /// so without this every reflector in a simulation is perfect. It must be
+  /// set explicitly; a run that leaves it at the sentinel is refused.
+  G4double fWrapReflectivity = -1.0;
 
   // --- optical coupling to the readout ---
   G4String fCouplingType = "grease"; ///< air | grease

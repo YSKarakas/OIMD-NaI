@@ -158,12 +158,10 @@ def _resolve_labels(rows: list[dict]) -> list[dict]:
 # decision is fine, an accident is not. Every entry here is printed as a NOTE
 # whenever it is used, and the manuscript states the same exception in the
 # caption of the table that carries it.
-DOCUMENTED_EVENT_EXCEPTIONS = {
-    "SCOPE_ctrl_flatabs_3inch": (
-        "run at 300 events: with a flat 2000 mm absorption length photons "
-        "survive far more boundary crossings and the 1000-event run projected "
-        "to ~65 min; 300 events give the ratio this control measures to 0.1 %"),
-    "SCOPE_ctrl_flatabs_1inch": "run at 300 events, to match its 3-inch partner",
+DOCUMENTED_EVENT_EXCEPTIONS: dict[str, str] = {
+    # Empty since the schema-4 campaign, which was run at one event count
+    # throughout. The earlier campaign's control pair ran at 300 events; that
+    # record lives in those runs' status.json, not here.
 }
 
 
@@ -227,7 +225,7 @@ def report(rows: list[dict]) -> dict:
             print("  Compton electrons from a 662 keV gamma pass. A simulation that counts")
             print("  'optical photons' without separating them overstates the light yield.")
         print(f"  variance / mean               {var_ratio:.3f} +- {var_err:.3f}   (Poisson: 1.000)")
-        print("  Geant4 11.4.2 G4Scintillation.cc draws N from a Gaussian of width")
+        print("  Geant4 (geant4-11-04-beta-01) G4Scintillation.cc draws N from a Gaussian of width")
         print("  RESOLUTIONSCALE*sqrt(mean) when mean > 10 and from a Poisson below it, so")
         print("  with RESOLUTIONSCALE = 1 the summed variance must equal the summed mean.")
         ok_mean = abs(ratio - YIELD_PER_MEV) / YIELD_PER_MEV < 0.01
