@@ -307,6 +307,69 @@ def report(rows: list[dict]) -> dict:
         }
 
     # ------------------------------------------------------------------ #
+    # The measured attenuation curve. This is the run set that replaces a
+    # scanned parameter with a measurement: the Urbach slope was scanned only
+    # because the curve it describes was published as a picture, and the
+    # picture has now been digitised. What the hi/lo pair spans is the error
+    # on that digitisation, not the range of models somebody might pick.
+    meas_rows = sorted((r for r in rows if r["label"].startswith("MEAS_")
+                        and r["label"] != "MEAS_baseline"),
+                       key=lambda r: r["label"])
+    meas_base = by_label.get("MEAS_baseline") or by_label.get("SCOPE_baseline")
+    if meas_rows and meas_base:
+        print()
+        print("=" * 78)
+        print("MEASURED ATTENUATION CURVE -- digitised from Mao et al. Fig. 2")
+        print("=" * 78)
+        mb = meas_base["lce_mean"]
+        print(f"  {'variant':<22} {'LCE':>9} {'+- sem':>9} {'vs baseline':>13}")
+        print(f"  {'baseline (edge model)':<22} {mb:>9.4f} "
+              f"{meas_base['lce_sem']:>9.4f} {'--':>13}")
+        vals = {}
+        for r in meas_rows:
+            name = r["label"][len("MEAS_"):]
+            vals[name] = r["lce_mean"]
+            print(f"  {name:<22} {r['lce_mean']:>9.4f} {r['lce_sem']:>9.4f} "
+                  f"{100*(r['lce_mean']-mb)/mb:>+12.2f} %")
+        if {"abs_measured", "abs_measured_hi", "abs_measured_lo"} <= set(vals):
+            c = vals["abs_measured"]
+            hi, lo = vals["abs_measured_hi"], vals["abs_measured_lo"]
+            band = abs(hi - lo) / 2.0
+            print()
+            print(f"  light-collection efficiency from the measured curve:")
+            print(f"      {c:.4f} +- {band:.4f}  "
+                  f"({100*band/c:.1f} % from the digitisation error alone)")
+            sysd = verdicts.get("systematics", {})
+            if sysd:
+                print(f"  for comparison, the scanned-slope family spanned "
+                      f"{100*sysd['defensible_spread_fraction']:.0f} % of baseline")
+            verdicts["measured"] = {
+                "baseline_lce": mb,
+                "lce": c, "lce_hi": hi, "lce_lo": lo,
+                "half_band": band,
+                "half_band_fraction": band / c,
+                "vs_baseline_pct": 100*(c-mb)/mb,
+            }
+            # The envelope over everything built ON the measured attenuation:
+            # its own error band, plus the refractive-index and emission-band
+            # alternatives rebuilt on top of it. This is the number that
+            # replaces the old 42 %.
+            fam = {k: v for k, v in vals.items()
+                   if k.startswith("abs_measured") or k.startswith("meas_")}
+            if len(fam) >= 5:
+                lo_f, hi_f = min(fam.values()), max(fam.values())
+                print()
+                print("  ENVELOPE over the family built on the measured curve")
+                for k in sorted(fam, key=lambda k: fam[k]):
+                    print(f"      {k:<24} {fam[k]:.4f}")
+                print(f"      spread {100*(hi_f-lo_f)/c:.1f} % of the measured "
+                      f"central value ({lo_f:.4f} .. {hi_f:.4f})")
+                verdicts["measured"]["family"] = fam
+                verdicts["measured"]["family_spread_fraction"] = (hi_f-lo_f)/c
+                verdicts["measured"]["family_lo"] = lo_f
+                verdicts["measured"]["family_hi"] = hi_f
+
+    # ------------------------------------------------------------------ #
     # The arrangement's own optical inputs. The material scan above asks what
     # the crystal's published properties cost; this asks the same question of
     # the things a published measurement chooses -- how big the crystal is,

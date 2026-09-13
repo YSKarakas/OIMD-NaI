@@ -4,8 +4,8 @@
 # in scint/optical.py.  Do not edit by hand: regenerate instead, so that the
 # provenance notes below cannot drift away from the code that made the numbers.
 #
-# VARIANT: rindex = Jellison 2012
-# Refractive index from the 2012 direct measurement instead of the 1976 fit.
+# VARIANT: measured absorption + flat refractive index 1.85
+# The flat-index practice, on top of the measured attenuation.
 #
 # PROVENANCE OF THE NON-OPTICAL PARAMETERS
 #
@@ -39,114 +39,108 @@ time_constant_2_ns          = 1500      # src_B
 resolution_scale = 1.0
 
 # --- Refractive index --------------------------------------------------------
-# G. E. Jellison Jr., L. A. Boatner, J. O. Ramey, J. A. Kolopus, L. A. Ramey,
-# D. J. Singh, 'Refractive index of sodium iodide', J. Appl. Phys. 111, 043521
-# (2012), doi:10.1063/1.3689746. Minimum-deviation measurement at six
-# wavelengths; the abstract quotes n(436 nm) = 1.839 +- 0.002 and n(633 nm) =
-# 1.786 +- 0.002. The paper's own fitted Sellmeier coefficients are behind a
-# paywall and the refractiveindex.info transcription of them (0, 1.994, 0.176)
-# does not reproduce the 633 nm value -- it gives 1.7779, four standard
-# deviations low -- so it is not used here. The coefficients below are a
-# single-term Sellmeier constrained to pass through the two values quoted
-# verbatim in the abstract. EXTRAPOLATION: the source claims validity over
-# 436-633 nm, but 23 of the 43 tabulated points lie outside it (280-700 nm).
-# For this material that is unavoidable -- the emission band reaches below
-# every published measurement of its own refractive index.
+# The single value quoted for NaI:Tl on essentially every manufacturer
+# datasheet and in most simulation papers. Kept as a variant because it is
+# what the field does, not because it is a measurement.
 [RINDEX]
-280    2.03097
-290    2.00408
-300    1.9811
-310    1.96126
-320    1.94399
-330    1.92884
-340    1.91545
-350    1.90355
-360    1.89292
-370    1.88337
-380    1.87476
-390    1.86696
-400    1.85987
-410    1.8534
-420    1.84748
-430    1.84205
-440    1.83705
-450    1.83244
-460    1.82817
-470    1.82421
-480    1.82054
-490    1.81712
-500    1.81393
-510    1.81095
-520    1.80816
-530    1.80555
-540    1.8031
-550    1.80079
-560    1.79862
-570    1.79657
-580    1.79464
-590    1.79282
-600    1.79109
-610    1.78946
-620    1.78791
-630    1.78644
-640    1.78505
-650    1.78372
-660    1.78246
-670    1.78125
-680    1.78011
-690    1.77902
-700    1.77797
+280    1.85
+290    1.85
+300    1.85
+310    1.85
+320    1.85
+330    1.85
+340    1.85
+350    1.85
+360    1.85
+370    1.85
+380    1.85
+390    1.85
+400    1.85
+410    1.85
+420    1.85
+430    1.85
+440    1.85
+450    1.85
+460    1.85
+470    1.85
+480    1.85
+490    1.85
+500    1.85
+510    1.85
+520    1.85
+530    1.85
+540    1.85
+550    1.85
+560    1.85
+570    1.85
+580    1.85
+590    1.85
+600    1.85
+610    1.85
+620    1.85
+630    1.85
+640    1.85
+650    1.85
+660    1.85
+670    1.85
+680    1.85
+690    1.85
+700    1.85
 
 # --- Bulk absorption length --------------------------------------------------
-# Urbach-form absorption edge, E_U = 0.175 eV (ASSUMED -- scanned systematic,
-# not measured), anchored to L_abs(365 nm) = 59 mm derived in
-# scripts/derive_nai_abslength.py from the 50 % cut-off wavelength reported by
-# Mao, Zhang and Zhu, IEEE TNS 55, 2425 (2008), Section III; far from the edge
-# it saturates at L_bulk = 2000 mm.
+# Effective attenuation length from the NaI(Tl) transmittance curve of Mao,
+# Zhang & Zhu, IEEE Trans. Nucl. Sci. 55 (2008) 2425, Fig. 2, digitised by
+# scripts/digitise_mao_fig2.py and inverted with the paper's own transmittance
+# expression over its 38.8 mm sample. Calibration was checked against the
+# emission and excitation peaks printed inside the panel, and the recovered 50
+# % cut-off against the 365 nm stated in the text. This is an EFFECTIVE
+# attenuation: a single-beam transmittance does not separate absorption from
+# scattering, so implementing it as ABSLENGTH overestimates the loss by
+# whatever fraction is scattering.
 [ABSLENGTH_mm]
-280    0.167787
-290    0.401454
-300    0.906134
-310    1.94007
-320    3.95866
-330    7.72859
-340    14.483
-350    26.1138
-360    45.3742
-370    76.0227
-380    122.772
-390    190.844
-400    284.92
-410    407.504
-420    557.135
-430    727.426
-440    907.851
-450    1086.28
-460    1252.08
-470    1398.17
-480    1521.57
-490    1622.52
-500    1703.25
-510    1766.84
-520    1816.49
-530    1855.07
-540    1885.03
-550    1908.31
-560    1926.46
-570    1940.66
-580    1951.83
-590    1960.66
-600    1967.68
-610    1973.29
-620    1977.81
-630    1981.45
-640    1984.42
-650    1986.84
-660    1988.83
-670    1990.48
-680    1991.84
-690    1992.98
-700    1993.94
+280    9.67605
+290    9.67605
+300    9.67605
+310    9.67605
+320    9.67605
+330    9.67605
+340    10.2543
+350    19.8469
+360    52.5246
+370    162.565
+380    275.75
+390    405.53
+400    506.36
+410    593.847
+420    638.981
+430    718.086
+440    782.435
+450    841.293
+460    936.621
+470    1030.39
+480    1102.82
+490    1225.61
+500    1339.27
+510    1429.53
+520    1628.11
+530    1736.8
+540    1928.64
+550    2038.13
+560    2424.59
+570    2515.57
+580    2630.31
+590    2888.59
+600    2888.59
+610    3347.24
+620    3818.23
+630    4070.72
+640    4090.63
+650    4653.28
+660    5485.06
+670    7124.4
+680    8692.15
+690    8692.15
+700    13480.6
 
 # --- Emission spectrum (1) ---------------------------------------------------
 # Gaussian band, peak 415 nm (src_A), FWHM 65 nm. The peak position is well

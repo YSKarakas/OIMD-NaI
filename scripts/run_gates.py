@@ -280,6 +280,22 @@ def gather(set_name: str, events: int, seed: int) -> list[dict]:
                 material_spec=str(spec.relative_to(ROOT)),
                 events=events, seed=seed,
             ))
+    if set_name in ("measured", "all"):
+        # The digitised transmittance curve and its two digitisation-error
+        # bounds, run against the same baseline as the arrangement scan so the
+        # three are directly comparable: same schema, same seed, same events.
+        for label in ("abs_measured", "abs_measured_hi", "abs_measured_lo",
+                      "meas_rindex_jellison", "meas_rindex_flat185",
+                      "meas_fwhm55", "meas_fwhm75"):
+            configs.append(config_for(
+                label=f"MEAS_{label}",
+                material_spec=f"materials/variants/NaI_Tl_{label}.dat",
+                events=events, seed=seed,
+            ))
+        configs.append(config_for(
+            label="MEAS_baseline", material_spec="materials/NaI_Tl.dat",
+            events=events, seed=seed,
+        ))
     if set_name in ("scope", "all"):
         # Everything in SCOPE_VARIANTS is an optical input of the arrangement
         # rather than of the crystal. They are scanned for the same reason the
@@ -302,7 +318,7 @@ def gather(set_name: str, events: int, seed: int) -> list[dict]:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--set", default="all",
-                    choices=["gates", "systematics", "scope", "all"])
+                    choices=["gates", "systematics", "scope", "measured", "all"])
     ap.add_argument("--events", type=int, default=2000)
     ap.add_argument("--seed", type=int, default=20260912)
     ap.add_argument("--jobs", type=int, default=6)

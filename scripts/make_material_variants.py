@@ -27,6 +27,7 @@ from scint.optical import (  # noqa: E402
     JELLISON_2012_ENDPOINTS,
     LI_1976,
     AbsorptionEdge,
+    MeasuredAttenuation,
     Dispersion,
     constant_absorption,
     constant_dispersion,
@@ -63,7 +64,7 @@ HEADER = """\
 # PROVENANCE OF THE NON-OPTICAL PARAMETERS
 #
 #   src_A = Bonesini, arXiv:2505.06929, Table 1
-#   src_B = Roberts et al., arXiv:2403.02668, Table I (Geant4 parameter compilation)
+#   src_B = Miller et al., IEEE TNS 72 197 (2025), arXiv:2403.02668, Table I (Geant4 parameter compilation)
 #
 # NOTE -- the two sources disagree about this material:
 #   light yield   src_A 38,000 ph/MeV   src_B 41,000 ph/MeV      (7.9 %)
@@ -183,6 +184,19 @@ def build(
 
 BASELINE_EDGE = AbsorptionEdge(urbach_energy_eV=0.175)
 
+# The measured curve, and its digitisation-error bounds. These are not a scan:
+# the slope that the AbsorptionEdge family had to guess at is measured here, so
+# what the hi/lo pair spans is the error on a measurement rather than the range
+# of models somebody might choose.
+FLAT_185 = constant_dispersion(1.85, source=(
+    "The single value quoted for NaI:Tl on essentially every manufacturer "
+    "datasheet and in most simulation papers. Kept as a variant because it is "
+    "what the field does, not because it is a measurement."))
+
+MEASURED = MeasuredAttenuation()
+MEASURED_HI = MeasuredAttenuation(sigma=+1.0)
+MEASURED_LO = MeasuredAttenuation(sigma=-1.0)
+
 FLAT_2000 = constant_absorption(
     2000.0,
     source=(
@@ -242,6 +256,49 @@ VARIANTS: list[tuple[str, str, str, Dispersion, object, float, bool]] = [
         "materials/variants/NaI_Tl_abs_edge025.dat", "absorption edge E_U = 0.25 eV",
         "Steep edge: most absorbing member of the scanned family.",
         LI_1976, AbsorptionEdge(0.25), EMISSION_FWHM_NM, False,
+    ),
+    (
+        "materials/variants/NaI_Tl_meas_rindex_jellison.dat",
+        "measured absorption + Jellison 2012 refractive index",
+        "The refractive-index alternative, on top of the measured attenuation.",
+        JELLISON_2012_ENDPOINTS, MEASURED, EMISSION_FWHM_NM, False,
+    ),
+    (
+        "materials/variants/NaI_Tl_meas_rindex_flat185.dat",
+        "measured absorption + flat refractive index 1.85",
+        "The flat-index practice, on top of the measured attenuation.",
+        FLAT_185, MEASURED, EMISSION_FWHM_NM, False,
+    ),
+    (
+        "materials/variants/NaI_Tl_meas_fwhm55.dat",
+        "measured absorption + emission FWHM 55 nm",
+        "The narrow end of the emission-band scan, on the measured attenuation.",
+        LI_1976, MEASURED, 55.0, False,
+    ),
+    (
+        "materials/variants/NaI_Tl_meas_fwhm75.dat",
+        "measured absorption + emission FWHM 75 nm",
+        "The wide end of the emission-band scan, on the measured attenuation.",
+        LI_1976, MEASURED, 75.0, False,
+    ),
+    (
+        "materials/variants/NaI_Tl_abs_measured.dat",
+        "absorption = measured (Mao et al. Fig. 2, digitised)",
+        "The published transmittance curve, inverted. Replaces the scanned "
+        "Urbach slope with a measurement.",
+        LI_1976, MEASURED, EMISSION_FWHM_NM, False,
+    ),
+    (
+        "materials/variants/NaI_Tl_abs_measured_hi.dat",
+        "absorption = measured, +1 sigma of the digitisation error",
+        "Upper bound of the measured curve.",
+        LI_1976, MEASURED_HI, EMISSION_FWHM_NM, False,
+    ),
+    (
+        "materials/variants/NaI_Tl_abs_measured_lo.dat",
+        "absorption = measured, -1 sigma of the digitisation error",
+        "Lower bound of the measured curve.",
+        LI_1976, MEASURED_LO, EMISSION_FWHM_NM, False,
     ),
     (
         "materials/variants/NaI_Tl_abs_flat2000.dat", "absorption = flat 2000 mm",

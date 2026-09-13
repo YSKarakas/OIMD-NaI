@@ -10,7 +10,7 @@
 # PROVENANCE OF THE NON-OPTICAL PARAMETERS
 #
 #   src_A = Bonesini, arXiv:2505.06929, Table 1
-#   src_B = Roberts et al., arXiv:2403.02668, Table I (Geant4 parameter compilation)
+#   src_B = Miller et al., IEEE TNS 72 197 (2025), arXiv:2403.02668, Table I (Geant4 parameter compilation)
 #
 # NOTE -- the two sources disagree about this material:
 #   light yield   src_A 38,000 ph/MeV   src_B 41,000 ph/MeV      (7.9 %)
@@ -48,7 +48,8 @@ resolution_scale = 1.0
 # al. (2012) identify that point as Spangenberg, Z. Kristallogr. 57, 494-534
 # (1923). This is the model used by Mao, Zhang and Zhu, IEEE TNS 55, 2425
 # (2008), which in turn is the source cited for NaI:Tl by the Geant4 parameter
-# compilation of Roberts et al., arXiv:2403.02668 (Fig. 8b).
+# compilation of Miller et al., IEEE TNS 72 197 (2025), arXiv:2403.02668 (Fig.
+# 8b).
 [RINDEX]
 280    1.97595
 290    1.95244

@@ -93,10 +93,10 @@ def main() -> None:
     # values because the comparison is the point.
     PUBLISHED = {
         "BGO": ["8000 (arXiv:1607.05486 Table I)", "8200 (arXiv:1308.3908, measured)",
-                "8500 (Roberts et al. arXiv:2403.02668)", "10000 (Bonesini arXiv:2505.06929)"],
+                "8500 (Miller et al., IEEE TNS 72 197 (2025))", "10000 (Bonesini arXiv:2505.06929)"],
         "NaI:Tl": ["38000 (Bonesini; also arXiv:1308.3908, measured)",
                    "40000 (ANAIS arXiv:1703.01262, cited)",
-                   "41000 (Roberts et al. arXiv:2403.02668)"],
+                   "41000 (Miller et al., IEEE TNS 72 197 (2025))"],
         "LYSO:Ce": ["26000 (arXiv:1309.3736, simulation input)",
                     "32000 (arXiv:1607.05486 Table I, same paper that assumes 33000)"],
         "GSO:Ce": ["11000 (arXiv:2104.07568, assumed)",

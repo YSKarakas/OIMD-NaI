@@ -118,7 +118,7 @@ LI_1976 = Dispersion(
         "Z. Kristallogr. 57, 494-534 (1923). "
         "This is the model used by Mao, Zhang and Zhu, IEEE TNS 55, 2425 (2008), "
         "which in turn is the source cited for NaI:Tl by the Geant4 parameter "
-        "compilation of Roberts et al., arXiv:2403.02668 (Fig. 8b)."
+        "compilation of Miller et al., IEEE TNS 72 197 (2025), arXiv:2403.02668 (Fig. 8b)."
     ),
     valid_nm=(250.0, 40000.0),
     _n=lambda lam: _sellmeier(lam, 0.478, ((1.532, 0.170), (4.27, 86.21))),
@@ -306,3 +306,124 @@ def gaussian_emission_sampled_in_wavelength(
 def sample_wavelengths(low_nm: float, high_nm: float, step_nm: float) -> list[float]:
     n = int(round((high_nm - low_nm) / step_nm))
     return [low_nm + i * step_nm for i in range(n + 1)]
+
+
+# --------------------------------------------------------------------------- #
+# Measured attenuation, digitised from a published transmittance curve.
+#
+# Everything above this line is a model. This is a measurement, and it replaces
+# the scanned Urbach slope that used to dominate the model envelope: the slope
+# is no longer a free parameter because the curve it describes is published,
+# and scripts/digitise_mao_fig2.py turns that picture back into numbers.
+#
+# Two honest limits travel with it. The quantity is an EFFECTIVE ATTENUATION
+# length -- a single-beam transmittance cannot separate absorption from
+# scattering -- and the inversion is well conditioned only where the crystal is
+# not yet transparent. Above about 450 nm the measured transmittance sits close
+# to its Fresnel limit, so a digitisation error of half a percent in T moves the
+# attenuation length by tens of percent. `uncertainty_mm` reports that, and the
+# hi/lo variants generated from it are what the paper propagates.
+# --------------------------------------------------------------------------- #
+
+MAO_2008_CURVE = "data/optical/mao2008_nai_transmittance.csv"
+
+# Half a stroke width in the rendered figure, in absolute transmittance. This
+# is the dominant digitisation error and the only one propagated.
+DIGITISATION_SIGMA_T = 0.0055
+
+
+def _running_median(values: list[float], window: int = 9) -> list[float]:
+    half = window // 2
+    out = []
+    for i in range(len(values)):
+        lo, hi = max(0, i - half), min(len(values), i + half + 1)
+        chunk = sorted(values[lo:hi])
+        out.append(chunk[len(chunk) // 2])
+    return out
+
+
+class MeasuredAttenuation:
+    """Effective attenuation length interpolated from a digitised curve.
+
+    `sigma` shifts the whole curve by that many standard deviations of the
+    digitisation error, wavelength by wavelength, which is how the hi/lo
+    variants are built. It is deliberately a coherent shift rather than a
+    random one: a digitisation bias would move every point the same way, and
+    that is the conservative assumption for an envelope.
+    """
+
+    def __init__(self, path: str | None = None, sigma: float = 0.0,
+                 root: str | None = None):
+        import csv as _csv
+        import os
+
+        base = root or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        self.path = path or os.path.join(base, MAO_2008_CURVE)
+        self.sigma = sigma
+        lams: list[float] = []
+        trans: list[float] = []
+        with open(self.path) as fh:
+            for row in _csv.DictReader(ln for ln in fh if not ln.startswith("#")):
+                lams.append(float(row["wavelength_nm"]))
+                trans.append(float(row["transmittance"]))
+        if not lams:
+            raise ValueError(f"no rows in {self.path}")
+        shifted = [min(0.999, max(1e-6, t + sigma * DIGITISATION_SIGMA_T))
+                   for t in trans]
+        lengths = [self._invert(lm, t) for lm, t in zip(lams, shifted)]
+        smoothed = _running_median(lengths)
+        # The curve is physically monotone in this range; pixel quantisation is
+        # not. Enforcing it keeps the interpolation from wobbling.
+        for i in range(1, len(smoothed)):
+            smoothed[i] = max(smoothed[i], smoothed[i - 1])
+        self._lams, self._lengths = lams, smoothed
+        self.source = (
+            "Effective attenuation length from the NaI(Tl) transmittance curve of "
+            "Mao, Zhang & Zhu, IEEE Trans. Nucl. Sci. 55 (2008) 2425, Fig. 2, "
+            "digitised by scripts/digitise_mao_fig2.py and inverted with the "
+            "paper's own transmittance expression over its 38.8 mm sample. "
+            "Calibration was checked against the emission and excitation peaks "
+            "printed inside the panel, and the recovered 50 % cut-off against "
+            "the 365 nm stated in the text. This is an EFFECTIVE attenuation: a "
+            "single-beam transmittance does not separate absorption from "
+            "scattering, so implementing it as ABSLENGTH overestimates the loss "
+            "by whatever fraction is scattering."
+        )
+        if sigma:
+            self.source += (
+                f" Shifted by {sigma:+.0f} sigma of the digitisation error "
+                f"({DIGITISATION_SIGMA_T:.4f} in transmittance) to bound the curve."
+            )
+
+    @staticmethod
+    def _invert(lam_nm: float, transmittance: float,
+                length_mm: float = 38.8) -> float:
+        n = LI_1976(lam_nm)
+        refl = ((n - 1.0) / (n + 1.0)) ** 2
+        qa = transmittance * refl ** 2
+        qb = (1.0 - refl) ** 2
+        qc = -transmittance
+        disc = qb * qb - 4.0 * qa * qc
+        a = (-qb + math.sqrt(disc)) / (2.0 * qa)
+        a = min(1.0 - 1e-12, max(1e-12, a))
+        return -length_mm / math.log(a)
+
+    def uncertainty_mm(self, wavelength_nm: float) -> float:
+        """Half the spread between the +1 and -1 sigma curves at one wavelength."""
+        hi = MeasuredAttenuation(self.path, sigma=+1.0)(wavelength_nm)
+        lo = MeasuredAttenuation(self.path, sigma=-1.0)(wavelength_nm)
+        return abs(hi - lo) / 2.0
+
+    def __call__(self, wavelength_nm: float) -> float:
+        lams, lengths = self._lams, self._lengths
+        if wavelength_nm <= lams[0]:
+            return lengths[0]
+        if wavelength_nm >= lams[-1]:
+            return lengths[-1]
+        import bisect
+
+        i = bisect.bisect_left(lams, wavelength_nm)
+        x0, x1 = lams[i - 1], lams[i]
+        y0, y1 = lengths[i - 1], lengths[i]
+        f = (wavelength_nm - x0) / (x1 - x0)
+        return y0 + f * (y1 - y0)
