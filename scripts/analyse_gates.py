@@ -92,6 +92,7 @@ def summarise(run) -> dict | None:
         "material": run.config["crystal"]["material_spec"],
         "wrapping": run.config["surface"]["wrapping"],
         "events": run.config["run"]["events"],
+        "seed": run.config["run"]["seed"],
         # Runs made with different recorded observables are kept apart: they are
         # the same physics but not the same dataset, and averaging them would
         # hide the fact that only the later schema can answer some questions.
@@ -558,6 +559,37 @@ def report(rows: list[dict]) -> dict:
     return verdicts
 
 
+def _expand_aliases(rows: list[dict]) -> list[dict]:
+    """Give a run every label whose configuration hashes to it.
+
+    The runner reuses a run whenever two labels ask for the same physics --
+    MEAS_baseline, SCOPE_baseline and G4_wrap_teflon are one run -- and the
+    directory keeps only the first label it was queued under. The blocks below
+    select by label, so without this the measured and arrangement blocks
+    silently find nothing. The mapping is taken from the runner itself rather
+    than re-typed here, and every alias row carries `alias_of`.
+    """
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("run_gates", ROOT / "scripts" / "run_gates.py")
+    rg = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(rg)
+    by_id = {r["id"]: r for r in rows}
+    out = list(rows)
+    seen = {(r["id"], r["label"]) for r in rows}
+    for events, seed in sorted({(r["events"], r["seed"]) for r in rows}):
+        for item in rg.gather("all", events, seed):
+            rid = rg._peek_id(item["config"])
+            base = by_id.get(rid)
+            if base is None or (rid, item["label"]) in seen:
+                continue
+            alias = dict(base)
+            alias["label"] = item["label"]
+            alias["alias_of"] = base["label"]
+            out.append(alias)
+            seen.add((rid, item["label"]))
+    return out
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--json", type=Path, default=None)
@@ -577,7 +609,7 @@ def main() -> None:
         raise SystemExit(f"no runs with schema {schema}; available: {available}")
     print(f"{len(chosen)} completed runs, output schema {schema} "
           f"(schemas on disk: {available})\n")
-    rows = chosen
+    rows = _expand_aliases(chosen)
     verdicts = report(rows)
 
     if args.json:

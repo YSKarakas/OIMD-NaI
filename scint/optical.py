@@ -370,7 +370,8 @@ class MeasuredAttenuation:
     """
 
     def __init__(self, path: str | None = None, sigma: float = 0.0,
-                 root: str | None = None, sigma_lam: float = 0.0):
+                 root: str | None = None, sigma_lam: float = 0.0,
+                 dispersion: "Dispersion | None" = None):
         import csv as _csv
         import os
 
@@ -378,6 +379,11 @@ class MeasuredAttenuation:
         self.path = path or os.path.join(base, MAO_2008_CURVE)
         self.sigma = sigma
         self.sigma_lam = sigma_lam
+        # The inversion needs n(lambda) for the Fresnel terms. A material
+        # variant that carries a different RINDEX must invert with that same
+        # index, or its ABSLENGTH and RINDEX blocks disagree with each other
+        # by about 2 % at the edge -- a referee's point. Default: Li 1976.
+        self.dispersion = dispersion or LI_1976
         lams: list[float] = []
         trans: list[float] = []
         with open(self.path) as fh:
@@ -392,7 +398,7 @@ class MeasuredAttenuation:
         lams = [lm + sigma_lam * DIGITISATION_SIGMA_LAM_NM for lm in lams]
         shifted = [min(0.999, max(1e-6, t + sigma * DIGITISATION_SIGMA_T))
                    for t in trans]
-        lengths = [self._invert(lm, t) for lm, t in zip(lams, shifted)]
+        lengths = [self._invert(lm, t, dispersion=self.dispersion) for lm, t in zip(lams, shifted)]
         smoothed = _running_median(lengths)
         # The curve is physically monotone in this range; pixel quantisation is
         # not. Enforcing it keeps the interpolation from wobbling.
@@ -416,6 +422,8 @@ class MeasuredAttenuation:
                 f" Shifted by {sigma:+.0f} sigma of the transmittance digitisation "
                 f"error ({DIGITISATION_SIGMA_T:.4f} in T) to bound the curve."
             )
+        if self.dispersion is not LI_1976:
+            self.source += f" Inverted with the {self.dispersion.key} dispersion, matching this variant's RINDEX."
         if sigma_lam:
             self.source += (
                 f" Wavelength axis shifted by {sigma_lam:+.0f} sigma of the "
@@ -425,8 +433,8 @@ class MeasuredAttenuation:
 
     @staticmethod
     def _invert(lam_nm: float, transmittance: float,
-                length_mm: float = 38.8) -> float:
-        n = LI_1976(lam_nm)
+                length_mm: float = 38.8, dispersion=None) -> float:
+        n = (dispersion or LI_1976)(lam_nm)
         refl = ((n - 1.0) / (n + 1.0)) ** 2
         qa = transmittance * refl ** 2
         qb = (1.0 - refl) ** 2
@@ -445,8 +453,8 @@ class MeasuredAttenuation:
         flat and close to the Fresnel limit.
         """
         def half(**kw):
-            hi = MeasuredAttenuation(self.path, **{k: +1.0 for k in kw})(wavelength_nm)
-            lo = MeasuredAttenuation(self.path, **{k: -1.0 for k in kw})(wavelength_nm)
+            hi = MeasuredAttenuation(self.path, dispersion=self.dispersion, **{k: +1.0 for k in kw})(wavelength_nm)
+            lo = MeasuredAttenuation(self.path, dispersion=self.dispersion, **{k: -1.0 for k in kw})(wavelength_nm)
             return abs(hi - lo) / 2.0
 
         d_t = half(sigma=1.0)

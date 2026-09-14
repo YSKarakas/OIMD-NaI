@@ -201,6 +201,10 @@ MEASURED_LO = MeasuredAttenuation(sigma=-1.0)
 # are independent: they are combined in quadrature at the end, not stacked.
 MEASURED_LAMHI = MeasuredAttenuation(sigma_lam=+1.0)
 MEASURED_LAMLO = MeasuredAttenuation(sigma_lam=-1.0)
+# The index variants invert the transmittance with their OWN index, so that a
+# file's ABSLENGTH and RINDEX blocks are one description rather than two.
+MEASURED_JELLISON = MeasuredAttenuation(dispersion=JELLISON_2012_ENDPOINTS)
+MEASURED_FLAT185 = MeasuredAttenuation(dispersion=FLAT_185)
 
 FLAT_2000 = constant_absorption(
     2000.0,
@@ -266,13 +270,14 @@ VARIANTS: list[tuple[str, str, str, Dispersion, object, float, bool]] = [
         "materials/variants/NaI_Tl_meas_rindex_jellison.dat",
         "measured absorption + Jellison 2012 refractive index",
         "The refractive-index alternative, on top of the measured attenuation.",
-        JELLISON_2012_ENDPOINTS, MEASURED, EMISSION_FWHM_NM, False,
+        JELLISON_2012_ENDPOINTS, MEASURED_JELLISON, EMISSION_FWHM_NM, False,
     ),
     (
         "materials/variants/NaI_Tl_meas_rindex_flat185.dat",
         "measured absorption + flat refractive index 1.85",
-        "The flat-index practice, on top of the measured attenuation.",
-        FLAT_185, MEASURED, EMISSION_FWHM_NM, False,
+        "The flat-index practice, on top of the measured attenuation, "
+        "inverted with the same flat index.",
+        FLAT_185, MEASURED_FLAT185, EMISSION_FWHM_NM, False,
     ),
     (
         "materials/variants/NaI_Tl_meas_fwhm55.dat",

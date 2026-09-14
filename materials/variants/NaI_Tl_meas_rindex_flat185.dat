@@ -5,7 +5,8 @@
 # provenance notes below cannot drift away from the code that made the numbers.
 #
 # VARIANT: measured absorption + flat refractive index 1.85
-# The flat-index practice, on top of the measured attenuation.
+# The flat-index practice, on top of the measured attenuation, inverted with
+# the same flat index.
 #
 # PROVENANCE OF THE NON-OPTICAL PARAMETERS
 #
@@ -96,51 +97,52 @@ resolution_scale = 1.0
 # % cut-off against the 365 nm stated in the text. This is an EFFECTIVE
 # attenuation: a single-beam transmittance does not separate absorption from
 # scattering, so implementing it as ABSLENGTH overestimates the loss by
-# whatever fraction is scattering.
+# whatever fraction is scattering. Inverted with the flat1p85 dispersion,
+# matching this variant's RINDEX.
 [ABSLENGTH_mm]
-280    9.67605
-290    9.67605
-300    9.67605
-310    9.67605
-320    9.67605
-330    9.67605
-340    10.2543
-350    19.8469
-360    52.5246
-370    162.565
-380    275.75
-390    405.53
-400    506.36
-410    593.847
-420    638.981
-430    718.086
-440    782.435
-450    841.293
-460    936.621
-470    1030.39
-480    1102.82
-490    1225.61
-500    1339.27
-510    1429.53
-520    1628.11
-530    1736.8
-540    1928.64
-550    2038.13
-560    2424.59
-570    2515.57
-580    2630.31
-590    2888.59
-600    2888.59
-610    3347.24
-620    3818.23
-630    4070.72
-640    4090.63
-650    4653.28
-660    5485.06
-670    7124.4
-680    8692.15
-690    8692.15
-700    13480.6
+280    9.61597
+290    9.61597
+300    9.61597
+310    9.61597
+320    9.61597
+330    9.61597
+340    10.2337
+350    19.7937
+360    52.3657
+370    162.712
+380    280.47
+390    424.544
+400    549.444
+410    671.75
+420    747.962
+430    884.826
+440    1019.59
+450    1158.51
+460    1397.67
+470    1697.19
+480    1961.8
+490    2535.48
+500    3270.68
+510    4042.36
+520    7274.52
+530    12235.6
+540    1.66289e+13
+550    3.88009e+13
+560    3.88009e+13
+570    3.88009e+13
+580    3.88009e+13
+590    3.88009e+13
+600    3.88009e+13
+610    3.88009e+13
+620    3.88009e+13
+630    3.88009e+13
+640    3.88009e+13
+650    3.88009e+13
+660    3.88009e+13
+670    3.88009e+13
+680    3.88009e+13
+690    3.88009e+13
+700    3.88009e+13
 
 # --- Emission spectrum (1) ---------------------------------------------------
 # Gaussian band, peak 415 nm (src_A), FWHM 65 nm. The peak position is well

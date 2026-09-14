@@ -96,6 +96,17 @@ BASE_GEOMETRY = {
     # the reasons published light yields are not comparable.
     "readout": {"efficiency": 1.0},
     "source": {"energy_keV": 662.0, "offset_z_mm": -200.0},
+    # Geant4 11.4.0 removed the clause of G4Scintillation::IsApplicable that
+    # excluded optical photons (11.3.0 and the 11.4 beta had it), and
+    # G4OpticalPhysics attaches the process to every particle IsApplicable
+    # accepts. An optical photon absorbed in the bulk deposits its ~3 eV
+    # (G4OpAbsorption::PostStepDoIt), and at 41 000 photons/MeV that deposit
+    # scintillates: 0.12 new photons per absorbed one, a cascade worth +8.6 %
+    # in the photon budget, +20 % in its variance and +40 % in mean detection
+    # time, measured here on the release. It is not a model of NaI(Tl) -- the
+    # yield per eV of absorbed light is not the yield per eV of ionisation --
+    # so it is switched off, as a recorded input rather than a silent one.
+    "physics": {"scintillation_from_optical_photons": False},
 }
 
 WRAPPINGS = ["none", "teflon", "lumirror", "tyvek", "tio", "esr"]
@@ -189,7 +200,11 @@ SCOPE_CONTROLS: dict[str, tuple[str, dict[str, dict]]] = {
 #      wrapper, and with a pre-release toolkit; schema 4 runs are made in the
 #      container against the 11.4.2 release. Bumping the schema is what keeps
 #      the two campaigns from ever being averaged or compared by accident.
-CONFIG_SCHEMA = 4
+#   5: physics.scintillation_from_optical_photons is a recorded input, off.
+#      Schema-4 runs were made on the release with Geant4's new default of
+#      letting absorbed optical photons scintillate; they are kept as the
+#      evidence for the size of that effect and are compared with nothing.
+CONFIG_SCHEMA = 5
 
 
 def config_for(
@@ -259,6 +274,7 @@ def macro_for(cfg: dict, output_stem: Path) -> str:
 /scint/output/format csv
 
 /run/initialize
+{"" if cfg.get("physics", {}).get("scintillation_from_optical_photons", True) else "/process/inactivate Scintillation opticalphoton"}
 /run/beamOn {run['events']}
 """
 
