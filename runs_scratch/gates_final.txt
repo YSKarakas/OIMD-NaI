@@ -1,0 +1,180 @@
+39 completed runs, output schema 5 (schemas on disk: [1, 2, 3, 4, 5])
+
+==============================================================================
+G2 -- PHOTON BUDGET
+==============================================================================
+  events used for the yield     1680 (edep > 50 keV)
+  photons per MeV deposited     40999.5 +- 7.5
+  requested (materials file)    41000.0
+  counted photons               scintillation only
+  deviation                     -0.001 %  (-0.06 sigma)
+
+  full-energy events            1208 (661.5-662.5 keV)
+  photons generated, mean       27144.9 +- 4.6   (expected 27142.0)
+  Cerenkov photons per event    28.3 (0.104 % of the scintillation photons)
+  In NaI (n ~ 1.85) the Cerenkov threshold for electrons is ~96 keV, which
+  Compton electrons from a 662 keV gamma pass. A simulation that counts
+  'optical photons' without separating them overstates the light yield.
+  variance / mean               0.960 +- 0.041   (Poisson: 1.000)
+  Geant4 (geant4-11-04-beta-01) G4Scintillation.cc draws N from a Gaussian of width
+  RESOLUTIONSCALE*sqrt(mean) when mean > 10 and from a Poisson below it, so
+  with RESOLUTIONSCALE = 1 the summed variance must equal the summed mean.
+  VERDICT                       PASS  (yield within 1 %: True; variance Poisson within 3 sigma: True)
+
+==============================================================================
+G3 -- STATISTICAL RESOLUTION (lower bound)
+==============================================================================
+  simulated FWHM at 662 keV     4.114 +- 0.084 %
+  measured FWHM (src_A)         7.0 %
+  ratio                         0.588
+  R_measured^2 - R_sim^2        -> 5.663 % (non-proportionality + transfer, not modelled here)
+  VERDICT                       PASS  (statistical bound must lie below the measurement)
+
+==============================================================================
+G4 -- LIGHT-COLLECTION EFFICIENCY BY WRAPPING
+==============================================================================
+  wrapping           LCE    +- sem    vs none
+  tio             0.3264    0.0004     1.364x
+  esr             0.3223    0.0002     1.346x
+  teflon          0.3219    0.0002     1.345x
+  tyvek           0.3082    0.0002     1.288x
+  lumirror        0.3047    0.0002     1.273x
+  none            0.2393    0.0002     1.000x
+
+  measured on one CsI crystal by arXiv:1602.02983, for comparison:
+    teflon              91 p.e./MeV  1.152x aluminium
+    tyvek               89 p.e./MeV  1.127x aluminium
+    aluminium           79 p.e./MeV  1.000x aluminium
+    teflon/tyvek: measured 1.022, simulated here 1.044
+    Same sign. The measured gap is the larger one, and our two
+    diffuse reflectors sit closer together than theirs do.
+
+  VERDICT                       PASS  (every reflector must beat the unwrapped crystal)
+
+==============================================================================
+OPTICAL INPUT SYSTEMATICS -- LCE under one-at-a-time variation
+==============================================================================
+  variant                      LCE    +- sem   vs baseline
+  baseline                  0.3219    0.0002            --
+  abs_edge010               0.3973    0.0001       +23.42 %
+  abs_edge025               0.2700    0.0002       -16.11 %
+  abs_flat1000              0.4288    0.0001       +33.21 %
+  abs_flat2000              0.4928    0.0002       +53.10 %
+  abs_flat500               0.3598    0.0001       +11.79 %
+  abs_measured              0.3543    0.0001       +10.07 %
+  abs_measured_hi           0.3653    0.0001       +13.50 %
+  abs_measured_lamhi        0.3445    0.0001        +7.03 %
+  abs_measured_lamlo        0.3632    0.0001       +12.85 %
+  abs_measured_lo           0.3448    0.0001        +7.12 %
+  emission_fwhm55           0.3311    0.0001        +2.86 %
+  emission_fwhm75           0.3123    0.0002        -2.97 %
+  emission_jacobian         0.3358    0.0001        +4.33 %
+  meas_fwhm55               0.3644    0.0001       +13.20 %
+  meas_fwhm75               0.3435    0.0001        +6.72 %
+  meas_rindex_flat185       0.3554    0.0001       +10.40 %
+  meas_rindex_jellison      0.3526    0.0001        +9.54 %
+  rindex_flat185            0.3094    0.0002        -3.87 %
+  rindex_jellison           0.3089    0.0002        -4.04 %
+
+  Self-absorption seen directly -- mean wavelength, emitted vs detected:
+  variant                  emitted  detected     shift
+  baseline                  411.25    420.28     +9.03 nm
+  abs_edge010               411.25    418.79     +7.54 nm
+  emission_fwhm75           410.03    422.14    +12.11 nm
+  meas_rindex_jellison      411.25    417.30     +6.05 nm
+  abs_measured_lo           411.25    416.80     +5.55 nm
+  abs_measured_hi           411.25    417.01     +5.76 nm
+  emission_fwhm55           412.32    418.66     +6.34 nm
+  abs_measured_lamhi        411.25    417.55     +6.30 nm
+  abs_measured              411.25    416.89     +5.65 nm
+  meas_fwhm55               412.31    415.85     +3.54 nm
+  emission_jacobian         414.97    423.15     +8.18 nm
+  rindex_jellison           411.24    420.53     +9.29 nm
+  meas_fwhm75               410.02    418.28     +8.26 nm
+  rindex_flat185            411.26    419.92     +8.66 nm
+  meas_rindex_flat185       411.26    417.19     +5.93 nm
+  abs_edge025               411.25    420.36     +9.11 nm
+  abs_flat1000              411.25    411.77     +0.52 nm
+  abs_measured_lamlo        411.24    416.24     +5.00 nm
+  abs_flat2000              411.25    411.74     +0.50 nm
+  abs_flat500               411.25    411.79     +0.53 nm
+
+  spread over published practice  69.2 % of baseline LCE   [20 variants]
+    (includes the flat absorption lengths that appear in the literature)
+  spread over defensible models   39.5 % of baseline LCE   [17 variants]
+    (flat absorption dropped: the 365 nm transmittance measurement excludes it)
+  Neither is reducible by running more events. Both measure what the state
+  of the published optical inputs costs, not what the simulation costs.
+
+==============================================================================
+MEASURED ATTENUATION CURVE -- digitised from Mao et al. Fig. 2
+==============================================================================
+  variant                      LCE    +- sem   vs baseline
+  baseline (edge model)     0.3219    0.0002            --
+  abs_measured              0.3543    0.0001       +10.07 %
+  abs_measured_hi           0.3653    0.0001       +13.50 %
+  abs_measured_lamhi        0.3445    0.0001        +7.03 %
+  abs_measured_lamlo        0.3632    0.0001       +12.85 %
+  abs_measured_lo           0.3448    0.0001        +7.12 %
+  meas_fwhm55               0.3644    0.0001       +13.20 %
+  meas_fwhm75               0.3435    0.0001        +6.72 %
+  meas_rindex_flat185       0.3554    0.0001       +10.40 %
+  meas_rindex_jellison      0.3526    0.0001        +9.54 %
+
+  light-collection efficiency from the measured curve:
+      0.3543 +- 0.0139  (3.9 %)
+        transmittance axis  +- 0.0103 (2.9 %)
+        wavelength axis     +- 0.0094 (2.6 %)
+  for comparison, the scanned-slope family spanned 40 % of baseline
+
+  ENVELOPE over the family built on the measured curve
+      meas_fwhm75              0.3435
+      abs_measured_lamhi       0.3445
+      abs_measured_lo          0.3448
+      meas_rindex_jellison     0.3526
+      abs_measured             0.3543
+      meas_rindex_flat185      0.3554
+      abs_measured_lamlo       0.3632
+      meas_fwhm55              0.3644
+      abs_measured_hi          0.3653
+      spread 6.2 % of the measured central value (0.3435 .. 0.3653)
+
+==============================================================================
+ARRANGEMENT SCAN -- geometry, coupling and surface finish
+==============================================================================
+  variant                    LCE    +- sem   vs baseline
+  baseline                0.3219    0.0002            --
+  couple_air              0.1422    0.0001       -55.82 %
+  couple_gel146           0.3199    0.0002        -0.63 %
+  couple_n15              0.3354    0.0002        +4.19 %
+  couple_n157             0.3760    0.0002       +16.80 %
+  ctrl_flatabs_1inch      0.5723    0.0005       +77.80 %
+  ctrl_flatabs_3inch      0.4928    0.0002       +53.10 %
+  finish_ground           0.4301    0.0003       +33.63 %
+  geom_1inch              0.4312    0.0002       +33.96 %
+  geom_2inch              0.3647    0.0002       +13.29 %
+  geom_4inch              0.2904    0.0002        -9.78 %
+  geom_long               0.2518    0.0002       -21.78 %
+  geom_short              0.3923    0.0002       +21.87 %
+  reflectance_090         0.2745    0.0002       -14.71 %
+  reflectance_095         0.2977    0.0002        -7.51 %
+  reflectance_100         0.3297    0.0002        +2.42 %
+
+  geometry           envelope   55.7 % of baseline  (0.2518 .. 0.4312)
+  readout coupling   envelope   72.6 % of baseline  (0.1422 .. 0.3760)
+  surface finish     envelope   33.6 % of baseline  (0.3219 .. 0.4301)
+  crystal optics     envelope   39.5 % of baseline  (defensible models, from the scan above)
+
+  Read this as scope, not as a ranking: the geometry entries are a
+  deliberate factor-four in size and the coupling entries span air to
+  index 1.57, so their envelopes are as wide as the choices made here.
+  What it establishes is that the crystal's optical model is not being
+  called dominant by default, having been the only thing varied.
+
+  CONTROL -- is the size dependence really the absorption edge?
+    1" / 3" with the measured absorption edge   1.340
+    1" / 3" with flat 2000 mm absorption        1.161
+    fraction of the size effect that disappears when the
+    absorption edge is removed                  52 %
+
+wrote runs_scratch/gates_final.json
