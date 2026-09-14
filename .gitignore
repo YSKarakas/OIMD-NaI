@@ -57,3 +57,4 @@ runs_scratch/*
 !data/derived/
 data/derived/*
 !data/derived/atomic_data.csv
+paper/sources/

@@ -42,60 +42,67 @@ resolution_scale = 1.0
 # G. E. Jellison Jr., L. A. Boatner, J. O. Ramey, J. A. Kolopus, L. A. Ramey,
 # D. J. Singh, 'Refractive index of sodium iodide', J. Appl. Phys. 111, 043521
 # (2012), doi:10.1063/1.3689746. Minimum-deviation measurement at six
-# wavelengths; the abstract quotes n(436 nm) = 1.839 +- 0.002 and n(633 nm) =
-# 1.786 +- 0.002. The paper's own fitted Sellmeier coefficients are behind a
-# paywall and the refractiveindex.info transcription of them (0, 1.994, 0.176)
-# does not reproduce the 633 nm value -- it gives 1.7779, four standard
-# deviations low -- so it is not used here. The coefficients below are a
-# single-term Sellmeier constrained to pass through the two values quoted
-# verbatim in the abstract. EXTRAPOLATION: the source claims validity over
-# 436-633 nm, but 23 of the 43 tabulated points lie outside it (280-700 nm).
-# For this material that is unavoidable -- the emission band reaches below
-# every published measurement of its own refractive index.
+# wavelengths from 436 to 633 nm, fitted by the authors to a one-term
+# Sellmeier form with chi^2 = 1.02. The coefficients used here, n^2 = 1 +
+# 1.994 lambda^2/(lambda^2 - 0.176^2) with lambda in um, are the paper's fit
+# as transcribed by refractiveindex.info
+# (database/data/main/NaI/nk/Jellison.yml). They reproduce the abstract's
+# n(436 nm) = 1.839 but give 1.778 at 633 nm where the abstract prints 1.786
+# +- 0.002: a fit reported at chi^2 = 1.02 to six points cannot miss an
+# endpoint by four standard deviations, so one of the two published statements
+# is a transcription error, and the fit -- the authors' own description of all
+# six points -- is the one adopted. An earlier version of this file rejected
+# the fit and pinned a one-term form to the two abstract values instead, which
+# gave 1.8504 at 415 nm against the 1.8524 of the fit; that was the wrong
+# choice, and the abstract's 633 nm value is the suspect item. EXTRAPOLATION:
+# the source claims validity over 436-633 nm, but 23 of the 43 tabulated
+# points lie outside it (280-700 nm). For this material that is unavoidable --
+# the emission band reaches below every published measurement of its own
+# refractive index.
 [RINDEX]
-280    2.03097
-290    2.00408
-300    1.9811
-310    1.96126
-320    1.94399
-330    1.92884
-340    1.91545
-350    1.90355
-360    1.89292
-370    1.88337
-380    1.87476
-390    1.86696
-400    1.85987
-410    1.8534
-420    1.84748
-430    1.84205
-440    1.83705
-450    1.83244
-460    1.82817
-470    1.82421
-480    1.82054
-490    1.81712
-500    1.81393
-510    1.81095
-520    1.80816
-530    1.80555
-540    1.8031
-550    1.80079
-560    1.79862
-570    1.79657
-580    1.79464
-590    1.79282
-600    1.79109
-610    1.78946
-620    1.78791
-630    1.78644
-640    1.78505
-650    1.78372
-660    1.78246
-670    1.78125
-680    1.78011
-690    1.77902
-700    1.77797
+280    2.07278
+290    2.03879
+300    2.01009
+310    1.98556
+320    1.96438
+330    1.94593
+340    1.92974
+350    1.91543
+360    1.9027
+370    1.89133
+380    1.88111
+390    1.87188
+400    1.86352
+410    1.85592
+420    1.84898
+430    1.84263
+440    1.83679
+450    1.83142
+460    1.82646
+470    1.82187
+480    1.81761
+490    1.81366
+500    1.80997
+510    1.80654
+520    1.80332
+530    1.80032
+540    1.7975
+550    1.79485
+560    1.79236
+570    1.79001
+580    1.7878
+590    1.78571
+600    1.78374
+610    1.78187
+620    1.7801
+630    1.77842
+640    1.77683
+650    1.77532
+660    1.77388
+670    1.77251
+680    1.77121
+690    1.76996
+700    1.76877
 
 # --- Bulk absorption length --------------------------------------------------
 # Effective attenuation length from the NaI(Tl) transmittance curve of Mao,
@@ -109,49 +116,49 @@ resolution_scale = 1.0
 # whatever fraction is scattering. Inverted with the jellison2012 dispersion,
 # matching this variant's RINDEX.
 [ABSLENGTH_mm]
-280    9.71423
-290    9.71423
-300    9.71423
-310    9.71423
-320    9.71423
-330    9.71423
-340    10.2886
-350    19.9705
-360    53.343
-370    169.936
-380    296.338
-390    449.272
-400    573.115
-410    683.615
-420    740.231
-430    843.094
-440    926.597
-450    1003.99
-460    1134.98
-470    1265.04
-480    1369.3
-490    1550.28
-500    1723.25
-510    1866.68
-520    2192.42
-530    2371.56
-540    2725.2
-550    2918.23
-560    3739.12
-570    3940.23
-580    4186.45
-590    4765.22
-600    4765.22
-610    6039.02
-620    7593.73
-630    8472.98
-640    8579.99
-650    11077.6
-660    16884.8
-670    54438.5
-680    100000
-690    100000
-700    100000
+280    9.73648
+290    9.73648
+300    9.73648
+310    9.73648
+320    9.73648
+330    9.73648
+340    10.3008
+350    20.0105
+360    53.5724
+370    171.758
+380    300.704
+390    457.006
+400    582.412
+410    692.684
+420    747.015
+430    846.746
+440    924.9
+450    996.315
+460    1118.5
+470    1235.77
+480    1329.68
+490    1489.15
+500    1638.01
+510    1760.57
+520    2028.22
+530    2165.49
+540    2444.49
+550    2579.88
+560    3171.97
+570    3311.62
+580    3461.39
+590    3792.41
+600    3792.41
+610    4506.22
+620    5261.78
+630    5608.92
+640    5662.21
+650    6512.18
+660    8145.05
+670    11842.2
+680    16255.8
+690    16255.8
+700    38252.8
 
 # --- Emission spectrum (1) ---------------------------------------------------
 # Gaussian band, peak 415 nm (src_A), FWHM 65 nm. The peak position is well

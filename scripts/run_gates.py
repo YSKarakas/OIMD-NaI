@@ -422,6 +422,14 @@ def main() -> None:
                          f"known release: {g4.get('tag')} (is_prerelease={g4.get('is_prerelease')})")
     global BINARY_SHA256
     BINARY_SHA256 = checksum(BINARY)
+    # A published-schema run must come from a committed tree, or its recorded
+    # commit does not determine the code that made it. The launcher passes the
+    # host's git state in; refuse rather than record dirty=True and move on.
+    if CONFIG_SCHEMA >= 5 and not args.dry_run:
+        from scint.registry import capture_environment
+        if capture_environment().get("git", {}).get("dirty") is not False:
+            raise SystemExit("refusing to run a schema >= 5 campaign from an uncommitted tree; "
+                             "commit first so the run's recorded commit is the code that ran")
 
     configs = gather(args.set, args.events, args.seed)
     if args.only:

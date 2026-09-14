@@ -127,22 +127,28 @@ LI_1976 = Dispersion(
 
 JELLISON_2012_ENDPOINTS = Dispersion(
     key="jellison2012",
-    label="Jellison 2012 (two-point Sellmeier)",
+    label="Jellison 2012 (published Sellmeier fit)",
     source=(
         "G. E. Jellison Jr., L. A. Boatner, J. O. Ramey, J. A. Kolopus, "
         "L. A. Ramey, D. J. Singh, 'Refractive index of sodium iodide', "
         "J. Appl. Phys. 111, 043521 (2012), doi:10.1063/1.3689746. "
-        "Minimum-deviation measurement at six wavelengths; the abstract quotes "
-        "n(436 nm) = 1.839 +- 0.002 and n(633 nm) = 1.786 +- 0.002. "
-        "The paper's own fitted Sellmeier coefficients are behind a paywall and "
-        "the refractiveindex.info transcription of them (0, 1.994, 0.176) does "
-        "not reproduce the 633 nm value -- it gives 1.7779, four standard "
-        "deviations low -- so it is not used here. The coefficients below are a "
-        "single-term Sellmeier constrained to pass through the two values quoted "
-        "verbatim in the abstract."
+        "Minimum-deviation measurement at six wavelengths from 436 to 633 nm, "
+        "fitted by the authors to a one-term Sellmeier form with chi^2 = 1.02. "
+        "The coefficients used here, n^2 = 1 + 1.994 lambda^2/(lambda^2 - 0.176^2) "
+        "with lambda in um, are the paper's fit as transcribed by "
+        "refractiveindex.info (database/data/main/NaI/nk/Jellison.yml). "
+        "They reproduce the abstract's n(436 nm) = 1.839 but give 1.778 at "
+        "633 nm where the abstract prints 1.786 +- 0.002: a fit reported at "
+        "chi^2 = 1.02 to six points cannot miss an endpoint by four standard "
+        "deviations, so one of the two published statements is a transcription "
+        "error, and the fit -- the authors' own description of all six points -- "
+        "is the one adopted. An earlier version of this file rejected the fit and "
+        "pinned a one-term form to the two abstract values instead, which gave "
+        "1.8504 at 415 nm against the 1.8524 of the fit; that was the wrong "
+        "choice, and the abstract's 633 nm value is the suspect item."
     ),
     valid_nm=(436.0, 633.0),
-    _n=lambda lam: _sellmeier(lam, 0.0, ((2.041276, 0.164882),)),
+    _n=lambda lam: _sellmeier(lam, 0.0, ((1.994, 0.176),)),
 )
 
 
