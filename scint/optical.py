@@ -137,15 +137,13 @@ JELLISON_2012_ENDPOINTS = Dispersion(
         "The coefficients used here, n^2 = 1 + 1.994 lambda^2/(lambda^2 - 0.176^2) "
         "with lambda in um, are the paper's fit as transcribed by "
         "refractiveindex.info (database/data/main/NaI/nk/Jellison.yml). "
-        "They reproduce the abstract's n(436 nm) = 1.839 but give 1.778 at "
-        "633 nm where the abstract prints 1.786 +- 0.002: a fit reported at "
-        "chi^2 = 1.02 to six points cannot miss an endpoint by four standard "
-        "deviations, so one of the two published statements is a transcription "
-        "error, and the fit -- the authors' own description of all six points -- "
-        "is the one adopted. An earlier version of this file rejected the fit and "
-        "pinned a one-term form to the two abstract values instead, which gave "
-        "1.8504 at 415 nm against the 1.8524 of the fit; that was the wrong "
-        "choice, and the abstract's 633 nm value is the suspect item."
+        "Table I of the paper (consulted 14 September 2026) lists 435.8 nm 1.839, "
+        "488.0 1.814, 514.5 1.804, 546.1 1.799, 578.0 1.786, 633.0 1.778, all "
+        "+- 0.002; the fit reproduces every entry to the quoted precision. The "
+        "abstract's '633 nm (n = 1.786)' is a typographical error -- it is the "
+        "578 nm value. An earlier version of this file, working from the abstract "
+        "alone, rejected the fit and pinned a one-term form to the two abstract "
+        "values, giving 1.8504 at 415 nm against the fit's 1.8524; corrected."
     ),
     valid_nm=(436.0, 633.0),
     _n=lambda lam: _sellmeier(lam, 0.0, ((1.994, 0.176),)),
