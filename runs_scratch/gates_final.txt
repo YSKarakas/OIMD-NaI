@@ -1,4 +1,4 @@
-58 completed runs, output schema 5 (schemas on disk: [1, 2, 3, 4, 5])
+59 completed runs, output schema 5 (schemas on disk: [1, 2, 3, 4, 5])
 
 ==============================================================================
 ORPHANED RUNS -- configurations the runner no longer defines; not analysed
@@ -78,6 +78,7 @@ OPTICAL INPUT SYSTEMATICS -- LCE under one-at-a-time variation
 ==============================================================================
   variant                      LCE    +- sem   vs baseline
   baseline                  0.3219    0.0001            --
+  abs_brown                 0.2981    0.0001        -7.38 %
   abs_edge010               0.3973    0.0001       +23.42 %
   abs_edge025               0.2700    0.0002       -16.11 %
   abs_flat1000              0.4288    0.0001       +33.21 %
@@ -103,6 +104,7 @@ OPTICAL INPUT SYSTEMATICS -- LCE under one-at-a-time variation
   variant                  emitted  detected     shift
   baseline                  411.25    416.89     +5.65 nm
   abs_measured              411.25    416.89     +5.65 nm
+  abs_brown                 411.25    415.99     +4.75 nm
   abs_edge010               411.25    418.79     +7.54 nm
   abs_edge025               411.25    420.36     +9.11 nm
   abs_flat1000              411.25    411.77     +0.52 nm
@@ -123,12 +125,14 @@ OPTICAL INPUT SYSTEMATICS -- LCE under one-at-a-time variation
   rindex_flat185            411.26    419.92     +8.66 nm
   rindex_jellison           411.25    420.62     +9.37 nm
 
-  spread over published practice  69.2 % of baseline LCE   [21 variants]
+  spread over published practice  69.2 % of baseline LCE   [22 variants]
     (includes the flat absorption lengths that appear in the literature)
-  spread over defensible models   39.5 % of baseline LCE   [18 variants]
+  spread over defensible models   39.5 % of baseline LCE   [19 variants]
     (flat absorption dropped: the 365 nm transmittance measurement excludes it)
   Neither is reducible by running more events. Both measure what the state
   of the published optical inputs costs, not what the simulation costs.
+
+  as implemented by Brown (2021, corrected 2023) vs the measured curve: -15.9 % in light collection
 
 ==============================================================================
 MEASURED ATTENUATION CURVE -- digitised from Mao et al. Fig. 2
