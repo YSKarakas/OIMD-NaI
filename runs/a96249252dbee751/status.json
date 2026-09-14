@@ -1,0 +1,13 @@
+{
+  "label": "SYS_rindex_jellison",
+  "state": "done",
+  "started_unix": 1789380984.3955674,
+  "material_sha256": "6d1ce529100e2f363d484b883754ad1796ffb3532ed85ecfc6280b0c1266e6ec",
+  "binary": "build/container/scint_optical",
+  "binary_sha256": "04550111bbcbe79ef73ee3650c32e50d2f89ef1f76d51fe0e1656b3196da26ee",
+  "container_image": "scint:11.4.2@sha256:6004c311be40b0547053be768028a5138af37e1738e7747f84bac24144a8d9af",
+  "returncode": 0,
+  "elapsed_s": 789.5,
+  "output": "runs/a96249252dbee751/output_nt_events.csv",
+  "output_sha256": "997c85356210a13c803ab658be113d85da8b2363b051efb182b0fd07bba7e826"
+}

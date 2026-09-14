@@ -28,6 +28,7 @@ from scint.optical import (  # noqa: E402
     LI_1976,
     AbsorptionEdge,
     MeasuredAttenuation,
+    TabulatedAttenuation,
     Dispersion,
     constant_absorption,
     constant_dispersion,
@@ -223,6 +224,20 @@ FLAT_1000 = constant_absorption(
         "into the emission band; included to compare against the edge model."
     ),
 )
+# The one structured NaI(Tl) attenuation model found implemented in a published
+# Geant4 simulation, read from the corrected figure of its corrigendum. Not a
+# measurement and not a bound: the comparison of Section 2 of the paper, run.
+BROWN_CORRECTED = TabulatedAttenuation(
+    key="brown2023",
+    source=(
+        "As implemented by J. M. C. Brown, Appl. Radiat. Isot. 168 (2021) 109368, "
+        "read from the corrected Fig. 1 of the corrigendum, Appl. Radiat. Isot. 194 "
+        "(2023) 110721 (data/optical/brown2021_nai_attenuation.csv). Brown's Table "
+        "A3 credits the curve to Mao et al. (2008) without stating the derivation; "
+        "it is about 1.8 times shorter than the inversion of that measurement at "
+        "415 nm. Carried so that the difference can be stated in light collection."
+    ),
+)
 FLAT_500 = constant_absorption(
     500.0,
     source=(
@@ -331,6 +346,14 @@ VARIANTS: list[tuple[str, str, str, Dispersion, object, float, bool]] = [
         "absorption = measured, wavelength axis -1 sigma",
         "Wavelength-axis bound: the curve moved 3.72 nm to the blue.",
         LI_1976, MEASURED_LAMLO, EMISSION_FWHM_NM, False,
+    ),
+    (
+        "materials/variants/NaI_Tl_abs_brown.dat",
+        "absorption = as implemented by Brown (2021), corrected figure (2023)",
+        "The structured model the Geant4 optical-property compilation of Miller "
+        "et al. redistributes, with everything else at the baseline, so that its "
+        "distance from the measured curve is a number in light collection.",
+        LI_1976, BROWN_CORRECTED, EMISSION_FWHM_NM, False,
     ),
     (
         "materials/variants/NaI_Tl_abs_flat2000.dat", "absorption = flat 2000 mm",

@@ -38,47 +38,52 @@ def test_li_1976_reproduces_the_sodium_d_line_value():
     assert LI_1976(589.3) == pytest.approx(1.7745, abs=5e-5)
 
 
-def test_jellison_reproduces_both_published_measurements():
-    """The two values quoted verbatim in the abstract of Jellison et al. (2012).
+# Table I of Jellison et al. (2012), read from the paper on 14 September 2026.
+# Six minimum-deviation lines, each quoted to +- 0.002.
+JELLISON_TABLE_I = ((435.8, 1.839), (488.0, 1.814), (514.5, 1.804),
+                    (546.1, 1.799), (578.0, 1.786), (633.0, 1.778))
 
-    The coefficients in scint/optical.py are constructed to pass through these,
-    so this test is what defines them; if it fails the coefficients have drifted.
+
+def test_jellison_fit_reproduces_table_i():
+    """The published one-term Sellmeier fit must reproduce every Table I entry.
+
+    The coefficients in scint/optical.py are the paper's own fit (chi^2 = 1.02
+    over these six points); if this fails they have drifted from the source.
+    The largest residual is 0.003 at 546.1 nm, inside the rounding of a value
+    quoted to three decimals plus its +- 0.002.
     """
-    assert JELLISON_2012_ENDPOINTS(436.0) == pytest.approx(1.839, abs=5e-4)
-    assert JELLISON_2012_ENDPOINTS(633.0) == pytest.approx(1.786, abs=5e-4)
+    residuals = {lam: JELLISON_2012_ENDPOINTS(lam) - n for lam, n in JELLISON_TABLE_I}
+    for lam, r in residuals.items():
+        assert abs(r) < 3.5e-3, (lam, r)
+    worst = max(residuals, key=lambda k: abs(residuals[k]))
+    assert worst == 546.1
+    assert abs(residuals[worst]) == pytest.approx(0.003, abs=5e-4)
 
 
-def test_refractiveindex_info_transcription_of_jellison_is_inconsistent():
-    """Pin the discrepancy that made us refit rather than copy.
+def test_the_abstracts_633nm_value_is_the_578nm_table_entry():
+    """Pin the typographical error that misled an earlier version of this code.
 
-    refractiveindex.info encodes Jellison as a single-term Sellmeier with
-    coefficients (0, 1.994, 0.176). That form reproduces the published 436 nm
-    value but falls about 0.008 below the published 633 nm value -- four times the
-    quoted uncertainty of 0.002, which a fit with a reported chi-squared of 1.02
-    cannot produce. One of the two published items is wrong; this test records
-    the inconsistency rather than choosing a winner, and fails if a future
-    version of the database changes its numbers.
+    The abstract prints "633 nm (n = 1.786)"; Table I gives 1.778 at 633.0 nm
+    and 1.786 at 578.0 nm. The fit agrees with the table at both wavelengths,
+    so the abstract's number is the 578 nm entry. An earlier version, working
+    from the abstract alone, rejected the fit and pinned a form to the two
+    abstract values instead; this test fails if that construction comes back.
     """
-    def transcribed(lam_nm: float) -> float:
-        lam2 = (lam_nm / 1000.0) ** 2
-        return math.sqrt(1 + 1.994 * lam2 / (lam2 - 0.176**2))
-
-    assert transcribed(436.0) == pytest.approx(1.839, abs=5e-4)
-    shortfall = 1.786 - transcribed(633.0)
-    assert shortfall == pytest.approx(0.008, abs=1e-3)
-    assert shortfall > 4 * 0.002 - 1e-3
+    assert JELLISON_2012_ENDPOINTS(633.0) == pytest.approx(1.778, abs=1e-3)
+    assert JELLISON_2012_ENDPOINTS(578.0) == pytest.approx(1.786, abs=2.5e-3)
+    assert JELLISON_2012_ENDPOINTS(633.0) != pytest.approx(1.786, abs=5e-3)
 
 
 def test_the_two_dispersion_models_disagree_at_the_emission_peak():
-    """The finding that motivates carrying both: 1.6 % apart at 415 nm.
+    """The finding that motivates carrying both: 1.7 % apart at 415 nm.
 
     That is not a rounding difference. It propagates into the critical angle and
     therefore into every light-collection number computed from it.
     """
     li, jellison = LI_1976(415.0), JELLISON_2012_ENDPOINTS(415.0)
     assert li == pytest.approx(1.8218, abs=1e-3)
-    assert jellison == pytest.approx(1.8504, abs=1e-3)
-    assert (jellison - li) / li == pytest.approx(0.0157, abs=2e-3)
+    assert jellison == pytest.approx(1.8524, abs=1e-3)
+    assert (jellison - li) / li == pytest.approx(0.0168, abs=2e-3)
 
 
 def test_the_emission_band_reaches_below_the_validated_range_of_both_models():

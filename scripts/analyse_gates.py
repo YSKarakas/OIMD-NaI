@@ -394,10 +394,19 @@ def report(rows: list[dict]) -> dict:
             print("    narrower than the full scan by construction -- not a different answer.")
         print("  Neither is reducible by running more events. Both measure what the state")
         print("  of the published optical inputs costs, not what the simulation costs.")
+        # The one structured model in circulation against the measurement it is
+        # credited to, both with the same index, band and everything else.
+        brown_vs_measured = None
+        if "SYS_abs_brown" in by_label and "SYS_abs_measured" in by_label:
+            brown_vs_measured = 100 * (by_label["SYS_abs_brown"]["lce_mean"]
+                                       / by_label["SYS_abs_measured"]["lce_mean"] - 1)
+            print(f"\n  as implemented by Brown (2021, corrected 2023) vs the measured curve:"
+                  f" {brown_vs_measured:+.1f} % in light collection")
         verdicts["systematics"] = {
             "baseline_lce": b,
             "spread_fraction": spread,
             "defensible_spread_fraction": defensible_spread,
+            "brown_vs_measured_pct": brown_vs_measured,
             "variants": {r["label"][4:]: r["lce_mean"] for r in sys_rows},
         }
 

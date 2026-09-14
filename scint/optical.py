@@ -257,6 +257,53 @@ def constant_absorption(length_mm: float, *, source: str) -> Callable[[float], f
     return fn
 
 
+BROWN_CORRECTED_CURVE = "data/optical/brown2021_nai_attenuation.csv"
+
+
+class TabulatedAttenuation:
+    """Attenuation length read from a digitised published curve.
+
+    Log-linear in wavelength between the tabulated points and held at the end
+    values outside them. This is how the one structured NaI(Tl) attenuation
+    model found implemented in a published Geant4 simulation -- Brown (2021),
+    as corrected by the 2023 corrigendum -- is carried into a material variant,
+    so that its distance from the measurement can be stated in light-collection
+    efficiency and not only in millimetres.
+    """
+
+    def __init__(self, path: str | None = None, root: str | None = None, *,
+                 key: str, source: str):
+        import csv as _csv
+        import os
+
+        base = root or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        self.path = path or os.path.join(base, BROWN_CORRECTED_CURVE)
+        self.key = key
+        self.source = source
+        lams: list[float] = []
+        lens: list[float] = []
+        with open(self.path) as fh:
+            for row in _csv.DictReader(ln for ln in fh if not ln.startswith("#")):
+                lams.append(float(row["wavelength_nm"]))
+                lens.append(float(row["attenuation_length_mm"]))
+        if not lams:
+            raise ValueError(f"no rows in {self.path}")
+        order = sorted(range(len(lams)), key=lambda i: lams[i])
+        self._lam = [lams[i] for i in order]
+        self._log = [math.log10(lens[i]) for i in order]
+
+    def __call__(self, lam_nm: float) -> float:
+        import bisect
+
+        if lam_nm <= self._lam[0]:
+            return 10.0 ** self._log[0]
+        if lam_nm >= self._lam[-1]:
+            return 10.0 ** self._log[-1]
+        i = bisect.bisect_left(self._lam, lam_nm)
+        f = (lam_nm - self._lam[i - 1]) / (self._lam[i] - self._lam[i - 1])
+        return 10.0 ** (self._log[i - 1] + f * (self._log[i] - self._log[i - 1]))
+
+
 # --------------------------------------------------------------------------- #
 # Emission spectrum
 # --------------------------------------------------------------------------- #
