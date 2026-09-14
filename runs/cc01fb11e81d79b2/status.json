@@ -1,0 +1,13 @@
+{
+  "label": "MEAS_meas_rindex_flat185",
+  "state": "done",
+  "started_unix": 1789390153.7649264,
+  "material_sha256": "cae01c61b75c0b9574e5c5d7d643e2be7bda904322f3f55313d67e30450d7e97",
+  "binary": "build/container/scint_optical",
+  "binary_sha256": "04550111bbcbe79ef73ee3650c32e50d2f89ef1f76d51fe0e1656b3196da26ee",
+  "container_image": "scint:11.4.2@sha256:6004c311be40b0547053be768028a5138af37e1738e7747f84bac24144a8d9af",
+  "returncode": 0,
+  "elapsed_s": 988.0,
+  "output": "runs/cc01fb11e81d79b2/output_nt_events.csv",
+  "output_sha256": "091b867cd7a5e29e0b89cae91456d0a99cfb7e7cb946e61dfadd2aa966a8ad86"
+}

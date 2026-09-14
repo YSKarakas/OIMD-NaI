@@ -1,0 +1,13 @@
+{
+  "label": "MEAS_meas_jacobian",
+  "state": "done",
+  "started_unix": 1789390777.5028312,
+  "material_sha256": "aa689f23e66f651ae9255751560ae2dbd3148550a14dcd1582b2ce23535a1e12",
+  "binary": "build/container/scint_optical",
+  "binary_sha256": "04550111bbcbe79ef73ee3650c32e50d2f89ef1f76d51fe0e1656b3196da26ee",
+  "container_image": "scint:11.4.2@sha256:6004c311be40b0547053be768028a5138af37e1738e7747f84bac24144a8d9af",
+  "returncode": 0,
+  "elapsed_s": 841.9,
+  "output": "runs/0653c3702f5fbce4/output_nt_events.csv",
+  "output_sha256": "d8d6701c8457fe11fa2d56ab9c36c49b596bd9b83fe495e79fe474feadaa7517"
+}
