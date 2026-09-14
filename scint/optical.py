@@ -305,6 +305,31 @@ class TabulatedAttenuation:
         return 10.0 ** (self._log[i - 1] + f * (self._log[i] - self._log[i - 1]))
 
 
+class ScatteringSplit:
+    """The measured attenuation split into absorption and a grey scattering term.
+
+    A single-beam transmittance cannot separate absorption from scattering; the
+    plateau above 750 nm bounds a wavelength-independent scattering length from
+    below (4.8 m at the +1 sigma_T limit, scint/optical.py's digitisation
+    model). This object is the extreme of that bound: scattering AT the bound
+    everywhere, and absorption carrying whatever attenuation remains,
+    1/L_abs = 1/L_att - 1/L_s. Where the measured attenuation is already longer
+    than L_s the remainder is unconstrained and absorption is set to the same
+    cap the inversion uses. Geant4's internal length unit is the millimetre, so
+    the RAYLEIGH values are written in mm unscaled.
+    """
+
+    def __init__(self, measured: "MeasuredAttenuation", scattering_mm: float, *, source: str):
+        self.measured = measured
+        self.scattering_mm = scattering_mm
+        self.source = source
+        self.key = f"{getattr(measured, 'key', 'measured')}_scatter{scattering_mm:g}mm"
+
+    def __call__(self, lam_nm: float) -> float:
+        inv = 1.0 / self.measured(lam_nm) - 1.0 / self.scattering_mm
+        return 1.0 / inv if inv > 1.0e-5 else 1.0e5
+
+
 # --------------------------------------------------------------------------- #
 # Emission spectrum
 # --------------------------------------------------------------------------- #

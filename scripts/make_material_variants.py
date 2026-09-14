@@ -28,6 +28,7 @@ from scint.optical import (  # noqa: E402
     LI_1976,
     AbsorptionEdge,
     MeasuredAttenuation,
+    ScatteringSplit,
     TabulatedAttenuation,
     Dispersion,
     constant_absorption,
@@ -172,6 +173,15 @@ def build(
         "Bulk absorption length", absorption.source,
         [(lam, absorption(lam)) for lam in optical_lams], "ABSLENGTH_mm",
     )
+    scattering_mm = getattr(absorption, "scattering_mm", None)
+    if scattering_mm:
+        text += _section(
+            "Rayleigh scattering length",
+            "Grey (wavelength-independent) scattering at the lower bound the "
+            "transmittance plateau allows. Values in mm: Geant4's internal length "
+            "unit is the millimetre and G4OpRayleigh reads RAYLEIGH unscaled.",
+            [(lam, scattering_mm) for lam in optical_lams], "RAYLEIGH",
+        )
     shape = gaussian_emission_sampled_in_wavelength if jacobian_corrected else gaussian_emission
     emission = [(lam, shape(lam, EMISSION_PEAK_NM, fwhm_nm)) for lam in band_lams]
     for component in ("SCINTILLATIONCOMPONENT1", "SCINTILLATIONCOMPONENT2"):
@@ -195,6 +205,16 @@ FLAT_185 = constant_dispersion(1.85, source=(
     "what the field does, not because it is a measurement."))
 
 MEASURED = MeasuredAttenuation()
+# The other reading of the same curve: as much of the attenuation as the
+# plateau allows assigned to scattering, which redirects light instead of
+# removing it. 4800 mm is the bound Section 2.2 of the paper states (4795 mm
+# before rounding); the paper quotes the rounded figure, so the run uses it.
+MEASURED_SCATTER_MAX = ScatteringSplit(MEASURED, 4800.0, source=(
+    "The measured curve (Mao et al. Fig. 2, digitised) with grey scattering at "
+    "the 4.8 m lower bound the 750-800 nm plateau allows, and absorption "
+    "carrying the remainder: 703 mm at 415 nm against 614 mm total. The "
+    "extreme of the absorption/scattering ambiguity a single-beam "
+    "transmittance leaves; not a measurement of either."))
 MEASURED_HI = MeasuredAttenuation(sigma=+1.0)
 MEASURED_LO = MeasuredAttenuation(sigma=-1.0)
 # The wavelength axis is the other half of the digitisation error, and below
@@ -320,6 +340,15 @@ VARIANTS: list[tuple[str, str, str, Dispersion, object, float, bool]] = [
         "The published transmittance curve, inverted. Replaces the scanned "
         "Urbach slope with a measurement.",
         LI_1976, MEASURED, EMISSION_FWHM_NM, False,
+    ),
+    (
+        "materials/variants/NaI_Tl_meas_scatter_max.dat",
+        "absorption = measured, with the maximal scattering share the plateau allows",
+        "Same total attenuation as the measured curve, but the largest part of "
+        "it that the 800 nm plateau permits (L_s = 4.8 m, grey) is scattering "
+        "rather than absorption. Bounds what the absorption-only implementation "
+        "of the curve can overstate.",
+        LI_1976, MEASURED_SCATTER_MAX, EMISSION_FWHM_NM, False,
     ),
     (
         "materials/variants/NaI_Tl_abs_measured_hi.dat",
