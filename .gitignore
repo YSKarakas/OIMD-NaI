@@ -58,3 +58,6 @@ runs_scratch/*
 data/derived/*
 !data/derived/atomic_data.csv
 paper/sources/
+
+# Submission package: derived from paper/, and it carries the signature image.
+gönderilecek/
