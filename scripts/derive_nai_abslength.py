@@ -32,19 +32,19 @@ The wavelength dependence away from 365 nm is a model (see scint/optical.py).
 """
 
 import math
+import sys
+from pathlib import Path
 
-# --- dispersion models (see scint/optical.py for provenance) ------------------
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from scint.optical import LI_1976, JELLISON_2012_ENDPOINTS, constant_dispersion  # noqa: E402
 
-def n_li1976(lam_nm: float) -> float:
-    l2 = (lam_nm / 1000.0) ** 2
-    return math.sqrt(1 + 0.478 + 1.532 * l2 / (l2 - 0.170**2) + 4.27 * l2 / (l2 - 86.21**2))
-
-def n_jellison_endpoints(lam_nm: float) -> float:
-    # single-term Sellmeier through the two values quoted in the abstract of
-    # Jellison et al., J. Appl. Phys. 111, 043521 (2012)
-    A, C2 = 2.041276, 0.027186
-    l2 = (lam_nm / 1000.0) ** 2
-    return math.sqrt(1 + A * l2 / (l2 - C2))
+# The dispersion models are the ones the simulation uses (scint/optical.py),
+# imported rather than copied: an earlier revision of this file carried its
+# own transcription of the 2012 index, pinned to the two values in that
+# paper's abstract, and kept it after the published fit had replaced it.
+n_li1976 = LI_1976
+n_jellison = JELLISON_2012_ENDPOINTS
+n_flat185 = constant_dispersion(1.85, source="flat 1.85, the datasheet value")
 
 
 def reflectance(n: float) -> float:
@@ -71,9 +71,33 @@ X0_G_CM2_PDG = 9.49      # PDG, NaI
 DENSITY = 3.667          # g/cm^3
 LENGTH_MM = 10.0 * 1.5 * X0_G_CM2_PDG / DENSITY
 
+def paper_cases() -> dict[str, float]:
+    """The inversion-stability numbers Section 2.2 of the paper quotes.
+
+    Each case changes ONE assumption about the inversion. A dispersion model is
+    swapped at both wavelengths (the 800 nm Fresnel limit and the 365 nm
+    inversion), because using one model's transmittance limit with another
+    model's index is two descriptions rather than one.
+    """
+    def invert(n_of, t800=None, length_mm=LENGTH_MM):
+        t800 = t_theoretical(n_of(800.0)) if t800 is None else t800
+        return abslength_from_transmittance(0.5 * t800, n_of(365.0), length_mm)
+    t0 = t_theoretical(n_li1976(800.0))
+    return {
+        "Li 1976": invert(n_li1976),
+        "Jellison 2012 fit at both wavelengths": invert(n_jellison),
+        "flat n = 1.85": invert(n_flat185),
+        "T(800) at the digitised plateau 0.8606": invert(n_li1976, 0.8606),
+        "T(800) 5 % below the limit": invert(n_li1976, 0.95 * t0),
+        "X0 = 9.49 g/cm^2": invert(n_li1976, length_mm=10.0 * 1.5 * 9.49 / DENSITY),
+        "X0 = 9.67 g/cm^2": invert(n_li1976, length_mm=10.0 * 1.5 * 9.67 / DENSITY),
+    }
+
+
 def main() -> None:
     print(f"sample length L = 1.5 X0 = {LENGTH_MM:.3f} mm\n")
-    for label, n_of in (("Li 1976", n_li1976), ("Jellison 2012 (endpoints)", n_jellison_endpoints)):
+    for label, n_of in (("Li 1976", n_li1976), ("Jellison 2012 (published fit)", n_jellison),
+                        ("flat 1.85", n_flat185)):
         n800, n365 = n_of(800.0), n_of(365.0)
         t800 = t_theoretical(n800)
         print(f"--- refractive index: {label}")
@@ -87,14 +111,10 @@ def main() -> None:
             print(f"    T(365) = {t365:.5f}  ->  L_abs(365 nm) = {l_abs:7.2f} mm   [{note}]")
         print()
 
-    # sensitivity to the sample length, i.e. to which X0 the authors used
-    print("--- sensitivity to the assumed sample length")
-    for x0 in (9.49, 9.67):
-        L = 10.0 * 1.5 * x0 / DENSITY
-        n365 = n_li1976(365.0)
-        t365 = 0.5 * t_theoretical(n_li1976(800.0))
-        print(f"    X0 = {x0:.2f} g/cm^2 -> L = {L:.3f} mm -> "
-              f"L_abs(365 nm) = {abslength_from_transmittance(t365, n365, L):.2f} mm")
+    print("--- the cases Section 2.2 quotes")
+    for label, value in paper_cases().items():
+        print(f"    {label:<42} {value:6.2f} mm")
+
 
 if __name__ == "__main__":
     main()

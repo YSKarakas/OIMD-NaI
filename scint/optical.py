@@ -12,7 +12,7 @@ Three findings drove the design, all recorded in ``docs/05_OPTIK_GIRDILER.md``:
 1.  The refractive index of NaI used throughout the scintillator-simulation
     literature descends from a *single measurement made in 1923*.  Jellison et
     al. (2012) open their abstract by saying so.  Their own measurement disagrees
-    with it by 1.6 % at the NaI:Tl emission peak.
+    with it by 1.7 % at the NaI:Tl emission peak.
 2.  Nobody publishes a machine-readable NaI:Tl emission spectrum.  The band shape
     is therefore an assumption, and is treated as one.
 3.  The published bulk absorption lengths (500 mm, 1000 mm, "transparent") are
@@ -139,7 +139,8 @@ JELLISON_2012_ENDPOINTS = Dispersion(
         "refractiveindex.info (database/data/main/NaI/nk/Jellison.yml). "
         "Table I of the paper (consulted 14 September 2026) lists 435.8 nm 1.839, "
         "488.0 1.814, 514.5 1.804, 546.1 1.799, 578.0 1.786, 633.0 1.778, all "
-        "+- 0.002; the fit reproduces every entry to the quoted precision. The "
+        "+- 0.002; the fit reproduces them with residuals of at most 0.003 (546.1 nm), "
+        "four within +- 0.002, and chi^2/ndf = 1.01 against the published 1.02. The "
         "abstract's '633 nm (n = 1.786)' is a typographical error -- it is the "
         "578 nm value. An earlier version of this file, working from the abstract "
         "alone, rejected the fit and pinned a one-term form to the two abstract "

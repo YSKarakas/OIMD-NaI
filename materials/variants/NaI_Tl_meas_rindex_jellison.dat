@@ -48,15 +48,16 @@ resolution_scale = 1.0
 # as transcribed by refractiveindex.info
 # (database/data/main/NaI/nk/Jellison.yml). Table I of the paper (consulted 14
 # September 2026) lists 435.8 nm 1.839, 488.0 1.814, 514.5 1.804, 546.1 1.799,
-# 578.0 1.786, 633.0 1.778, all +- 0.002; the fit reproduces every entry to
-# the quoted precision. The abstract's '633 nm (n = 1.786)' is a typographical
-# error -- it is the 578 nm value. An earlier version of this file, working
-# from the abstract alone, rejected the fit and pinned a one-term form to the
-# two abstract values, giving 1.8504 at 415 nm against the fit's 1.8524;
-# corrected. EXTRAPOLATION: the source claims validity over 436-633 nm, but 23
-# of the 43 tabulated points lie outside it (280-700 nm). For this material
-# that is unavoidable -- the emission band reaches below every published
-# measurement of its own refractive index.
+# 578.0 1.786, 633.0 1.778, all +- 0.002; the fit reproduces them with
+# residuals of at most 0.003 (546.1 nm), four within +- 0.002, and chi^2/ndf =
+# 1.01 against the published 1.02. The abstract's '633 nm (n = 1.786)' is a
+# typographical error -- it is the 578 nm value. An earlier version of this
+# file, working from the abstract alone, rejected the fit and pinned a
+# one-term form to the two abstract values, giving 1.8504 at 415 nm against
+# the fit's 1.8524; corrected. EXTRAPOLATION: the source claims validity over
+# 436-633 nm, but 23 of the 43 tabulated points lie outside it (280-700 nm).
+# For this material that is unavoidable -- the emission band reaches below
+# every published measurement of its own refractive index.
 [RINDEX]
 280    2.07278
 290    2.03879

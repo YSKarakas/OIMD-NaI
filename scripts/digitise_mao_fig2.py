@@ -320,7 +320,11 @@ def main() -> int:
         w.writerow(["wavelength_nm", "transmittance", "attenuation_length_mm"])
         for lm, t, la in rows:
             w.writerow([f"{lm:.2f}", f"{t:.5f}", "" if la is None else f"{la:.3f}"])
-    print(f"\nwrote {args.out.relative_to(ROOT)}  ({len(rows)} points, "
+    try:
+        shown = args.out.relative_to(ROOT)
+    except ValueError:
+        shown = args.out
+    print(f"\nwrote {shown}  ({len(rows)} points, "
           f"{lam.min():.0f}-{lam.max():.0f} nm)")
     return 0
 
