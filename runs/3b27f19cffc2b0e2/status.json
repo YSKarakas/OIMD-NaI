@@ -1,0 +1,10 @@
+{
+  "label": "MEAS_abs_measured_lamhi",
+  "state": "done",
+  "started_unix": 1789364700.718021,
+  "material_sha256": "05ea100fe828016efa486708ab7c3e08c41ef149d086f565b33098440b682930",
+  "returncode": 0,
+  "elapsed_s": 748.3,
+  "output": "runs/3b27f19cffc2b0e2/output_nt_events.csv",
+  "output_sha256": "8de84c9b9ae14236f4c7e4ee78c4bf09c550ad28d566a259d014c32d04aea447"
+}

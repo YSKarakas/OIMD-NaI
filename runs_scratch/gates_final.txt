@@ -1,4 +1,4 @@
-39 completed runs, output schema 5 (schemas on disk: [1, 2, 3, 4, 5])
+40 completed runs, output schema 5 (schemas on disk: [1, 2, 3, 4, 5])
 
 ==============================================================================
 G2 -- PHOTON BUDGET
@@ -16,7 +16,7 @@ G2 -- PHOTON BUDGET
   Compton electrons from a 662 keV gamma pass. A simulation that counts
   'optical photons' without separating them overstates the light yield.
   variance / mean               0.960 +- 0.041   (Poisson: 1.000)
-  Geant4 (geant4-11-04-beta-01) G4Scintillation.cc draws N from a Gaussian of width
+  Geant4 (geant4-11-04-patch-02) G4Scintillation.cc draws N from a Gaussian of width
   RESOLUTIONSCALE*sqrt(mean) when mean > 10 and from a Poisson below it, so
   with RESOLUTIONSCALE = 1 the summed variance must equal the summed mean.
   VERDICT                       PASS  (yield within 1 %: True; variance Poisson within 3 sigma: True)
@@ -46,8 +46,8 @@ G4 -- LIGHT-COLLECTION EFFICIENCY BY WRAPPING
     tyvek               89 p.e./MeV  1.127x aluminium
     aluminium           79 p.e./MeV  1.000x aluminium
     teflon/tyvek: measured 1.022, simulated here 1.044
-    Same sign. The measured gap is the larger one, and our two
-    diffuse reflectors sit closer together than theirs do.
+    Same sign. The simulated gap is the larger one, and our two
+    diffuse reflectors sit further apart than theirs do.
 
   VERDICT                       PASS  (every reflector must beat the unwrapped crystal)
 
@@ -62,17 +62,18 @@ OPTICAL INPUT SYSTEMATICS -- LCE under one-at-a-time variation
   abs_flat2000              0.4928    0.0002       +53.10 %
   abs_flat500               0.3598    0.0001       +11.79 %
   abs_measured              0.3543    0.0001       +10.07 %
-  abs_measured_hi           0.3653    0.0001       +13.50 %
-  abs_measured_lamhi        0.3445    0.0001        +7.03 %
-  abs_measured_lamlo        0.3632    0.0001       +12.85 %
-  abs_measured_lo           0.3448    0.0001        +7.12 %
+  abs_measured_hi           0.3690    0.0001       +14.63 %
+  abs_measured_lamhi        0.3396    0.0001        +5.50 %
+  abs_measured_lamlo        0.3676    0.0001       +14.21 %
+  abs_measured_lo           0.3417    0.0001        +6.16 %
   emission_fwhm55           0.3311    0.0001        +2.86 %
   emission_fwhm75           0.3123    0.0002        -2.97 %
   emission_jacobian         0.3358    0.0001        +4.33 %
   meas_fwhm55               0.3644    0.0001       +13.20 %
   meas_fwhm75               0.3435    0.0001        +6.72 %
-  meas_rindex_flat185       0.3554    0.0001       +10.40 %
-  meas_rindex_jellison      0.3526    0.0001        +9.54 %
+  meas_jacobian             0.3638    0.0001       +13.02 %
+  meas_rindex_flat185       0.3553    0.0001       +10.37 %
+  meas_rindex_jellison      0.3523    0.0001        +9.43 %
   rindex_flat185            0.3094    0.0002        -3.87 %
   rindex_jellison           0.3089    0.0002        -4.04 %
 
@@ -81,27 +82,28 @@ OPTICAL INPUT SYSTEMATICS -- LCE under one-at-a-time variation
   baseline                  411.25    420.28     +9.03 nm
   abs_edge010               411.25    418.79     +7.54 nm
   emission_fwhm75           410.03    422.14    +12.11 nm
-  meas_rindex_jellison      411.25    417.30     +6.05 nm
-  abs_measured_lo           411.25    416.80     +5.55 nm
-  abs_measured_hi           411.25    417.01     +5.76 nm
   emission_fwhm55           412.32    418.66     +6.34 nm
-  abs_measured_lamhi        411.25    417.55     +6.30 nm
   abs_measured              411.25    416.89     +5.65 nm
   meas_fwhm55               412.31    415.85     +3.54 nm
   emission_jacobian         414.97    423.15     +8.18 nm
   rindex_jellison           411.24    420.53     +9.29 nm
   meas_fwhm75               410.02    418.28     +8.26 nm
   rindex_flat185            411.26    419.92     +8.66 nm
-  meas_rindex_flat185       411.26    417.19     +5.93 nm
   abs_edge025               411.25    420.36     +9.11 nm
   abs_flat1000              411.25    411.77     +0.52 nm
-  abs_measured_lamlo        411.24    416.24     +5.00 nm
   abs_flat2000              411.25    411.74     +0.50 nm
   abs_flat500               411.25    411.79     +0.53 nm
+  abs_measured_hi           411.26    417.08     +5.82 nm
+  abs_measured_lamhi        411.26    417.88     +6.62 nm
+  abs_measured_lamlo        411.25    416.00     +4.74 nm
+  abs_measured_lo           411.24    416.76     +5.52 nm
+  meas_jacobian             414.97    419.93     +4.96 nm
+  meas_rindex_flat185       411.26    417.19     +5.94 nm
+  meas_rindex_jellison      411.24    417.27     +6.03 nm
 
-  spread over published practice  69.2 % of baseline LCE   [20 variants]
+  spread over published practice  69.2 % of baseline LCE   [21 variants]
     (includes the flat absorption lengths that appear in the literature)
-  spread over defensible models   39.5 % of baseline LCE   [17 variants]
+  spread over defensible models   39.5 % of baseline LCE   [18 variants]
     (flat absorption dropped: the 365 nm transmittance measurement excludes it)
   Neither is reducible by running more events. Both measure what the state
   of the published optical inputs costs, not what the simulation costs.
@@ -112,32 +114,34 @@ MEASURED ATTENUATION CURVE -- digitised from Mao et al. Fig. 2
   variant                      LCE    +- sem   vs baseline
   baseline (edge model)     0.3219    0.0002            --
   abs_measured              0.3543    0.0001       +10.07 %
-  abs_measured_hi           0.3653    0.0001       +13.50 %
-  abs_measured_lamhi        0.3445    0.0001        +7.03 %
-  abs_measured_lamlo        0.3632    0.0001       +12.85 %
-  abs_measured_lo           0.3448    0.0001        +7.12 %
+  abs_measured_hi           0.3690    0.0001       +14.63 %
+  abs_measured_lamhi        0.3396    0.0001        +5.50 %
+  abs_measured_lamlo        0.3676    0.0001       +14.21 %
+  abs_measured_lo           0.3417    0.0001        +6.16 %
   meas_fwhm55               0.3644    0.0001       +13.20 %
   meas_fwhm75               0.3435    0.0001        +6.72 %
-  meas_rindex_flat185       0.3554    0.0001       +10.40 %
-  meas_rindex_jellison      0.3526    0.0001        +9.54 %
+  meas_jacobian             0.3638    0.0001       +13.02 %
+  meas_rindex_flat185       0.3553    0.0001       +10.37 %
+  meas_rindex_jellison      0.3523    0.0001        +9.43 %
 
   light-collection efficiency from the measured curve:
-      0.3543 +- 0.0139  (3.9 %)
-        transmittance axis  +- 0.0103 (2.9 %)
-        wavelength axis     +- 0.0094 (2.6 %)
+      0.3543 +- 0.0195  (5.5 %)
+        transmittance axis  +- 0.0136 (3.8 %)
+        wavelength axis     +- 0.0140 (4.0 %)
   for comparison, the scanned-slope family spanned 40 % of baseline
 
   ENVELOPE over the family built on the measured curve
+      abs_measured_lamhi       0.3396
+      abs_measured_lo          0.3417
       meas_fwhm75              0.3435
-      abs_measured_lamhi       0.3445
-      abs_measured_lo          0.3448
-      meas_rindex_jellison     0.3526
+      meas_rindex_jellison     0.3523
       abs_measured             0.3543
-      meas_rindex_flat185      0.3554
-      abs_measured_lamlo       0.3632
+      meas_rindex_flat185      0.3553
+      meas_jacobian            0.3638
       meas_fwhm55              0.3644
-      abs_measured_hi          0.3653
-      spread 6.2 % of the measured central value (0.3435 .. 0.3653)
+      abs_measured_lamlo       0.3676
+      abs_measured_hi          0.3690
+      spread 8.3 % of the measured central value (0.3396 .. 0.3690)
 
 ==============================================================================
 ARRANGEMENT SCAN -- geometry, coupling and surface finish
