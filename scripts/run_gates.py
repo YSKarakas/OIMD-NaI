@@ -75,6 +75,15 @@ RUNS_DIR = ROOT / "runs"
 
 # Fixed for every gate: a 3" x 3" NaI(Tl) cylinder read out over its full face,
 # the geometry the published 7.0 % FWHM refers to.
+# The crystal every gate and every arrangement run uses. It is the DIGITISED
+# transmittance curve, not the scanned Urbach edge the study began with: a
+# referee pointed out that the wrapping table and the arrangement scan were
+# quoted on a baseline the paper's own Section 2.2 rejects, and never named.
+# The scanned edge survives only as the reference of the "outset" envelope
+# (the SYS set), which has its own baseline run on it.
+BASELINE_MATERIAL = "materials/variants/NaI_Tl_abs_measured.dat"
+OUTSET_MATERIAL = "materials/NaI_Tl.dat"
+
 BASE_GEOMETRY = {
     "crystal": {
         "shape": "cylinder",
@@ -325,16 +334,20 @@ def gather(set_name: str, events: int, seed: int) -> list[dict]:
         # G2 and G3 come from the same baseline run: the photon budget and the
         # photopeak width are two readings of one dataset.
         configs.append(config_for(
-            label="G2G3_baseline", material_spec="materials/NaI_Tl.dat",
+            label="G2G3_baseline", material_spec=BASELINE_MATERIAL,
             events=events, seed=seed,
         ))
         # G4: the wrapping scan.
         for wrap in WRAPPINGS:
             configs.append(config_for(
-                label=f"G4_wrap_{wrap}", material_spec="materials/NaI_Tl.dat",
+                label=f"G4_wrap_{wrap}", material_spec=BASELINE_MATERIAL,
                 events=events, seed=seed, wrapping=wrap,
             ))
     if set_name in ("systematics", "all"):
+        configs.append(config_for(
+            label="SYS_baseline", material_spec=OUTSET_MATERIAL,
+            events=events, seed=seed,
+        ))
         for spec in sorted((ROOT / "materials" / "variants").glob("*.dat")):
             configs.append(config_for(
                 label=f"SYS_{spec.stem.replace('NaI_Tl_', '')}",
@@ -356,7 +369,7 @@ def gather(set_name: str, events: int, seed: int) -> list[dict]:
                 events=events, seed=seed,
             ))
         configs.append(config_for(
-            label="MEAS_baseline", material_spec="materials/NaI_Tl.dat",
+            label="MEAS_baseline", material_spec=OUTSET_MATERIAL,
             events=events, seed=seed,
         ))
     if set_name in ("scope", "all"):
@@ -367,7 +380,7 @@ def gather(set_name: str, events: int, seed: int) -> list[dict]:
         # fixed cannot say the crystal's properties are what matters.
         for label, overrides in SCOPE_VARIANTS.items():
             configs.append(config_for(
-                label=f"SCOPE_{label}", material_spec="materials/NaI_Tl.dat",
+                label=f"SCOPE_{label}", material_spec=BASELINE_MATERIAL,
                 events=events, seed=seed, overrides=overrides,
             ))
         for label, (spec, overrides) in SCOPE_CONTROLS.items():

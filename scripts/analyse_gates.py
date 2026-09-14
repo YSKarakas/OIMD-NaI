@@ -343,10 +343,13 @@ def report(rows: list[dict]) -> dict:
     print("=" * 78)
     print("OPTICAL INPUT SYSTEMATICS -- LCE under one-at-a-time variation")
     print("=" * 78)
-    sys_rows = [r for r in rows if r["label"].startswith("SYS_")]
+    sys_rows = [r for r in rows if r["label"].startswith("SYS_") and r["label"] != "SYS_baseline"]
+    # The outset envelope is relative to the scanned-edge run, which is no
+    # longer the gates' baseline; it has its own run.
+    sys_baseline = by_label.get("SYS_baseline") or baseline
     _same_settings(sys_rows, "optical-systematics set")
     if baseline is not None and sys_rows:
-        b = baseline["lce_mean"]
+        b = sys_baseline["lce_mean"]
         print(f"  {'variant':<22} {'LCE':>9} {'+- sem':>9} {'vs baseline':>13}")
         print(f"  {'baseline':<22} {b:>9.4f} {baseline['lce_sem']:>9.4f} {'--':>13}")
         for r in sorted(sys_rows, key=lambda r: r["label"]):
@@ -407,7 +410,7 @@ def report(rows: list[dict]) -> dict:
     meas_rows = sorted((r for r in rows if r["label"].startswith("MEAS_")
                         and r["label"] != "MEAS_baseline"),
                        key=lambda r: r["label"])
-    meas_base = by_label.get("MEAS_baseline") or by_label.get("SCOPE_baseline")
+    meas_base = by_label.get("MEAS_baseline") or by_label.get("SYS_baseline")
     if meas_rows and meas_base:
         print()
         print("=" * 78)
