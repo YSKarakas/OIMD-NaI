@@ -8,7 +8,8 @@
   "output": "runs/cde2a5a9d130c501/output_nt_events.csv",
   "output_sha256": "cbdd28359ca987c6c091cdf4e0c3e1be7c00cbf04fb35360ecd121f4f3da50b4",
   "aliases": [
-    "MEAS_baseline"
+    "MEAS_baseline",
+    "SYS_baseline"
   ],
   "binary": "build/container/scint_optical",
   "binary_sha256": "04550111bbcbe79ef73ee3650c32e50d2f89ef1f76d51fe0e1656b3196da26ee",

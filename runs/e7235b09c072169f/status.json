@@ -6,5 +6,8 @@
   "returncode": 0,
   "elapsed_s": 889.7,
   "output": "runs/e7235b09c072169f/output_nt_events.csv",
-  "output_sha256": "3d207bd97e1b59d47ef0199913cda10a057254e4d84097d549119250501b0f16"
+  "output_sha256": "3d207bd97e1b59d47ef0199913cda10a057254e4d84097d549119250501b0f16",
+  "aliases": [
+    "SYS_abs_measured_lamlo"
+  ]
 }

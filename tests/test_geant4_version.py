@@ -107,6 +107,7 @@ def test_macro_commands_actually_reach_the_geometry(tmp_path):
         "/scint/surface/treatment ground\n"
         "/scint/surface/wrapping esr\n"
         "/scint/surface/coupling glue\n"
+        "/scint/surface/reflectivity 0.985\n"
         "/run/initialize\n"
     )
     result = subprocess.run(

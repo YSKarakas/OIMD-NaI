@@ -6,5 +6,8 @@
   "returncode": 0,
   "elapsed_s": 967.5,
   "output": "runs/04767e90fa2eacfa/output_nt_events.csv",
-  "output_sha256": "812b4f2915cef12e4a10636d35b0b3068f3746f5099f5064de5e31aa42787ee2"
+  "output_sha256": "812b4f2915cef12e4a10636d35b0b3068f3746f5099f5064de5e31aa42787ee2",
+  "aliases": [
+    "SYS_meas_rindex_jellison"
+  ]
 }

@@ -278,7 +278,7 @@ def gaussian_emission_sampled_in_wavelength(
 ) -> float:
     """The table that makes Geant4 SAMPLE a Gaussian in wavelength.
 
-    Geant4 (build geant4-11-04-beta-01) builds the emission CDF by integrating the tabulated values
+    Geant4 (verified in the 11.4 beta and the 11.4.2 release) builds the emission CDF by integrating the tabulated values
     over photon ENERGY (``G4Scintillation::BuildInverseCdfTable``: the trapezium
     weight is ``Energy(i) - Energy(i-1)``).  The numbers in a
     SCINTILLATIONCOMPONENT table are therefore a probability density in energy,

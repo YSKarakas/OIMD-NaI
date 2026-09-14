@@ -8,7 +8,10 @@
   "output": "runs/4743478c1b564cba/output_nt_events.csv",
   "output_sha256": "2eeb2651b2e0d0226dff09b7c8b3475ea2b0615def299b9d860228de8599f19a",
   "aliases": [
-    "MEAS_abs_measured"
+    "MEAS_abs_measured",
+    "G2G3_baseline",
+    "G4_wrap_teflon",
+    "SCOPE_baseline"
   ],
   "binary": "build/container/scint_optical",
   "binary_sha256": "04550111bbcbe79ef73ee3650c32e50d2f89ef1f76d51fe0e1656b3196da26ee",

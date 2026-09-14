@@ -19,7 +19,7 @@ struct Key {
 };
 
 // The full set Geant4 ships look-up tables for -- 21 entries, verified against
-// G4OpticalSurface::ReadLUTFile in Geant4 geant4-11-04-beta-01 and against the contents of the
+// G4OpticalSurface::ReadLUTFile in Geant4 11.4.2 (and the 11.4 beta) and against the contents of the
 // RealSurface2.2 dataset, not against the enum.
 //
 // Teflon, TiO and Tyvek exist only in air-coupled form; Geant4 provides no
@@ -29,13 +29,17 @@ struct Key {
 // The BARE surface finishes -- polishedair, etchedair, groundair -- are absent
 // too, and their absence is not cosmetic. They exist as enumerators, but
 // ReadLUTFile has no case for them: it falls through to `default: return;`, no
-// file is loaded, and the angular distribution stays empty. G4OpBoundaryProcess
+// file is loaded, and the angular distribution -- allocated with new G4float[]
+// and never value-initialised -- holds whatever the allocator supplied, in
+// practice zeros from fresh pages. G4OpBoundaryProcess
 // then reaches DielectricLUT(), whose inner loop is
 //
 //     do { ... angularDistVal = GetAngularDistributionValue(...); }
 //     while(!G4BooleanRand(angularDistVal));
 //
-// and with angularDistVal identically zero that loop never terminates. The
+// and with angularDistVal zero everywhere that loop never terminates (with
+// recycled memory it would instead sample a plausible-looking wrong
+// distribution, which is worse). The
 // result is not an error and not a warning: the simulation hangs inside a single
 // step, at full CPU, indefinitely. This cost three abandoned runs (5h51m, 2h17m
 // and 11 minutes) and an incorrect physical explanation before it was found.
