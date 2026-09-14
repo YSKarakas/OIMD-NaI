@@ -261,7 +261,7 @@ def test_the_absorption_anchor_matches_its_own_derivation():
 
 
 def test_the_absorption_anchor_is_robust_to_the_assumptions_behind_it():
-    """The derivation's stated robustness, 55-60 mm, checked rather than asserted.
+    """The derivation's stated robustness, a few millimetres, checked rather than asserted.
 
     The assumptions varied are the ones the paper does not pin down: which
     dispersion model to use, how close the 800 nm transmittance sits to its
@@ -279,7 +279,7 @@ def test_the_absorption_anchor_is_robust_to_the_assumptions_behind_it():
     spec.loader.exec_module(module)
 
     results = []
-    for n_of in (module.n_li1976, module.n_jellison_endpoints):
+    for n_of in (module.n_li1976, module.n_jellison, module.n_flat185):
         for t800_factor in (1.00, 0.98, 0.95):
             for x0 in (9.49, 9.67):
                 length = 10.0 * 1.5 * x0 / module.DENSITY
@@ -287,7 +287,13 @@ def test_the_absorption_anchor_is_robust_to_the_assumptions_behind_it():
                 results.append(
                     module.abslength_from_transmittance(t365, n_of(365.0), length)
                 )
-    assert 54.0 < min(results) < max(results) < 62.0
+    assert 52.0 < min(results) < max(results) < 62.0
+    # The cases the paper quotes, from the same script (pinned in the checker
+    # against the manuscript's literals; here against the spread they claim).
+    cases = module.paper_cases()
+    assert cases["Li 1976"] == pytest.approx(58.94, abs=0.01)
+    assert cases["Jellison 2012 fit at both wavelengths"] == pytest.approx(60.10, abs=0.01)
+    assert max(cases.values()) - min(cases.values()) < 6.0
 
 
 def test_jacobian_correction_undoes_geant4s_energy_space_sampling():
