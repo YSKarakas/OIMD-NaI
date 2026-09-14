@@ -344,7 +344,7 @@ def gather(set_name: str, events: int, seed: int) -> list[dict]:
         for label in ("abs_measured", "abs_measured_hi", "abs_measured_lo",
                       "abs_measured_lamhi", "abs_measured_lamlo",
                       "meas_rindex_jellison", "meas_rindex_flat185",
-                      "meas_fwhm55", "meas_fwhm75"):
+                      "meas_fwhm55", "meas_fwhm75", "meas_jacobian"):
             configs.append(config_for(
                 label=f"MEAS_{label}",
                 material_spec=f"materials/variants/NaI_Tl_{label}.dat",
@@ -407,12 +407,37 @@ def main() -> None:
         if args.dry_run:
             print(f"would run {label:32s} {_peek_id(cfg)}")
             continue
+        # The run identifier hashes the configuration, which names the material
+        # file by path. If that file's CONTENT has changed since the run was
+        # made -- a regenerated variant -- the run on disk no longer represents
+        # the configuration, and reusing it would pair a label with physics it
+        # did not simulate. Such a run is moved aside, not deleted, and redone.
+        rid = _peek_id(cfg)
+        existing = RUNS_DIR / rid / "status.json"
+        material = ROOT / cfg["crystal"]["material_spec"]
+        if existing.exists() and material.exists():
+            recorded = json.loads(existing.read_text()).get("material_sha256")
+            current = checksum(material)
+            if recorded and recorded != current:
+                stale_dir = RUNS_DIR / "_stale"
+                stale_dir.mkdir(exist_ok=True)
+                target = stale_dir / f"{rid}-material-{recorded[:8]}"
+                (RUNS_DIR / rid).rename(target)
+                print(f"stale {label:32s} {rid}  material file changed since the run; "
+                      f"moved to {target.relative_to(ROOT)}")
         try:
             run = create_run(cfg, runs_dir=RUNS_DIR, seed=cfg["run"]["seed"])
         except RunExistsError:
-            first = seen.get(_peek_id(cfg))
+            first = seen.get(rid)
             note = f"identical physics to {first}" if first else "already on disk"
-            print(f"reuse {label:32s} {_peek_id(cfg)}  ({note})")
+            print(f"reuse {label:32s} {rid}  ({note})")
+            # Record the alias on the run so the analysis does not have to
+            # re-derive it from this script later.
+            st = json.loads(existing.read_text()) if existing.exists() else {}
+            aliases = st.get("aliases", [])
+            if label not in aliases and label != st.get("label"):
+                aliases.append(label); st["aliases"] = aliases
+                existing.write_text(json.dumps(st, indent=2) + "\n")
             continue
         seen[run.id] = label
         runs.append((label, run))

@@ -243,20 +243,53 @@ def main() -> int:
             f"past the {CUTOFF_TOLERANCE_NM:.0f} nm tolerance. That is the size "
             "of error the rejected column-wise trace produced; do not use this "
             "output.")
-    from scint.optical import DIGITISATION_SIGMA_LAM_NM
-    print(f"  residual   : {residual:+.2f} nm, carried as the wavelength-axis "
-          f"systematic")
-    if abs(abs(residual) - DIGITISATION_SIGMA_LAM_NM) > 0.1:
+    from scint.optical import (CALIBRATION_RESIDUAL_NM, STROKE_PX_VERTICAL,
+                               STROKE_PX_HORIZONTAL)
+    print(f"  residual   : {residual:+.2f} nm, carried as the calibration term of "
+          f"the wavelength-axis systematic")
+    print(f"  the three handles about the applied offset: emission "
+          f"{STATED_EMISSION_NM - em - offset:+.1f}, excitation "
+          f"{STATED_EXCITATION_NM - ex - offset:+.1f}, cut-off {residual:+.1f} nm")
+    if abs(abs(residual) - CALIBRATION_RESIDUAL_NM) > 0.1:
         raise SystemExit(
             f"the residual measured here ({abs(residual):.2f} nm) no longer "
-            f"matches DIGITISATION_SIGMA_LAM_NM ({DIGITISATION_SIGMA_LAM_NM:.2f} "
-            "nm) in scint/optical.py, which the paper propagates. Update it.")
+            f"matches CALIBRATION_RESIDUAL_NM ({CALIBRATION_RESIDUAL_NM:.2f} nm) "
+            "in scint/optical.py, which the paper propagates. Update it.")
 
+    # ---- check 3: the stroke width the error model rests on -------------------
+    # Measured with the same mask that traces the curve: vertical thickness on
+    # the transparent plateau, horizontal extent on the steep rise. Half of each
+    # is the reading half-width scint/optical.py carries.
+    vt, ht = [], []
+    for x in range(PANEL["left"] + 3, PANEL["right"] - 3):
+        if 450 <= raw_nm(x) <= 740:
+            yy = np.where(m["green"][PANEL["top"] + 2:PANEL["bottom"] - 1, x])[0]
+            if len(yy):
+                s, e = longest_run(yy); vt.append(e - s + 1)
+    for y in range(PANEL["top"] + 1, PANEL["bottom"]):
+        if 15 <= to_pct(y) <= 60:
+            xx = np.where(m["green"][y, PANEL["left"] + 3:PANEL["right"] - 3])[0]
+            if len(xx):
+                s, e = longest_run(xx); ht.append(e - s + 1)
+    vt_med, ht_med = int(np.median(vt)), int(np.median(ht))
+    print("\nstroke width, measured with the tracing mask")
+    print(f"  vertical, on the plateau   : {vt_med} px  (half = {vt_med/2/T_PX_PER_PCT/100:.4f} in T)")
+    print(f"  horizontal, on the rise    : {ht_med} px  (half = {ht_med/2/PX_PER_NM:.1f} nm)")
+    if (vt_med, ht_med) != (STROKE_PX_VERTICAL, STROKE_PX_HORIZONTAL):
+        raise SystemExit(
+            f"stroke widths measured here ({vt_med}, {ht_med}) px differ from "
+            f"({STROKE_PX_VERTICAL}, {STROKE_PX_HORIZONTAL}) in scint/optical.py, "
+            "which the error model rests on. Update it.")
+
+    # Every traced point is written. Where the transmittance sits above the
+    # Fresnel limit of a lossless crystal the inversion has no solution and the
+    # length column is left empty; dropping those rows, as an earlier version
+    # did, silently biased the plateau low by excluding exactly the points
+    # that say the crystal is transparent there.
     rows = []
     for lm, t in zip(lam, tr):
         la = attenuation_length(float(lm), float(t), SAMPLE_LENGTH_MM)
-        if la is not None:
-            rows.append((float(lm), float(t), la))
+        rows.append((float(lm), float(t), la))
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     with args.out.open("w", newline="") as fh:
@@ -273,7 +306,9 @@ def main() -> int:
             "# The sample is a cylinder 1.5 X0 = 38.8 mm long (Section III).\n"
             "# attenuation_length_mm inverts the paper's own transmittance\n"
             "# expression and is EFFECTIVE: a single-beam transmittance cannot\n"
-            "# separate absorption from scattering.\n"
+            "# separate absorption from scattering. It is empty where the\n"
+            "# transmittance exceeds the Fresnel limit of a lossless crystal\n"
+            "# and the inversion has no solution.\n"
             "#\n"
             f"# calibration offset applied: {offset:+.2f} nm, from the emission\n"
             f"#   ({em:.1f} vs {STATED_EMISSION_NM:.0f}) and excitation\n"
@@ -284,7 +319,7 @@ def main() -> int:
         w = csv.writer(fh)
         w.writerow(["wavelength_nm", "transmittance", "attenuation_length_mm"])
         for lm, t, la in rows:
-            w.writerow([f"{lm:.2f}", f"{t:.5f}", f"{la:.3f}"])
+            w.writerow([f"{lm:.2f}", f"{t:.5f}", "" if la is None else f"{la:.3f}"])
     print(f"\nwrote {args.out.relative_to(ROOT)}  ({len(rows)} points, "
           f"{lam.min():.0f}-{lam.max():.0f} nm)")
     return 0

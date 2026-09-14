@@ -4,8 +4,10 @@
 # in scint/optical.py.  Do not edit by hand: regenerate instead, so that the
 # provenance notes below cannot drift away from the code that made the numbers.
 #
-# VARIANT: absorption = measured, -1 sigma of the transmittance digitisation error
-# Transmittance-axis lower bound of the measured curve.
+# VARIANT: measured absorption + Jacobian-corrected emission table
+# The tabulation convention of Appendix B.2, on the measured attenuation, so
+# that the measurement-consistent family counts the same term the scanned
+# family does.
 #
 # PROVENANCE OF THE NON-OPTICAL PARAMETERS
 #
@@ -104,52 +106,51 @@ resolution_scale = 1.0
 # % cut-off against the 365 nm stated in the text. This is an EFFECTIVE
 # attenuation: a single-beam transmittance does not separate absorption from
 # scattering, so implementing it as ABSLENGTH overestimates the loss by
-# whatever fraction is scattering. Shifted by -1 sigma of the transmittance
-# digitisation error (0.0073 in T) to bound the curve.
+# whatever fraction is scattering.
 [ABSLENGTH_mm]
-280    8.2501
-290    8.2501
-300    8.2501
-310    8.2501
-320    8.2501
-330    8.2501
-340    9.06081
-350    19.2099
-360    51.2291
-370    155.326
-380    257.403
-390    368.705
-400    451.287
-410    520.349
-420    555.11
-430    614.58
-440    661.71
-450    703.843
-460    770.152
-470    833.241
-480    880.517
-490    958.015
-500    1026.93
-510    1079.77
-520    1190.73
-530    1248.59
-540    1345.79
-550    1398.99
-560    1571.96
-570    1611.08
-580    1658.02
-590    1758.5
-600    1758.5
-610    1920.22
-620    2068.56
-630    2141.52
-640    2147.03
-650    2293.22
-660    2481.97
-670    2772.19
-680    2985.69
-690    2985.69
-700    3405.96
+280    9.67605
+290    9.67605
+300    9.67605
+310    9.67605
+320    9.67605
+330    9.67605
+340    10.2543
+350    19.8469
+360    52.5246
+370    162.565
+380    275.75
+390    405.53
+400    506.36
+410    593.847
+420    638.981
+430    718.086
+440    782.435
+450    841.293
+460    936.621
+470    1030.39
+480    1102.82
+490    1225.61
+500    1339.27
+510    1429.53
+520    1628.11
+530    1736.8
+540    1928.64
+550    2038.13
+560    2424.59
+570    2515.57
+580    2630.31
+590    2888.59
+600    2888.59
+610    3347.24
+620    3818.23
+630    4070.72
+640    4090.63
+650    4653.28
+660    5485.06
+670    7124.4
+680    8692.15
+690    8692.15
+700    13480.6
 
 # --- Emission spectrum (1) ---------------------------------------------------
 # Gaussian band, peak 415 nm (src_A), FWHM 65 nm. The peak position is well
@@ -158,138 +159,136 @@ resolution_scale = 1.0
 # the underlying data sits behind an IEEE DataPort subscription, and the LBNL
 # scintillator library lists the peak only. The width is therefore scanned
 # (55/65/75 nm) rather than claimed. It is entangled with the absorption edge:
-# the blue side of this band runs straight into it. AS TABULATED: the values
-# are written straight down as a Gaussian in wavelength, which is what
-# digitising a published emission curve produces. Geant4 integrates the table
-# over photon ENERGY, so the band it samples is blue-shifted by 3.8 nm
-# relative to the curve written here (measured: mean 411.25 nm against the 415
-# nm written). This is the baseline because it is what current practice
-# produces; the jacobian variant shows what the choice costs.
+# the blue side of this band runs straight into it. JACOBIAN-CORRECTED: the
+# tabulated values are multiplied by (lambda/lambda_0)^2 so that the
+# distribution Geant4 actually samples is the Gaussian in wavelength written
+# above. Geant4 integrates the table over photon energy, so without this
+# factor the sampled band is blue-shifted by 2 sigma^2 / lambda_0 = 3.8 nm.
 [SCINTILLATIONCOMPONENT1]
-300    0.000170173
-305    0.000356053
-310    0.000720922
-315    0.00141258
-320    0.00267846
-325    0.00491484
-330    0.00872737
-335    0.0149971
-340    0.0249392
-345    0.0401334
-350    0.0625
-355    0.0941899
-360    0.137366
-365    0.193867
-370    0.264775
-375    0.349947
-380    0.447586
-385    0.553989
-390    0.663553
-395    0.769131
-400    0.862731
-405    0.936483
-410    0.983728
+300    8.89277e-05
+305    0.000192317
+310    0.000402268
+315    0.000813836
+320    0.00159254
+325    0.00301426
+330    0.00551843
+335    0.0097724
+340    0.0167395
+345    0.0277363
+350    0.0444549
+355    0.0689231
+360    0.103368
+365    0.149966
+370    0.210467
+375    0.285738
+380    0.375273
+385    0.476789
+390    0.586015
+395    0.696784
+400    0.801492
+405    0.891895
+410    0.960167
 415    1
-420    0.983728
-425    0.936483
-430    0.862731
-435    0.769131
-440    0.663553
-445    0.553989
-450    0.447586
-455    0.349947
-460    0.264775
-465    0.193867
-470    0.137366
-475    0.0941899
-480    0.0625
-485    0.0401334
-490    0.0249392
-495    0.0149971
-500    0.00872737
-505    0.00491484
-510    0.00267846
-515    0.00141258
-520    0.000720922
-525    0.000356053
-530    0.000170173
-535    7.87077e-05
-540    3.52285e-05
-545    1.52588e-05
-550    6.39583e-06
-555    2.59432e-06
-560    1.01836e-06
-565    3.86836e-07
-570    1.42201e-07
-575    5.0586e-08
-580    1.74144e-08
-585    5.80142e-09
-590    1.8703e-09
-595    5.83497e-10
-600    1.76163e-10
+420    1.00758
+425    0.982159
+430    0.926224
+435    0.845051
+440    0.745907
+445    0.636979
+450    0.526266
+455    0.420657
+460    0.32531
+465    0.243396
+470    0.176189
+475    0.123394
+480    0.0836116
+485    0.0548142
+490    0.0347678
+495    0.0213364
+500    0.0126686
+505    0.00727773
+510    0.00404511
+515    0.00217535
+520    0.00113188
+525    0.000569819
+530    0.000277553
+535    0.000130806
+540    5.96465e-05
+545    2.63158e-05
+550    1.12338e-05
+555    4.63995e-06
+560    1.8543e-06
+565    7.17014e-07
+570    2.68261e-07
+575    9.71113e-08
+580    3.40147e-08
+585    1.15279e-08
+590    3.78024e-09
+595    1.19943e-09
+600    3.68232e-10
 
 # --- Emission spectrum (2) ---------------------------------------------------
 # The two decay components are given the same emission spectrum: no source
 # reports a different band for the slow component of NaI:Tl.
 [SCINTILLATIONCOMPONENT2]
-300    0.000170173
-305    0.000356053
-310    0.000720922
-315    0.00141258
-320    0.00267846
-325    0.00491484
-330    0.00872737
-335    0.0149971
-340    0.0249392
-345    0.0401334
-350    0.0625
-355    0.0941899
-360    0.137366
-365    0.193867
-370    0.264775
-375    0.349947
-380    0.447586
-385    0.553989
-390    0.663553
-395    0.769131
-400    0.862731
-405    0.936483
-410    0.983728
+300    8.89277e-05
+305    0.000192317
+310    0.000402268
+315    0.000813836
+320    0.00159254
+325    0.00301426
+330    0.00551843
+335    0.0097724
+340    0.0167395
+345    0.0277363
+350    0.0444549
+355    0.0689231
+360    0.103368
+365    0.149966
+370    0.210467
+375    0.285738
+380    0.375273
+385    0.476789
+390    0.586015
+395    0.696784
+400    0.801492
+405    0.891895
+410    0.960167
 415    1
-420    0.983728
-425    0.936483
-430    0.862731
-435    0.769131
-440    0.663553
-445    0.553989
-450    0.447586
-455    0.349947
-460    0.264775
-465    0.193867
-470    0.137366
-475    0.0941899
-480    0.0625
-485    0.0401334
-490    0.0249392
-495    0.0149971
-500    0.00872737
-505    0.00491484
-510    0.00267846
-515    0.00141258
-520    0.000720922
-525    0.000356053
-530    0.000170173
-535    7.87077e-05
-540    3.52285e-05
-545    1.52588e-05
-550    6.39583e-06
-555    2.59432e-06
-560    1.01836e-06
-565    3.86836e-07
-570    1.42201e-07
-575    5.0586e-08
-580    1.74144e-08
-585    5.80142e-09
-590    1.8703e-09
-595    5.83497e-10
-600    1.76163e-10
+420    1.00758
+425    0.982159
+430    0.926224
+435    0.845051
+440    0.745907
+445    0.636979
+450    0.526266
+455    0.420657
+460    0.32531
+465    0.243396
+470    0.176189
+475    0.123394
+480    0.0836116
+485    0.0548142
+490    0.0347678
+495    0.0213364
+500    0.0126686
+505    0.00727773
+510    0.00404511
+515    0.00217535
+520    0.00113188
+525    0.000569819
+530    0.000277553
+535    0.000130806
+540    5.96465e-05
+545    2.63158e-05
+550    1.12338e-05
+555    4.63995e-06
+560    1.8543e-06
+565    7.17014e-07
+570    2.68261e-07
+575    9.71113e-08
+580    3.40147e-08
+585    1.15279e-08
+590    3.78024e-09
+595    1.19943e-09
+600    3.68232e-10

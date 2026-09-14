@@ -292,6 +292,14 @@ VARIANTS: list[tuple[str, str, str, Dispersion, object, float, bool]] = [
         LI_1976, MEASURED, 75.0, False,
     ),
     (
+        "materials/variants/NaI_Tl_meas_jacobian.dat",
+        "measured absorption + Jacobian-corrected emission table",
+        "The tabulation convention of Appendix B.2, on the measured attenuation, "
+        "so that the measurement-consistent family counts the same term the "
+        "scanned family does.",
+        LI_1976, MEASURED, EMISSION_FWHM_NM, True,
+    ),
+    (
         "materials/variants/NaI_Tl_abs_measured.dat",
         "absorption = measured (Mao et al. Fig. 2, digitised)",
         "The published transmittance curve, inverted. Replaces the scanned "

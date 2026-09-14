@@ -90,6 +90,10 @@ def summarise(run) -> dict | None:
         "id": run.id,
         "label": status.get("label", "?"),
         "material": run.config["crystal"]["material_spec"],
+        # A run made on a material file that has since changed is not evidence
+        # about the current file, however it is labelled. Refuse it here so the
+        # verdict can never quote a stale run.
+        "material_sha256": status.get("material_sha256"),
         "wrapping": run.config["surface"]["wrapping"],
         "events": run.config["run"]["events"],
         "seed": run.config["run"]["seed"],
@@ -609,6 +613,16 @@ def main() -> None:
         raise SystemExit(f"no runs with schema {schema}; available: {available}")
     print(f"{len(chosen)} completed runs, output schema {schema} "
           f"(schemas on disk: {available})\n")
+    import hashlib as _hl
+    stale = []
+    for r in chosen:
+        f = ROOT / r["material"]
+        if f.exists() and r.get("material_sha256") and r["material_sha256"] != _hl.sha256(f.read_bytes()).hexdigest():
+            stale.append(r)
+    if stale:
+        raise SystemExit("runs made on a material file that has since changed: "
+                         + ", ".join(f"{r['label']} ({r['id'][:12]})" for r in stale)
+                         + ". Re-run them (run_gates moves stale runs aside) before analysing.")
     rows = _expand_aliases(chosen)
     verdicts = report(rows)
 

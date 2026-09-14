@@ -10,7 +10,9 @@
 # The sample is a cylinder 1.5 X0 = 38.8 mm long (Section III).
 # attenuation_length_mm inverts the paper's own transmittance
 # expression and is EFFECTIVE: a single-beam transmittance cannot
-# separate absorption from scattering.
+# separate absorption from scattering. It is empty where the
+# transmittance exceeds the Fresnel limit of a lossless crystal
+# and the inversion has no solution.
 #
 # calibration offset applied: +1.77 nm, from the emission
 #   (408.9 vs 410) and excitation
@@ -356,6 +358,35 @@ wavelength_nm,transmittance,attenuation_length_mm
 740.50,0.85872,65577.755
 741.90,0.85872,62633.214
 743.30,0.85872,59957.181
+744.70,0.85963,
+746.10,0.85963,
+747.50,0.85963,
+749.00,0.85963,
+750.40,0.85963,
+751.80,0.85963,
+753.20,0.86055,
+754.60,0.86055,
+756.00,0.86055,
+757.40,0.86055,
+758.80,0.86055,
+760.20,0.86055,
+761.60,0.86055,
+763.00,0.86055,
+764.40,0.86055,
+765.80,0.86055,
+767.20,0.86055,
+768.60,0.86055,
+770.10,0.86055,
+771.50,0.86055,
+772.90,0.86055,
+774.30,0.86055,
+775.70,0.86055,
+777.10,0.86055,
+778.50,0.86055,
+779.90,0.86055,
+781.30,0.86055,
+782.70,0.86055,
+784.10,0.86055,
 785.50,0.85780,15736.680
 786.90,0.85688,10939.586
 788.30,0.85688,10869.251

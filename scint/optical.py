@@ -331,19 +331,32 @@ def sample_wavelengths(low_nm: float, high_nm: float, step_nm: float) -> list[fl
 
 MAO_2008_CURVE = "data/optical/mao2008_nai_transmittance.csv"
 
-# Half a stroke width in the rendered figure, in absolute transmittance.
-DIGITISATION_SIGMA_T = 0.0055
+# The stroke of the plotted curve, measured by digitise_mao_fig2.py with the
+# same colour mask that traces it, at the 400 dpi it renders: 8 px tall on the
+# transparent plateau (5.45 px per % T) and 6 px wide on the steep rise
+# (0.711 px per nm). An earlier version of this file assumed a 6 px stroke and
+# carried 0.0055; a referee measured it. Both numbers below are HALF-WIDTHS of
+# that stroke, taken as one-sigma coherent shifts of the whole curve. That is
+# deliberately conservative -- the tracer reads the centre of the stroke, and
+# the GUM standard uncertainty of a rectangular half-width would be a factor
+# sqrt(3) smaller -- and it is stated as a half-width, not as a fitted sigma.
+STROKE_PX_VERTICAL, STROKE_PX_HORIZONTAL = 8, 6
+T_PX_PER_PCT, PX_PER_NM = 5.45, 0.711
+DIGITISATION_SIGMA_T = STROKE_PX_VERTICAL / 2 / T_PX_PER_PCT / 100      # 0.0073
 
-# Wavelength-axis systematic, in nm. Three independent handles fix this axis:
-# the emission peak printed in the panel (needs +1.1 nm), the excitation peak
-# printed in the panel (+2.5 nm), and the 50 % cut-off the authors state in
-# their text (+5.5 nm). digitise_mao_fig2.py applies the mean of the two
-# in-panel handles, which leaves the third 3.7 nm away. That residual is not
-# negligible and is not dismissed: it is carried here as a one-sigma coherent
-# shift of the whole axis. Its size is checkable in one line -- shifting the
-# curve by +1 sigma reproduces, at 365 nm, exactly the attenuation length that
-# inverting the stated cut-off analytically gives (Sec. 2.2 of the paper).
-DIGITISATION_SIGMA_LAM_NM = 3.72
+# Wavelength axis. Two independent terms, combined in quadrature: the reading
+# half-width above (4.2 nm), and the calibration residual. Three handles fix
+# the axis -- the emission peak printed in the panel, the excitation peak
+# printed in the panel, and the 50 % cut-off the authors state in their text.
+# About the applied offset (the mean of the two in-panel handles) they leave
+# -0.7, +0.7 and +3.7 nm. Two of the three agree, so the 3.7 nm is not evidence
+# of an axis error; it is a discrepancy between the plotted curve and the
+# stated cut-off, of unknown origin, and it is carried in full rather than
+# averaged away. Shifting the curve by it puts the half-transmittance point at
+# the stated 365 nm by construction -- an identity, not a check.
+CALIBRATION_RESIDUAL_NM = 3.7
+DIGITISATION_SIGMA_LAM_NM = math.hypot(STROKE_PX_HORIZONTAL / 2 / PX_PER_NM,
+                                       CALIBRATION_RESIDUAL_NM)             # 5.6 nm
 
 
 def _running_median(values: list[float], window: int = 9) -> list[float]:
@@ -442,7 +455,11 @@ class MeasuredAttenuation:
         disc = qb * qb - 4.0 * qa * qc
         a = (-qb + math.sqrt(disc)) / (2.0 * qa)
         a = min(1.0 - 1e-12, max(1e-12, a))
-        return -length_mm / math.log(a)
+        # Above the Fresnel limit the inversion is unbounded: a shifted-up
+        # transmittance can exceed what a lossless crystal transmits, and the
+        # length then runs to 1e13 mm. Cap at 100 m, which is transparent for
+        # every purpose here and says so in the material file.
+        return min(-length_mm / math.log(a), 1.0e5)
 
     def uncertainty_components_mm(self, wavelength_nm: float) -> dict[str, float]:
         """Half-spreads from each axis separately, and their quadrature sum.
@@ -465,6 +482,19 @@ class MeasuredAttenuation:
     def uncertainty_mm(self, wavelength_nm: float) -> float:
         """Both axes combined in quadrature, as a half-spread in mm."""
         return self.uncertainty_components_mm(wavelength_nm)["combined"]
+
+    def bounds_mm(self, wavelength_nm: float) -> dict[str, float]:
+        """Asymmetric bounds: the inversion is convex, so +1 sigma and -1 sigma
+        move the length by different amounts, and on the steep edge by very
+        different amounts. Each axis' up/down excursions are combined in
+        quadrature on their own side; the symmetric half-spread hides this."""
+        c = self(wavelength_nm)
+        up, dn = 0.0, 0.0
+        for kw in ({"sigma": +1.0}, {"sigma": -1.0}, {"sigma_lam": +1.0}, {"sigma_lam": -1.0}):
+            v = MeasuredAttenuation(self.path, dispersion=self.dispersion, **kw)(wavelength_nm) - c
+            if v > 0: up = math.hypot(up, v)
+            else: dn = math.hypot(dn, -v)
+        return {"central": c, "lower": c - dn, "upper": c + up}
 
     def __call__(self, wavelength_nm: float) -> float:
         lams, lengths = self._lams, self._lengths
