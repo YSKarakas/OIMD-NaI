@@ -122,6 +122,11 @@ def capture_environment(seed: int | None = None) -> dict[str, Any]:
             "config_version": _command_version("geant4-config", "--version"),
             "prefix": _command_version("geant4-config", "--prefix"),
         },
+        # The dataset directories Geant4 will read, from the environment the
+        # run inherits (geant4.sh sets them); a reproduction needs the versions
+        # in these names, not only the toolkit tag.
+        "geant4_datasets": {k: v for k, v in sorted(os.environ.items())
+                            if k.startswith("G4") and k.endswith("DATA")},
         "root": {"version": _command_version("root-config", "--version")},
         "python": {
             "version": sys.version.split()[0],

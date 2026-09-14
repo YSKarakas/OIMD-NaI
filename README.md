@@ -41,7 +41,6 @@ docs/      Strategy and literature documents (Turkish)
 scint/     Python package: materials, optical models, cost/CRM, run registry, runner, reporting
 sim/       Geant4 C++ application and helper tools
 scripts/   Derivations and drivers — each one re-runnable and self-documenting
-configs/   Run and sweep configurations (YAML)
 materials/ Geant4 material specifications (GENERATED — see below)
 data/      Sourced input data — every numeric value carries a source and a date
 runs/      Run outputs (git-ignored; regenerable from configs)
@@ -93,7 +92,7 @@ python3 scripts/analyse_gates.py              # verdicts
 
 ## Setup
 
-Requires Geant4 11.4.0, ROOT 6.36, CMake ≥ 3.20, a C++17 compiler, Python 3.12.
+Published runs are made inside the container against Geant4 11.4.2 (`scripts/run_in_container.sh`); the host toolchain is for development only. Host: ROOT 6.36, CMake ≥ 3.20, a C++17 compiler, Python 3.12.
 
 ```bash
 python3.12 -m venv .venv && source .venv/bin/activate

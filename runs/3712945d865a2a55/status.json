@@ -1,0 +1,14 @@
+{
+  "label": "SYS_abs_measured_hi",
+  "state": "done",
+  "started_unix": 1789332745.2214868,
+  "material_sha256": "a39d5ce8efb4bfd4f278a92cd6470fc18a9fd5f7e10c4dba6f1797bbafbfda89",
+  "returncode": 0,
+  "elapsed_s": 1045.2,
+  "output": "runs/3712945d865a2a55/output_nt_events.csv",
+  "output_sha256": "dce6c66bfd092ee513debde408bd0c23e944059689d9002a5ac74e3fa4c77ee3",
+  "binary": "build/container/scint_optical",
+  "binary_sha256": "04550111bbcbe79ef73ee3650c32e50d2f89ef1f76d51fe0e1656b3196da26ee",
+  "container_image": "scint:11.4.2@sha256:6004c311be40b0547053be768028a5138af37e1738e7747f84bac24144a8d9af",
+  "provenance_note": "binary and image recorded after the run, from the files still on disk; the binary's build time (2026-09-13 19:14 UTC) precedes every schema-4 run and it was not rebuilt"
+}

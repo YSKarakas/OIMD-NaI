@@ -1,0 +1,10 @@
+{
+  "label": "SYS_abs_measured_lo",
+  "state": "done",
+  "started_unix": 1789352571.19546,
+  "material_sha256": "1346226872dee7255b40d1b8f9fbde38eaf67f98080ac90ba03e549fe0eb1667",
+  "returncode": 0,
+  "elapsed_s": 772.0,
+  "output": "runs/1f8b43c00e34a14e/output_nt_events.csv",
+  "output_sha256": "ef99de4cc3c249251dad5fb3df999320aad40c4ca80892e905962335ab491805"
+}

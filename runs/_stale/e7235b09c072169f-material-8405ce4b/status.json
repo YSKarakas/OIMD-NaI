@@ -1,0 +1,10 @@
+{
+  "label": "SYS_abs_measured_lamlo",
+  "state": "done",
+  "started_unix": 1789352262.3725028,
+  "material_sha256": "8405ce4b3e56fc8e077cee5571c83072420f6783a61730f5d4d98573fdfce714",
+  "returncode": 0,
+  "elapsed_s": 869.5,
+  "output": "runs/e7235b09c072169f/output_nt_events.csv",
+  "output_sha256": "9efddaf8d70bad2b82a57c758e668bfadeff48f9f6208d5e0f42b91646a0832a"
+}

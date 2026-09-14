@@ -40,3 +40,20 @@ paper/build.log
 # Third-party copyrighted material: it must not travel with a repository that
 # is going to be published and archived under a DOI.
 Guide for authors*.pdf
+
+# Evidence the manuscript quotes: kept under version control despite the
+# directory rules above, so the paper resolves from a clean clone.
+!runs_scratch/
+runs_scratch/*
+!runs_scratch/gates_final.json
+!runs_scratch/gates_final.txt
+!runs_scratch/gates_schema4_cascade.json
+!runs_scratch/gates_schema4_cascade.txt
+!runs_scratch/equiv_host_nt_events.csv
+!runs_scratch/equiv_container_nt_events.csv
+!runs_scratch/equiv_host_repeat_nt_events.csv
+!runs_scratch/equiv_container_repeat_nt_events.csv
+!runs_scratch/diag/
+!data/derived/
+data/derived/*
+!data/derived/atomic_data.csv

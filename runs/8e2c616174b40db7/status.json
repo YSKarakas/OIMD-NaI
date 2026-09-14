@@ -1,0 +1,14 @@
+{
+  "label": "SYS_meas_rindex_flat185",
+  "state": "done",
+  "started_unix": 1789337274.780409,
+  "material_sha256": "ff11c6ad245f908611edaee8b0b86c0391185a729c7abb62e4d565063ea3f1d0",
+  "returncode": 0,
+  "elapsed_s": 986.5,
+  "output": "runs/8e2c616174b40db7/output_nt_events.csv",
+  "output_sha256": "0e4a66dc1efc066c930fa2c0abc2fcfc6a2fa61f95852ada10e945296b8df068",
+  "binary": "build/container/scint_optical",
+  "binary_sha256": "04550111bbcbe79ef73ee3650c32e50d2f89ef1f76d51fe0e1656b3196da26ee",
+  "container_image": "scint:11.4.2@sha256:6004c311be40b0547053be768028a5138af37e1738e7747f84bac24144a8d9af",
+  "provenance_note": "binary and image recorded after the run, from the files still on disk; the binary's build time (2026-09-13 19:14 UTC) precedes every schema-4 run and it was not rebuilt"
+}

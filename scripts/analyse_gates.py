@@ -94,6 +94,13 @@ def summarise(run) -> dict | None:
         # about the current file, however it is labelled. Refuse it here so the
         # verdict can never quote a stale run.
         "material_sha256": status.get("material_sha256"),
+        "geant4_tag": ((json.loads((run.path / "env.json").read_text()).get("geant4") or {}).get("tag")
+                       if (run.path / "env.json").exists() else None),
+        "in_container": ((json.loads((run.path / "env.json").read_text()).get("platform") or {}).get("in_container")
+                         if (run.path / "env.json").exists() else None),
+        # G1: the fraction of primaries that interact at all, for the intrinsic-
+        # efficiency gate the paper quotes; it was typed from memory before.
+        "interaction_probability": float((np.asarray(data["edep_keV"]) > 0).mean()),
         "wrapping": run.config["surface"]["wrapping"],
         "events": run.config["run"]["events"],
         "seed": run.config["run"]["seed"],
@@ -235,7 +242,7 @@ def report(rows: list[dict]) -> dict:
             print("  Compton electrons from a 662 keV gamma pass. A simulation that counts")
             print("  'optical photons' without separating them overstates the light yield.")
         print(f"  variance / mean               {var_ratio:.3f} +- {var_err:.3f}   (Poisson: 1.000)")
-        print("  Geant4 (geant4-11-04-beta-01) G4Scintillation.cc draws N from a Gaussian of width")
+        print(f"  Geant4 ({baseline.get('geant4_tag', 'tag not recorded')}) G4Scintillation.cc draws N from a Gaussian of width")
         print("  RESOLUTIONSCALE*sqrt(mean) when mean > 10 and from a Poisson below it, so")
         print("  with RESOLUTIONSCALE = 1 the summed variance must equal the summed mean.")
         ok_mean = abs(ratio - YIELD_PER_MEV) / YIELD_PER_MEV < 0.01
@@ -299,8 +306,12 @@ def report(rows: list[dict]) -> dict:
             theirs = MEASURED["teflon"] / MEASURED["tyvek"]
             mine = ours["teflon"] / ours["tyvek"]
             print(f"    teflon/tyvek: measured {theirs:.3f}, simulated here {mine:.3f}")
-            print("    Same sign. The measured gap is the larger one, and our two")
-            print("    diffuse reflectors sit closer together than theirs do.")
+            if theirs > mine:
+                print("    Same sign. The measured gap is the larger one, and our two")
+                print("    diffuse reflectors sit closer together than theirs do.")
+            else:
+                print("    Same sign. The simulated gap is the larger one, and our two")
+                print("    diffuse reflectors sit further apart than theirs do.")
         print()
 
         if bare is None:
@@ -627,7 +638,20 @@ def main() -> None:
     verdicts = report(rows)
 
     if args.json:
-        args.json.write_text(json.dumps({"runs": rows, "gates": verdicts}, indent=2) + "\n")
+        import datetime, subprocess as _sp
+        try:
+            commit = _sp.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True, cwd=ROOT).stdout.strip()
+        except Exception:
+            commit = None
+        base = next((r for r in rows if r["label"] == "G2G3_baseline"), {})
+        header = {
+            "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "generator": "scripts/analyse_gates.py", "generator_commit": commit,
+            "schema": schema, "events": sorted({r["events"] for r in rows}),
+            "geant4_tag": base.get("geant4_tag"), "in_container": base.get("in_container"),
+            "G1_interaction_probability": base.get("interaction_probability"),
+        }
+        args.json.write_text(json.dumps({"header": header, "runs": rows, "gates": verdicts}, indent=2) + "\n")
         print(f"\nwrote {args.json}")
 
 

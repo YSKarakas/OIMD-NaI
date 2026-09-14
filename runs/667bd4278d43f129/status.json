@@ -1,0 +1,14 @@
+{
+  "label": "G4_wrap_lumirror",
+  "state": "done",
+  "started_unix": 1789327249.2802958,
+  "material_sha256": "3c4d7dfa94c76dbeada4db2e63df15ffbfafaf861fb088fe19ea869cd19e9dc6",
+  "returncode": 0,
+  "elapsed_s": 803.2,
+  "output": "runs/667bd4278d43f129/output_nt_events.csv",
+  "output_sha256": "413d613ccf8d7c060c0e31cfbe8ae5485b939bfffc992c084f4520f81b263cd2",
+  "binary": "build/container/scint_optical",
+  "binary_sha256": "04550111bbcbe79ef73ee3650c32e50d2f89ef1f76d51fe0e1656b3196da26ee",
+  "container_image": "scint:11.4.2@sha256:6004c311be40b0547053be768028a5138af37e1738e7747f84bac24144a8d9af",
+  "provenance_note": "binary and image recorded after the run, from the files still on disk; the binary's build time (2026-09-13 19:14 UTC) precedes every schema-4 run and it was not rebuilt"
+}

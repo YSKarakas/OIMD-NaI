@@ -56,8 +56,10 @@ Consequences, in force since 2026-09-13:
    `scripts/run_in_container.sh`, which records `in_container: true`, the
    release tag `geant4-11-04-patch-02`, and the host's git state (the image has
    no git, so the launcher passes it in through the environment).
-2. Runs made with the pre-release are config schema 3 and earlier; release runs
-   are schema 4. The analysis refuses to compare across schemas.
+2. Runs made with the pre-release are config schema 3 and earlier; schema 4 is
+   the release campaign that exposed the scintillation cascade (kept as
+   evidence); the published campaign is schema 5. The analysis refuses to
+   compare across schemas.
 3. `/etc/geant4.env`, which the entrypoint sources, is **empty** in the image as
    built (the `grep` in the Dockerfile matched nothing), so `LD_LIBRARY_PATH`
    and the dataset variables are unset for any command run directly. The

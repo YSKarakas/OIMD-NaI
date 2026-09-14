@@ -1,0 +1,10 @@
+{
+  "label": "SYS_meas_rindex_flat185",
+  "state": "done",
+  "started_unix": 1789354890.5288918,
+  "material_sha256": "aab87816a46150bc5b6df33354361722fcf22a8fb25d679e1778815c6f5ddb7b",
+  "returncode": 0,
+  "elapsed_s": 995.8,
+  "output": "runs/cc01fb11e81d79b2/output_nt_events.csv",
+  "output_sha256": "993a7fa393beba2ccf86a2f7b6d14adede6c16ff8581ebb4470d24e2a59a9b69"
+}

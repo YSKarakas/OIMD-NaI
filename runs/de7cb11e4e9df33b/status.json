@@ -1,0 +1,14 @@
+{
+  "label": "SCOPE_geom_long",
+  "state": "done",
+  "started_unix": 1789340189.3001142,
+  "material_sha256": "3c4d7dfa94c76dbeada4db2e63df15ffbfafaf861fb088fe19ea869cd19e9dc6",
+  "returncode": 0,
+  "elapsed_s": 1081.7,
+  "output": "runs/de7cb11e4e9df33b/output_nt_events.csv",
+  "output_sha256": "4f50b6d2704025ce87ca9a88f61fd79049df93109f0a3d3115fc83516b557f94",
+  "binary": "build/container/scint_optical",
+  "binary_sha256": "04550111bbcbe79ef73ee3650c32e50d2f89ef1f76d51fe0e1656b3196da26ee",
+  "container_image": "scint:11.4.2@sha256:6004c311be40b0547053be768028a5138af37e1738e7747f84bac24144a8d9af",
+  "provenance_note": "binary and image recorded after the run, from the files still on disk; the binary's build time (2026-09-13 19:14 UTC) precedes every schema-4 run and it was not rebuilt"
+}

@@ -1,0 +1,14 @@
+{
+  "label": "SYS_meas_rindex_jellison",
+  "state": "done",
+  "started_unix": 1789337461.4570768,
+  "material_sha256": "7a284ef16097227112db9c6795a6b22e01e100577a867a6d09f5216ddde74771",
+  "returncode": 0,
+  "elapsed_s": 978.5,
+  "output": "runs/f60ca063b7478449/output_nt_events.csv",
+  "output_sha256": "552880bb0f366124e825cf53cfd1c2f139cea506cd361b76625bf093db9ef3e6",
+  "binary": "build/container/scint_optical",
+  "binary_sha256": "04550111bbcbe79ef73ee3650c32e50d2f89ef1f76d51fe0e1656b3196da26ee",
+  "container_image": "scint:11.4.2@sha256:6004c311be40b0547053be768028a5138af37e1738e7747f84bac24144a8d9af",
+  "provenance_note": "binary and image recorded after the run, from the files still on disk; the binary's build time (2026-09-13 19:14 UTC) precedes every schema-4 run and it was not rebuilt"
+}

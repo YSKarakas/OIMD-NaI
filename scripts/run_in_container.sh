@@ -30,8 +30,10 @@ if [ -n "$(git status --porcelain)" ]; then GIT_DIRTY=1; else GIT_DIRTY=0; fi
 # when a command is run directly. geant4.sh from the installation itself is
 # sourced here instead; it is the file /etc/geant4.env was meant to be derived
 # from. SCINT_G4DATA_BIN points the version record at the container-built tool.
+IMAGE_ID=$(docker image inspect "$IMAGE" --format '{{.Id}}')
 exec docker run --rm -v "$PWD":/work -w /work \
     -e SCINT_GIT_COMMIT="$GIT_COMMIT" -e SCINT_GIT_BRANCH="$GIT_BRANCH" -e SCINT_GIT_DIRTY="$GIT_DIRTY" \
+    -e SCINT_CONTAINER_IMAGE="$IMAGE@$IMAGE_ID" \
     -e SCINT_G4DATA_BIN=/work/build/container/g4data \
     "$IMAGE" bash -c '. /opt/geant4/bin/geant4.sh && exec /opt/venv/bin/python3 scripts/run_gates.py \
         --binary build/container/scint_optical "$@"' -- "$@"

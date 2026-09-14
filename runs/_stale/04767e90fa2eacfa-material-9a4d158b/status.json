@@ -1,0 +1,10 @@
+{
+  "label": "SYS_meas_rindex_jellison",
+  "state": "done",
+  "started_unix": 1789355420.7982192,
+  "material_sha256": "9a4d158ba0d0de7ae5f1d4ba20a5a084d8559d6bb16683763f5822fbd4db4310",
+  "returncode": 0,
+  "elapsed_s": 949.2,
+  "output": "runs/04767e90fa2eacfa/output_nt_events.csv",
+  "output_sha256": "1387ca843bbccecb1c9721cadff2e10f36158e385b63605db7bfb0afb1b924b4"
+}

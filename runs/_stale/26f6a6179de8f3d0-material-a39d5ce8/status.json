@@ -1,0 +1,10 @@
+{
+  "label": "SYS_abs_measured_hi",
+  "state": "done",
+  "started_unix": 1789351330.8969147,
+  "material_sha256": "a39d5ce8efb4bfd4f278a92cd6470fc18a9fd5f7e10c4dba6f1797bbafbfda89",
+  "returncode": 0,
+  "elapsed_s": 931.5,
+  "output": "runs/26f6a6179de8f3d0/output_nt_events.csv",
+  "output_sha256": "a1c8015d127c715e4b1ba545d81eaa9cce9e594d38e43a4330bc1f8b772af06c"
+}

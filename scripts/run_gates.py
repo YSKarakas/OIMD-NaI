@@ -50,6 +50,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 import time
@@ -69,6 +70,7 @@ from scint.registry import (  # noqa: E402
 )
 
 BINARY = ROOT / "build" / "sim" / "scint_optical"
+BINARY_SHA256: str | None = None
 RUNS_DIR = ROOT / "runs"
 
 # Fixed for every gate: a 3" x 3" NaI(Tl) cylinder read out over its full face,
@@ -294,6 +296,9 @@ def execute(item: tuple[str, Run]) -> tuple[str, bool, float]:
     record_status(
         run, label=label, state="running", started_unix=started,
         material_sha256=checksum(material) if material.exists() else None,
+        binary=str(BINARY.relative_to(ROOT)) if BINARY.is_relative_to(ROOT) else str(BINARY),
+        binary_sha256=BINARY_SHA256,
+        container_image=os.environ.get("SCINT_CONTAINER_IMAGE"),
     )
     with log.open("w") as fh:
         proc = subprocess.run(
@@ -395,6 +400,15 @@ def main() -> None:
 
     if not BINARY.exists():
         raise SystemExit(f"{BINARY} not built -- run cmake --build build/sim first")
+    # A published-schema campaign may not be made on a pre-release toolkit, and
+    # the paper's provenance record must be able to say which binary ran.
+    from scint.geant4 import version_info
+    g4 = version_info()
+    if CONFIG_SCHEMA >= 4 and g4.get("is_prerelease") is not False and not args.dry_run:
+        raise SystemExit(f"refusing to run schema {CONFIG_SCHEMA} on a toolkit that is not a "
+                         f"known release: {g4.get('tag')} (is_prerelease={g4.get('is_prerelease')})")
+    global BINARY_SHA256
+    BINARY_SHA256 = checksum(BINARY)
 
     configs = gather(args.set, args.events, args.seed)
     if args.only:

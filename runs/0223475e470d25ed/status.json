@@ -1,0 +1,14 @@
+{
+  "label": "SYS_abs_edge010",
+  "state": "done",
+  "started_unix": 1789347596.291489,
+  "material_sha256": "5de28a40464621cac3b889b861163e971b29444ae16e13351ca703e7334a8c65",
+  "returncode": 0,
+  "elapsed_s": 1309.9,
+  "output": "runs/0223475e470d25ed/output_nt_events.csv",
+  "output_sha256": "139a49d503e53b6d59051f96d06fc24ae72058067a3d95dc83087157ed21360d",
+  "binary": "build/container/scint_optical",
+  "binary_sha256": "04550111bbcbe79ef73ee3650c32e50d2f89ef1f76d51fe0e1656b3196da26ee",
+  "container_image": "scint:11.4.2@sha256:6004c311be40b0547053be768028a5138af37e1738e7747f84bac24144a8d9af",
+  "provenance_note": "binary and image recorded after the run, from the files still on disk; the binary's build time (2026-09-13 19:14 UTC) precedes every schema-5 run and it was not rebuilt"
+}
