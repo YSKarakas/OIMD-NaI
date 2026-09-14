@@ -1,8 +1,8 @@
 {
   "header": {
-    "generated_at": "2026-09-14T13:26:07.739634+00:00",
+    "generated_at": "2026-09-14T16:44:50.969991+00:00",
     "generator": "scripts/analyse_gates.py",
-    "generator_commit": "55a4011801f67119bf217c36bd651f636aba01fc",
+    "generator_commit": "03e6daf3133bc62f3efcb2a4f2931e91e21d6159",
     "schema": 5,
     "events": [
       2000
@@ -1268,6 +1268,69 @@
       "fwhm_pct_err": 0.062260353180366254
     },
     {
+      "id": "601cffb85c3cfcc4",
+      "label": "SYS_meas_scatter_max",
+      "material": "materials/variants/NaI_Tl_meas_scatter_max.dat",
+      "material_sha256": "918eaac161e85b2aa131a1d2730ad30418bd807805d1e59bb6a1fca709b49765",
+      "geant4_tag": "geant4-11-04-patch-02",
+      "in_container": true,
+      "interaction_probability": 0.8725,
+      "wrapping": "teflon",
+      "events": 2000,
+      "seed": 20260912,
+      "schema": 5,
+      "photopeak_events": 1202,
+      "yield_ratio_mean": 41004.535853804766,
+      "yield_ratio_sem": 7.532141590697664,
+      "yield_ratio_events": 1697,
+      "yield_is_scintillation_only": true,
+      "lce_denominator": "scintillation",
+      "cherenkov_mean": 27.828476269775187,
+      "mean_generated_nm": 411.24458118234804,
+      "mean_detected_nm": 417.3211996672213,
+      "full_energy_events": 1201,
+      "generated_mean": 27141.57951706911,
+      "generated_sem": 4.726431710490775,
+      "generated_var_over_mean": 0.9884954262356218,
+      "detected_mean": 10310.386855241264,
+      "lce_mean": 0.3798761119135653,
+      "lce_sem": 0.00012082859305326622,
+      "fwhm_pct": 2.976157038713052,
+      "fwhm_pct_err": 0.060725254240157296
+    },
+    {
+      "id": "601cffb85c3cfcc4",
+      "label": "MEAS_meas_scatter_max",
+      "material": "materials/variants/NaI_Tl_meas_scatter_max.dat",
+      "material_sha256": "918eaac161e85b2aa131a1d2730ad30418bd807805d1e59bb6a1fca709b49765",
+      "geant4_tag": "geant4-11-04-patch-02",
+      "in_container": true,
+      "interaction_probability": 0.8725,
+      "wrapping": "teflon",
+      "events": 2000,
+      "seed": 20260912,
+      "schema": 5,
+      "photopeak_events": 1202,
+      "yield_ratio_mean": 41004.535853804766,
+      "yield_ratio_sem": 7.532141590697664,
+      "yield_ratio_events": 1697,
+      "yield_is_scintillation_only": true,
+      "lce_denominator": "scintillation",
+      "cherenkov_mean": 27.828476269775187,
+      "mean_generated_nm": 411.24458118234804,
+      "mean_detected_nm": 417.3211996672213,
+      "full_energy_events": 1201,
+      "generated_mean": 27141.57951706911,
+      "generated_sem": 4.726431710490775,
+      "generated_var_over_mean": 0.9884954262356218,
+      "detected_mean": 10310.386855241264,
+      "lce_mean": 0.3798761119135653,
+      "lce_sem": 0.00012082859305326622,
+      "fwhm_pct": 2.976157038713052,
+      "fwhm_pct_err": 0.060725254240157296,
+      "alias_of": "SYS_meas_scatter_max"
+    },
+    {
       "id": "c45cb3f40ecb75ec",
       "label": "SYS_rindex_flat185",
       "material": "materials/variants/NaI_Tl_rindex_flat185.dat",
@@ -1813,6 +1876,7 @@
         "meas_jacobian": 0.36377940278058835,
         "meas_rindex_flat185": 0.35525563122685905,
         "meas_rindex_jellison": 0.3521738439842581,
+        "meas_scatter_max": 0.3798761119135653,
         "rindex_flat185": 0.3094171542928211,
         "rindex_jellison": 0.307867774483819
       }
@@ -1841,11 +1905,12 @@
         "meas_fwhm75": 0.34350714595516857,
         "meas_jacobian": 0.36377940278058835,
         "meas_rindex_flat185": 0.35525563122685905,
-        "meas_rindex_jellison": 0.3521738439842581
+        "meas_rindex_jellison": 0.3521738439842581,
+        "meas_scatter_max": 0.3798761119135653
       },
-      "family_spread_fraction": 0.0828979756114838,
+      "family_spread_fraction": 0.11369707499129574,
       "family_lo": 0.33959402257340005,
-      "family_hi": 0.36896420346817044
+      "family_hi": 0.3798761119135653
     },
     "scope_control": {
       "size_ratio_edge": 1.2939973676522534,

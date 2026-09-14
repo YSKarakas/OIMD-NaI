@@ -53,7 +53,7 @@ SCREENING = ROOT / "data" / "literature" / "screening.csv"
 ARXIV_API = "https://export.arxiv.org/api/query"
 # arXiv asks for no more than one request every three seconds.
 POLITE_DELAY_S = 3.0
-USER_AGENT = "scint-paper0-survey/0.1 (academic literature survey; contact via repository)"
+USER_AGENT = "scint-survey/0.1 (academic literature survey; contact via repository)"
 
 ATOM = "{http://www.w3.org/2005/Atom}"
 

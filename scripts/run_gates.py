@@ -361,6 +361,7 @@ def gather(set_name: str, events: int, seed: int) -> list[dict]:
         # comparable: same schema, same seed, same events.
         for label in ("abs_measured", "abs_measured_hi", "abs_measured_lo",
                       "abs_measured_lamhi", "abs_measured_lamlo",
+                      "meas_scatter_max",
                       "meas_rindex_jellison", "meas_rindex_flat185",
                       "meas_fwhm55", "meas_fwhm75", "meas_jacobian"):
             configs.append(config_for(

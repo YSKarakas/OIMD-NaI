@@ -1,4 +1,4 @@
-59 completed runs, output schema 5 (schemas on disk: [1, 2, 3, 4, 5])
+60 completed runs, output schema 5 (schemas on disk: [1, 2, 3, 4, 5])
 
 ==============================================================================
 ORPHANED RUNS -- configurations the runner no longer defines; not analysed
@@ -97,6 +97,7 @@ OPTICAL INPUT SYSTEMATICS -- LCE under one-at-a-time variation
   meas_jacobian             0.3638    0.0001       +13.02 %
   meas_rindex_flat185       0.3553    0.0001       +10.37 %
   meas_rindex_jellison      0.3522    0.0001        +9.41 %
+  meas_scatter_max          0.3799    0.0001       +18.02 %
   rindex_flat185            0.3094    0.0002        -3.87 %
   rindex_jellison           0.3079    0.0002        -4.35 %
 
@@ -122,12 +123,13 @@ OPTICAL INPUT SYSTEMATICS -- LCE under one-at-a-time variation
   meas_jacobian             414.97    419.93     +4.96 nm
   meas_rindex_flat185       411.26    417.19     +5.94 nm
   meas_rindex_jellison      411.24    417.27     +6.03 nm
+  meas_scatter_max          411.24    417.32     +6.08 nm
   rindex_flat185            411.26    419.92     +8.66 nm
   rindex_jellison           411.25    420.62     +9.37 nm
 
-  spread over published practice  69.2 % of baseline LCE   [22 variants]
+  spread over published practice  69.2 % of baseline LCE   [23 variants]
     (includes the flat absorption lengths that appear in the literature)
-  spread over defensible models   39.5 % of baseline LCE   [19 variants]
+  spread over defensible models   39.5 % of baseline LCE   [20 variants]
     (flat absorption dropped: the 365 nm transmittance measurement excludes it)
   Neither is reducible by running more events. Both measure what the state
   of the published optical inputs costs, not what the simulation costs.
@@ -149,6 +151,7 @@ MEASURED ATTENUATION CURVE -- digitised from Mao et al. Fig. 2
   meas_jacobian             0.3638    0.0001       +13.02 %
   meas_rindex_flat185       0.3553    0.0001       +10.37 %
   meas_rindex_jellison      0.3522    0.0001        +9.41 %
+  meas_scatter_max          0.3799    0.0001       +18.02 %
 
   light-collection efficiency from the measured curve:
       0.3543 +- 0.0195  (5.5 %)
@@ -167,7 +170,8 @@ MEASURED ATTENUATION CURVE -- digitised from Mao et al. Fig. 2
       meas_fwhm55              0.3644
       abs_measured_lamlo       0.3676
       abs_measured_hi          0.3690
-      spread 8.3 % of the measured central value (0.3396 .. 0.3690)
+      meas_scatter_max         0.3799
+      spread 11.4 % of the measured central value (0.3396 .. 0.3799)
 
 ==============================================================================
 ARRANGEMENT SCAN -- geometry, coupling and surface finish
