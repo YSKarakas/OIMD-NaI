@@ -1,7 +1,7 @@
 {
   "title": "Optical-input model dependence in Geant4 light-collection corrections: a NaI(Tl) case study — code and data",
   "upload_type": "software",
-  "description": "<p>Geant4 application, optical models, digitised inputs, run records, analysis scripts and manuscript source for the paper of the same title. Every number in the manuscript is produced by the scripts from the files in this archive and asserted against its source by scripts/check_paper_numbers.py.</p><p>Code is released under the MIT licence; data, material tables, run records and the manuscript text and figures under CC BY 4.0 (see LICENSE and LICENSE-DATA).</p>",
+  "description": "<p>Geant4 application, optical models, digitised inputs, run records, literature records and analysis scripts behind the paper of the same title. Every number the paper quotes is read from the verdict file runs_scratch/gates_final.json, which the scripts here regenerate from the run records.</p><p>Code is released under the MIT licence; data, material tables and run records under CC BY 4.0 (see LICENSE and LICENSE-DATA).</p>",
   "creators": [
     {"name": "Karakaş, Yavuz Selim", "affiliation": "TU Dortmund University; University of Bologna", "orcid": "0009-0007-1349-3149"},
     {"name": "Beysi, Öykü", "affiliation": "TU Dortmund University; University of Bologna", "orcid": "0009-0006-1872-5650"}
