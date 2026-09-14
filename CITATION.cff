@@ -1,0 +1,34 @@
+cff-version: 1.2.0
+message: "If you use this software or data, please cite the paper below and the archived release."
+title: "Optical-input model dependence in Geant4 light-collection corrections: a NaI(Tl) case study — code and data"
+type: software
+authors:
+  - family-names: Karakaş
+    given-names: Yavuz Selim
+    orcid: https://orcid.org/0009-0007-1349-3149
+    affiliation: "Department of Physics, TU Dortmund University; Department of Physics and Astronomy \"Augusto Righi\", University of Bologna"
+  - family-names: Beysi
+    given-names: Öykü
+    orcid: https://orcid.org/0009-0006-1872-5650
+    affiliation: "Department of Physics, TU Dortmund University; Department of Physics and Astronomy \"Augusto Righi\", University of Bologna"
+version: 1.0.0
+date-released: 2026-09-14
+license: MIT
+keywords:
+  - scintillator
+  - light yield
+  - light-collection efficiency
+  - Geant4
+  - optical simulation
+  - NaI(Tl)
+  - reproducibility
+preferred-citation:
+  type: article
+  title: "Optical-input model dependence in Geant4 light-collection corrections: a NaI(Tl) case study"
+  authors:
+    - family-names: Karakaş
+      given-names: Yavuz Selim
+    - family-names: Beysi
+      given-names: Öykü
+  journal: "Nuclear Instruments and Methods in Physics Research Section A"
+  year: 2026
