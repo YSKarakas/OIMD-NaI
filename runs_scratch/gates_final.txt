@@ -1,21 +1,43 @@
-40 completed runs, output schema 5 (schemas on disk: [1, 2, 3, 4, 5])
+58 completed runs, output schema 5 (schemas on disk: [1, 2, 3, 4, 5])
+
+==============================================================================
+ORPHANED RUNS -- configurations the runner no longer defines; not analysed
+==============================================================================
+  G4_wrap_esr                  58d4e51632c4  materials/NaI_Tl.dat
+  G4_wrap_lumirror             4ae4332f06ca  materials/NaI_Tl.dat
+  G4_wrap_none                 1514028717e0  materials/NaI_Tl.dat
+  G4_wrap_tio                  5d119a3698f0  materials/NaI_Tl.dat
+  G4_wrap_tyvek                7405f12ed243  materials/NaI_Tl.dat
+  SCOPE_couple_air             6ae2c702f625  materials/NaI_Tl.dat
+  SCOPE_couple_gel146          2675161b9b23  materials/NaI_Tl.dat
+  SCOPE_couple_n15             846a182ee0fe  materials/NaI_Tl.dat
+  SCOPE_couple_n157            461e18adac93  materials/NaI_Tl.dat
+  SCOPE_finish_ground          3c02863df8a7  materials/NaI_Tl.dat
+  SCOPE_geom_1inch             30f96382d9b4  materials/NaI_Tl.dat
+  SCOPE_geom_2inch             314cb45def90  materials/NaI_Tl.dat
+  SCOPE_geom_4inch             6f4bf12a0ec1  materials/NaI_Tl.dat
+  SCOPE_geom_long              9d38d5708d68  materials/NaI_Tl.dat
+  SCOPE_geom_short             a17b6f5d2a2a  materials/NaI_Tl.dat
+  SCOPE_reflectance_090        d73f16c591c6  materials/NaI_Tl.dat
+  SCOPE_reflectance_095        eb0e097e4d10  materials/NaI_Tl.dat
+  SCOPE_reflectance_100        6132ec625588  materials/NaI_Tl.dat
 
 ==============================================================================
 G2 -- PHOTON BUDGET
 ==============================================================================
-  events used for the yield     1680 (edep > 50 keV)
+  events used for the yield     1689 (edep > 50 keV)
   photons per MeV deposited     40999.5 +- 7.5
   requested (materials file)    41000.0
   counted photons               scintillation only
-  deviation                     -0.001 %  (-0.06 sigma)
+  deviation                     -0.001 %  (-0.07 sigma)
 
-  full-energy events            1208 (661.5-662.5 keV)
-  photons generated, mean       27144.9 +- 4.6   (expected 27142.0)
-  Cerenkov photons per event    28.3 (0.104 % of the scintillation photons)
+  full-energy events            1230 (661.5-662.5 keV)
+  photons generated, mean       27147.5 +- 4.6   (expected 27142.0)
+  Cerenkov photons per event    27.7 (0.102 % of the scintillation photons)
   In NaI (n ~ 1.85) the Cerenkov threshold for electrons is ~96 keV, which
   Compton electrons from a 662 keV gamma pass. A simulation that counts
   'optical photons' without separating them overstates the light yield.
-  variance / mean               0.960 +- 0.041   (Poisson: 1.000)
+  variance / mean               0.963 +- 0.040   (Poisson: 1.000)
   Geant4 (geant4-11-04-patch-02) G4Scintillation.cc draws N from a Gaussian of width
   RESOLUTIONSCALE*sqrt(mean) when mean > 10 and from a Poisson below it, so
   with RESOLUTIONSCALE = 1 the summed variance must equal the summed mean.
@@ -24,28 +46,28 @@ G2 -- PHOTON BUDGET
 ==============================================================================
 G3 -- STATISTICAL RESOLUTION (lower bound)
 ==============================================================================
-  simulated FWHM at 662 keV     4.114 +- 0.084 %
+  simulated FWHM at 662 keV     3.202 +- 0.065 %
   measured FWHM (src_A)         7.0 %
-  ratio                         0.588
-  R_measured^2 - R_sim^2        -> 5.663 % (non-proportionality + transfer, not modelled here)
+  ratio                         0.457
+  R_measured^2 - R_sim^2        -> 6.225 % (non-proportionality + transfer, not modelled here)
   VERDICT                       PASS  (statistical bound must lie below the measurement)
 
 ==============================================================================
 G4 -- LIGHT-COLLECTION EFFICIENCY BY WRAPPING
 ==============================================================================
   wrapping           LCE    +- sem    vs none
-  tio             0.3264    0.0004     1.364x
-  esr             0.3223    0.0002     1.346x
-  teflon          0.3219    0.0002     1.345x
-  tyvek           0.3082    0.0002     1.288x
-  lumirror        0.3047    0.0002     1.273x
-  none            0.2393    0.0002     1.000x
+  tio             0.3649    0.0004     1.400x
+  esr             0.3549    0.0001     1.362x
+  teflon          0.3543    0.0001     1.359x
+  tyvek           0.3390    0.0001     1.301x
+  lumirror        0.3347    0.0001     1.284x
+  none            0.2606    0.0002     1.000x
 
   measured on one CsI crystal by arXiv:1602.02983, for comparison:
     teflon              91 p.e./MeV  1.152x aluminium
     tyvek               89 p.e./MeV  1.127x aluminium
     aluminium           79 p.e./MeV  1.000x aluminium
-    teflon/tyvek: measured 1.022, simulated here 1.044
+    teflon/tyvek: measured 1.022, simulated here 1.045
     Same sign. The simulated gap is the larger one, and our two
     diffuse reflectors sit further apart than theirs do.
 
@@ -55,7 +77,7 @@ G4 -- LIGHT-COLLECTION EFFICIENCY BY WRAPPING
 OPTICAL INPUT SYSTEMATICS -- LCE under one-at-a-time variation
 ==============================================================================
   variant                      LCE    +- sem   vs baseline
-  baseline                  0.3219    0.0002            --
+  baseline                  0.3219    0.0001            --
   abs_edge010               0.3973    0.0001       +23.42 %
   abs_edge025               0.2700    0.0002       -16.11 %
   abs_flat1000              0.4288    0.0001       +33.21 %
@@ -79,16 +101,9 @@ OPTICAL INPUT SYSTEMATICS -- LCE under one-at-a-time variation
 
   Self-absorption seen directly -- mean wavelength, emitted vs detected:
   variant                  emitted  detected     shift
-  baseline                  411.25    420.28     +9.03 nm
-  abs_edge010               411.25    418.79     +7.54 nm
-  emission_fwhm75           410.03    422.14    +12.11 nm
-  emission_fwhm55           412.32    418.66     +6.34 nm
+  baseline                  411.25    416.89     +5.65 nm
   abs_measured              411.25    416.89     +5.65 nm
-  meas_fwhm55               412.31    415.85     +3.54 nm
-  emission_jacobian         414.97    423.15     +8.18 nm
-  rindex_jellison           411.24    420.53     +9.29 nm
-  meas_fwhm75               410.02    418.28     +8.26 nm
-  rindex_flat185            411.26    419.92     +8.66 nm
+  abs_edge010               411.25    418.79     +7.54 nm
   abs_edge025               411.25    420.36     +9.11 nm
   abs_flat1000              411.25    411.77     +0.52 nm
   abs_flat2000              411.25    411.74     +0.50 nm
@@ -97,9 +112,16 @@ OPTICAL INPUT SYSTEMATICS -- LCE under one-at-a-time variation
   abs_measured_lamhi        411.26    417.88     +6.62 nm
   abs_measured_lamlo        411.25    416.00     +4.74 nm
   abs_measured_lo           411.24    416.76     +5.52 nm
+  emission_fwhm55           412.32    418.66     +6.34 nm
+  emission_fwhm75           410.03    422.14    +12.11 nm
+  emission_jacobian         414.97    423.15     +8.18 nm
+  meas_fwhm55               412.31    415.85     +3.54 nm
+  meas_fwhm75               410.02    418.28     +8.26 nm
   meas_jacobian             414.97    419.93     +4.96 nm
   meas_rindex_flat185       411.26    417.19     +5.94 nm
   meas_rindex_jellison      411.24    417.27     +6.03 nm
+  rindex_flat185            411.26    419.92     +8.66 nm
+  rindex_jellison           411.24    420.53     +9.29 nm
 
   spread over published practice  69.2 % of baseline LCE   [21 variants]
     (includes the flat absorption lengths that appear in the literature)
@@ -147,26 +169,26 @@ MEASURED ATTENUATION CURVE -- digitised from Mao et al. Fig. 2
 ARRANGEMENT SCAN -- geometry, coupling and surface finish
 ==============================================================================
   variant                    LCE    +- sem   vs baseline
-  baseline                0.3219    0.0002            --
-  couple_air              0.1422    0.0001       -55.82 %
-  couple_gel146           0.3199    0.0002        -0.63 %
-  couple_n15              0.3354    0.0002        +4.19 %
-  couple_n157             0.3760    0.0002       +16.80 %
-  ctrl_flatabs_1inch      0.5723    0.0005       +77.80 %
-  ctrl_flatabs_3inch      0.4928    0.0002       +53.10 %
-  finish_ground           0.4301    0.0003       +33.63 %
-  geom_1inch              0.4312    0.0002       +33.96 %
-  geom_2inch              0.3647    0.0002       +13.29 %
-  geom_4inch              0.2904    0.0002        -9.78 %
-  geom_long               0.2518    0.0002       -21.78 %
-  geom_short              0.3923    0.0002       +21.87 %
-  reflectance_090         0.2745    0.0002       -14.71 %
-  reflectance_095         0.2977    0.0002        -7.51 %
-  reflectance_100         0.3297    0.0002        +2.42 %
+  baseline                0.3543    0.0001            --
+  couple_air              0.1572    0.0001       -55.63 %
+  couple_gel146           0.3519    0.0001        -0.68 %
+  couple_n15              0.3697    0.0001        +4.36 %
+  couple_n157             0.4145    0.0002       +17.00 %
+  ctrl_flatabs_1inch      0.5723    0.0005       +61.54 %
+  ctrl_flatabs_3inch      0.4928    0.0002       +39.10 %
+  finish_ground           0.4886    0.0002       +37.92 %
+  geom_1inch              0.4585    0.0003       +29.40 %
+  geom_2inch              0.3948    0.0001       +11.44 %
+  geom_4inch              0.3246    0.0001        -8.37 %
+  geom_long               0.2896    0.0001       -18.25 %
+  geom_short              0.4132    0.0002       +16.62 %
+  reflectance_090         0.3005    0.0002       -15.18 %
+  reflectance_095         0.3271    0.0001        -7.67 %
+  reflectance_100         0.3629    0.0001        +2.43 %
 
-  geometry           envelope   55.7 % of baseline  (0.2518 .. 0.4312)
-  readout coupling   envelope   72.6 % of baseline  (0.1422 .. 0.3760)
-  surface finish     envelope   33.6 % of baseline  (0.3219 .. 0.4301)
+  geometry           envelope   47.6 % of baseline  (0.2896 .. 0.4585)
+  readout coupling   envelope   72.6 % of baseline  (0.1572 .. 0.4145)
+  surface finish     envelope   37.9 % of baseline  (0.3543 .. 0.4886)
   crystal optics     envelope   39.5 % of baseline  (defensible models, from the scan above)
 
   Read this as scope, not as a ranking: the geometry entries are a
@@ -176,9 +198,9 @@ ARRANGEMENT SCAN -- geometry, coupling and surface finish
   called dominant by default, having been the only thing varied.
 
   CONTROL -- is the size dependence really the absorption edge?
-    1" / 3" with the measured absorption edge   1.340
+    1" / 3" with the measured absorption edge   1.294
     1" / 3" with flat 2000 mm absorption        1.161
     fraction of the size effect that disappears when the
-    absorption edge is removed                  52 %
+    absorption edge is removed                  45 %
 
 wrote runs_scratch/gates_final.json

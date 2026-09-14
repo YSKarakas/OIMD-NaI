@@ -592,19 +592,36 @@ def _expand_aliases(rows: list[dict]) -> list[dict]:
     rg = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(rg)
     by_id = {r["id"]: r for r in rows}
-    out = list(rows)
-    seen = {(r["id"], r["label"]) for r in rows}
+    # The label -> physics mapping is the runner's CURRENT definition. A run
+    # whose configuration the runner no longer defines is an orphan of an
+    # earlier campaign definition -- for instance an arrangement run on a
+    # baseline material that has since changed -- and it must not enter the
+    # verdict under its old label, however plausible that label looks. It
+    # is listed and dropped.
+    defined: dict[str, list[str]] = {}
     for events, seed in sorted({(r["events"], r["seed"]) for r in rows}):
         for item in rg.gather("all", events, seed):
-            rid = rg._peek_id(item["config"])
-            base = by_id.get(rid)
-            if base is None or (rid, item["label"]) in seen:
-                continue
-            alias = dict(base)
-            alias["label"] = item["label"]
-            alias["alias_of"] = base["label"]
-            out.append(alias)
-            seen.add((rid, item["label"]))
+            defined.setdefault(rg._peek_id(item["config"]), []).append(item["label"])
+    orphans = [r for r in rows if r["id"] not in defined]
+    if orphans:
+        print("=" * 78)
+        print("ORPHANED RUNS -- configurations the runner no longer defines; not analysed")
+        print("=" * 78)
+        for r in sorted(orphans, key=lambda r: r["label"]):
+            print(f"  {r['label']:<28} {r['id'][:12]}  {r['material']}")
+        print()
+    out = []
+    for rid, labels in defined.items():
+        base = by_id.get(rid)
+        if base is None:
+            continue
+        first = base["label"] if base["label"] in labels else labels[0]
+        for label in labels:
+            row = dict(base)
+            row["label"] = label
+            if label != first:
+                row["alias_of"] = first
+            out.append(row)
     return out
 
 

@@ -1,0 +1,26 @@
+coupling:
+  rindex: 1.5
+  thickness_mm: 0.1
+  type: grease
+crystal:
+  diameter_mm: 76.2
+  length_mm: 76.2
+  material_spec: materials/variants/NaI_Tl_abs_measured.dat
+  shape: cylinder
+physics:
+  scintillation_from_optical_photons: false
+readout:
+  efficiency: 1.0
+run:
+  events: 2000
+  schema: 5
+  seed: 20260912
+source:
+  energy_keV: 662.0
+  offset_z_mm: -200.0
+surface:
+  coupling: air
+  model: lut
+  reflectivity: 0.99
+  treatment: polished
+  wrapping: teflon

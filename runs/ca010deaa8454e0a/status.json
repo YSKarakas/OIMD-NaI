@@ -1,0 +1,13 @@
+{
+  "label": "SCOPE_reflectance_095",
+  "state": "done",
+  "started_unix": 1789376708.443065,
+  "material_sha256": "11f5f9eb27664426b521cefa3aff8ded26e46b3b679063a2ade7928babd035d2",
+  "binary": "build/container/scint_optical",
+  "binary_sha256": "04550111bbcbe79ef73ee3650c32e50d2f89ef1f76d51fe0e1656b3196da26ee",
+  "container_image": "scint:11.4.2@sha256:6004c311be40b0547053be768028a5138af37e1738e7747f84bac24144a8d9af",
+  "returncode": 0,
+  "elapsed_s": 609.9,
+  "output": "runs/ca010deaa8454e0a/output_nt_events.csv",
+  "output_sha256": "4f617675a6d6e5846b50f1014c00c64b7173d455995dd4f6e048df820904b963"
+}
