@@ -1,0 +1,6 @@
+{
+  "label": "G4_wrap_none_tiny",
+  "state": "killed",
+  "killed_unix": 1789201620.8307252,
+  "kill_reason": "Third and final attempt at the unwrapped polished crystal, at 25 events with a 20-minute watchdog. It completed no events at all in 11 minutes. Together with the 250-event attempt (2h17m, killed) and the 3000-event attempt (5h51m, killed), this configuration is not tractable with the present setup at any useful statistics. The cause is physical and is itself the result: at a bare polished surface with air outside, total internal reflection is lossless, and a skew ray in a cylinder preserves its angle to the wall, so a large fraction of photons are permanently trapped and are removed only by bulk absorption. Measured contrast: the same crystal with a Teflon wrap runs at 0.65 s/event. No LCE is recorded for this configuration."
+}

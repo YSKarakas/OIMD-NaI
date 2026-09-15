@@ -1,0 +1,10 @@
+#class tools::wcsv::ntuple
+#title Per-event scintillation tallies
+#separator 44
+#vector_separator 59
+#column int event
+#column double edep_keV
+#column int photons_generated
+#column int photons_detected
+#column double first_detection_ns
+#column double mean_detection_ns

@@ -1,0 +1,7 @@
+{
+  "label": "G4_wrap_none",
+  "state": "killed",
+  "started_unix": 1789179245.644881,
+  "killed_unix": 1789200340.220931,
+  "kill_reason": "Stopped by hand. The unwrapped polished-crystal configuration is computationally pathological: lossless total internal reflection at a bare polished air interface, with a skew ray in a cylinder preserving its angle to the wall, keeps photons alive for enormous numbers of steps. 250 events had consumed 2h17m of CPU (33 s/event) and 3000 events 5h51m without finishing. Two cores at 100 % were overheating the machine. No result is recorded for this configuration."
+}

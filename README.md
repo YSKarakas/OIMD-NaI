@@ -99,7 +99,15 @@ Every run directory holds `config.yaml` (the complete input), `env.json`
 identifier, dataset versions, seed), `status.json` (state, elapsed time,
 binary and material-file checksums, output checksum, label aliases),
 `run.mac` and the per-event output `output_nt_events.csv`. The Geant4 log
-of each run is not tracked, for size.
+of each run is not tracked, for size, with one exception: the three attempts
+at an unwrapped crystal under the look-up-table surface model (labels
+`G4_wrap_none`, `G4_wrap_none_short`, `G4_wrap_none_tiny`; state `killed`)
+are kept with their logs and their empty output files, because together they
+are the record that no event completed (each log stops inside the
+initialisation printout, at the last flushed block of the killed process's
+output, not at the hang itself). The
+reasons recorded when they were stopped give the explanation entertained at
+the time; the cause found afterwards is in `sim/src/SurfaceCatalogue.cc`.
 
 `runs_scratch/gates_final.json` is the verdict the paper is built from:
 its header names the commit of the analysis, the schema, the toolkit tag and

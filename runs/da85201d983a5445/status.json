@@ -1,0 +1,11 @@
+{
+  "label": "G4_wrap_none_short",
+  "state": "killed",
+  "started_unix": 1789192075.380646,
+  "material_sha256": "9c2bc3a0fb5eeda3abf3213a875517e72700a07538e3aa0f14f7d682e1bb8889",
+  "returncode": -15,
+  "elapsed_s": 8253.2,
+  "output": "runs/da85201d983a5445/output_nt_events.csv",
+  "output_sha256": "b7978bd39c7e856a174d037e7c9d941d7f90687a1731ce4f16d265c1aa2a256b",
+  "kill_reason": "Stopped by hand (SIGTERM, returncode -15) after 8253 s of CPU for 250 events -- 33 s/event, against 0.65 s/event for the same crystal with a Teflon wrap. The unwrapped polished crystal is computationally pathological: total internal reflection at a bare polished air interface is lossless, and a skew ray in a cylinder preserves its angle to the wall, so photons survive an enormous number of steps. Two cores at 100 % were overheating the machine. No result recorded."
+}

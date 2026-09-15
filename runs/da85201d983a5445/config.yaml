@@ -1,0 +1,21 @@
+coupling:
+  thickness_mm: 0.1
+  type: grease
+crystal:
+  diameter_mm: 76.2
+  length_mm: 76.2
+  material_spec: materials/NaI_Tl.dat
+  shape: cylinder
+readout:
+  efficiency: 1.0
+run:
+  events: 250
+  seed: 20260912
+source:
+  energy_keV: 662.0
+  offset_z_mm: -200.0
+surface:
+  coupling: air
+  model: lut
+  treatment: polished
+  wrapping: none
