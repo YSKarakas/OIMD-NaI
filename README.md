@@ -131,4 +131,7 @@ themselves are not included.
 ## Citation
 
 See `CITATION.cff`. Please cite the paper for the results and the archived
-release (DOI given there once minted) for the simulation and data.
+release for the simulation and data: Zenodo concept DOI
+[10.5281/zenodo.22770120](https://doi.org/10.5281/zenodo.22770120)
+(resolves to the latest version); repository
+<https://github.com/YSKarakas/OIMD-NaI>.

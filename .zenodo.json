@@ -1,5 +1,5 @@
 {
-  "title": "Optical-input model dependence in Geant4 light-collection corrections: a NaI(Tl) case study — code and data",
+  "title": "Optical-input model dependence in Geant4 light-collection corrections: a NaI(Tl) case study — simulation and data",
   "upload_type": "software",
   "description": "<p>Geant4 application, optical models, digitised inputs, run records, literature records and analysis scripts behind the paper of the same title. Every number the paper quotes is read from the verdict file runs_scratch/gates_final.json, which the scripts here regenerate from the run records.</p><p>Code is released under the MIT licence; data, material tables and run records under CC BY 4.0 (see LICENSE and LICENSE-DATA).</p>",
   "creators": [
