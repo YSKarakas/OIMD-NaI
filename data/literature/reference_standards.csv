@@ -23,6 +23,7 @@ BGO,8000,Yanagida 2016,arXiv:1607.05486v2,"Table, l.416: BGO:Ce row, light yield
 BGO,8200,Bizarri 2013,arXiv:1308.3908v1,"Table, l.109: BGO row, light-yield column",2026-09-12
 BGO,8500,Miller 2025,arXiv:2403.02668,"Table I, optical yield row for BGO; cites its ref [22]",2026-09-12
 BGO,10000,Bonesini 2025,arXiv:2505.06929,"Table 1, l.179: last column of the light-yield row",2026-09-12
+NaI:Tl,35000,Hawrami 2020,arXiv:1911.03611v1,"l.169-170: 'a 1 inch x 1 inch NaI:Tl crystal, which was measured to have a light yield of 35,000 ph/MeV'",2026-09-20
 NaI:Tl,38000,Bonesini 2025,arXiv:2505.06929,"Table 1, l.179: NaI(Tl) column of the light-yield row",2026-09-12
 NaI:Tl,40000,Cebrian 2017,arXiv:1703.01262v1,"l.121: 'scintillation efficiency in NaI(Tl) to be 40,000 photons/MeV'",2026-09-12
 NaI:Tl,41000,Miller 2025,arXiv:2403.02668,"Table I, l.179: optical yield for NaI:Tl, cites refs [12] and [21]",2026-09-12

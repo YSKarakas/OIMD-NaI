@@ -38,6 +38,21 @@ REQUIRED = [
 
 MISSING = {"not_stated", "unclear", "", "no"}
 
+# A cell whose whole value says the paper is silent counts as missing, however
+# it is worded. Two records say so in free text -- "not stated in the section
+# read" (photodetector) and "not stated -- no method, reference or uncertainty
+# is given for this value" (reference standard) -- and an exact-match test
+# counted both as stated, which put two fields at 47 of 47. A cell that names
+# the thing and then notes that a SUB-part is unstated, such as "1 inch x
+# 1 inch NaI:Tl, assumed value NOT stated", does state the thing; the missing
+# sub-part is its own column. Hence the prefix test rather than a substring one.
+MISSING_PREFIX = ("not stated", "not_stated", "unclear", "none stated")
+
+
+def is_missing(value: str, missing_set) -> bool:
+    v = value.strip().lower()
+    return v in missing_set or v.startswith(MISSING_PREFIX)
+
 
 def load() -> list[dict]:
     if not RECORDS.exists():
@@ -59,14 +74,14 @@ def main() -> None:
     print("=" * 74)
     print(f"  {'field':<32} {'stated':>8} {'of':>4} {'':>4} {'percent':>8}")
     for field, label in REQUIRED:
-        stated = sum(1 for r in rows if r[field].strip().lower() not in MISSING)
+        stated = sum(1 for r in rows if not is_missing(r[field], MISSING))
         pct = 100 * stated / len(rows)
         bar = "#" * int(pct / 5)
         print(f"  {label:<32} {stated:>8} {len(rows):>4} {'':>4} {pct:>7.1f} % {bar}")
 
     complete = sum(
         1 for r in rows
-        if all(r[f].strip().lower() not in MISSING for f, _ in REQUIRED)
+        if all(not is_missing(r[f], MISSING) for f, _ in REQUIRED)
     )
     print(f"\n  records stating ALL of the above: {complete} of {len(rows)} "
           f"({100 * complete / len(rows):.1f} %)")
@@ -77,7 +92,7 @@ def main() -> None:
     print("=" * 74)
     absolute = [r for r in rows if r["reference_standard"].lower().startswith("absolute")]
     relative = [r for r in rows if not r["reference_standard"].lower().startswith("absolute")
-                and r["reference_standard"].strip().lower() not in MISSING]
+                and not is_missing(r["reference_standard"], MISSING)]
     print(f"  measured absolutely (own QE calibration)  {len(absolute)}")
     print(f"  measured against another scintillator     {len(relative)}")
     for r in relative:
