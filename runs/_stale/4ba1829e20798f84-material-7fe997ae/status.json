@@ -4,13 +4,13 @@
   ],
   "label": "SYS_meas_emission_mao",
   "state": "done",
-  "started_unix": 1790156582.9020755,
-  "material_sha256": "533812b4b6f0b4bca721b61a7f74a5c04e87f595358b4ee30a44989fa37b7d49",
+  "started_unix": 1790155016.4748957,
+  "material_sha256": "7fe997aedd7991426e47eb363314fa3217221f3ea5da965a387444f3d69fcb78",
   "binary": "build/container/scint_optical",
   "binary_sha256": "04550111bbcbe79ef73ee3650c32e50d2f89ef1f76d51fe0e1656b3196da26ee",
   "container_image": "scint:11.4.2@sha256:b5e01ff7b473495800f270ac60bdd22e6c4ec4ac14ff59c53c8c14d81044fdf6",
   "returncode": 0,
-  "elapsed_s": 631.3,
+  "elapsed_s": 642.9,
   "output": "runs/4ba1829e20798f84/output_nt_events.csv",
-  "output_sha256": "4166c737df8d60c73104a42a10682b8219a2a2729e384ce6de81fab91cf671e3"
+  "output_sha256": "71b57190e91fbd6307f6dc7a978536113e1c5f6e2c93803afe700ebef5aff107"
 }
