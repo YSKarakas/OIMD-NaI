@@ -41,6 +41,9 @@ DENSITY, MASSFRAC, LENGTH_CM = "3.67", "Na:0.153373922,I:0.846626078", 7.62
 
 
 def main() -> None:
+    # The container writes into the repository's git-ignored scratch space,
+    # which a fresh checkout does not have yet.
+    (ROOT / SCRATCH).parent.mkdir(parents=True, exist_ok=True)
     subprocess.run(["docker", "run", "--rm", "-v", f"{ROOT}:/work", "-w", "/work", IMAGE, "bash", "-c",
                     f". /opt/geant4/bin/geant4.sh && /work/{TOOL} attenuation --name NaI "
                     f"--density {DENSITY} --massfrac {MASSFRAC} --energies 0.662 --out /work/{SCRATCH}"],
