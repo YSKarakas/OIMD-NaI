@@ -10,8 +10,10 @@
 # written down. The `read_at` column says where in the source the number is, so
 # the check is repeatable by a person and not only by us.
 #
-# Only five of the values are assumptions made for a reference crystal in a
-# measurement (kind = assumed). The others (kind = published) are values a
+# Eight of the values are assumptions made for a reference crystal in a
+# measurement (kind = assumed); the three from Truc et al. (2026) were added on
+# 23 September 2026, when the texts left unread at the close of the survey were
+# read (data/literature/read_after_close.csv). The others (kind = published) are values a
 # measurement could adopt for the same crystal: a measured absolute yield, a
 # compilation input, a review table, a property quoted from earlier work. The
 # source_key labels were corrected on 23 September 2026: seven of them had
@@ -39,6 +41,9 @@ NaI:Tl,38000,published,Bonesini 2025,arXiv:2505.06929,"Table 1, l.179: NaI(Tl) c
 NaI:Tl,40000,published,Olivan 2017,arXiv:1703.01262v1,"l.121: 'scintillation efficiency in NaI(Tl) to be 40,000 photons/MeV'",2026-09-23
 NaI:Tl,41000,published,Miller 2025,arXiv:2403.02668,"Table I, l.179: optical yield for NaI:Tl, cites refs [12] and [21]",2026-09-12
 NaI:Tl,43000,assumed,Shendrik 2013,arXiv:1210.3755v1,l.157: 'Light output of NaI-Tl crystals is approximately 43000 photons/MeV',2026-09-23
+NaI:Tl,32400,assumed,Truc 2026,arXiv:2608.21171v1,"Table 2, l.505: 2-inch EPIC reference, '32,400 +- 3,240 [15]'",2026-09-23
+NaI:Tl,48000,assumed,Truc 2026,arXiv:2608.21171v1,"Table 2, l.507: 3-inch Alpha Spectra reference, '48,000 +- 4,800 [15]'",2026-09-23
+NaI:Tl,52000,assumed,Truc 2026,arXiv:2608.21171v1,"Table 1, l.262: 8 x 8 x 8 mm3 reference, '52,000 +- 5,200 [16]'",2026-09-23
 LYSO:Ce,26000,published,Chen 2013,arXiv:1309.3736v1,"l.83: 'output (26,000 photons/MeV)'; also l.301 table",2026-09-23
 LYSO:Ce,32000,published,Kim 2017 (table),arXiv:1607.05486v2,"Table, l.421: LYSO:Ce row, light-yield column",2026-09-23
 LYSO:Ce,33000,assumed,Kim 2017 (text),arXiv:1607.05486v2,"l.120: 'calculated light yield 33,000 ph/MeV was used'",2026-09-23

@@ -11,7 +11,7 @@ authors:
     given-names: Öykü
     orcid: https://orcid.org/0009-0006-1872-5650
     affiliation: "Department of Physics, TU Dortmund University; Department of Physics and Astronomy \"Augusto Righi\", University of Bologna"
-version: 1.5.0
+version: 1.6.0
 date-released: 2026-09-23
 license: MIT
 doi: 10.5281/zenodo.22770120

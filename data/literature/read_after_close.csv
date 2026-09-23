@@ -1,0 +1,31 @@
+# The 20 retrieved texts that the keyword classification marked as reporting a
+# light yield but that were left without a disposition when the survey sample
+# was closed (data/literature/undisposed.csv, class != none). They were read on
+# 23 September 2026, after the close, and are recorded here rather than added to
+# ly_records.csv, so that the counts the manuscript gives describe the sample as
+# it was fixed. For each: the disposition the existing precedents in
+# ly_records.csv.pending would give it, or the rows it would add; for would-be
+# rows, how many there are, how many give an uncertainty, whether any row states
+# every condition of the manuscript's Section 7 and how many state the index of
+# their coupling medium. Line numbers refer to data/literature/cache/txt/<id>.txt.
+arxiv_id,disposition,reason,rows_if_entered,rows_with_uncertainty,states_every_condition,rows_stating_coupling_index,evidence,read_on
+2112.04990v1,excluded,"liquid argon, and a simulation of it; no crystal and no measurement",0,0,,,l.116,2026-09-23
+2209.02885v3,excluded,"phenomenology; light yields quoted or assumed, none measured",0,0,,,"l.83, l.122",2026-09-23
+2512.04965v3,would_enter,"absolute yields measured with a PMT (BGO, BSO, PWO, photons/MeV) and with a SiPM (LYSO:Ce, photoelectrons/MeV, without and with grease)",5,3,no,1,"l.255-268 (3500 +- 390, 950 +- 110, 60 +- 10 ph/MeV; no temperature, grease index not given); l.608 and l.666-669 (LYSO 1480 and 2700 phe/MeV, grease of index 1.55)",2026-09-23
+2604.14060v2,excluded,plastic (wavelength-shifting fibres),0,0,,,"l.306, l.341",2026-09-23
+2608.21171v1,would_enter,"NaI(Tl) yields relative to NaI(Tl) reference crystals of stated value, photons/MeV +- 10 %",7,7,no,0,"Table 1 l.262-280, Table 2 l.505-509; l.250 (+-10 %); no temperature, QE, shaping or coupling index",2026-09-23
+1809.10840v2,excluded,"Cherenkov radiator (PbF2), as the 2308.01148v1 precedent",0,0,,,"l.33, l.675",2026-09-23
+2212.13054v3,excluded,liquid argon,0,0,,,"l.37, l.394-399",2026-09-23
+0706.2422v1,deferred,"relative only, no value for the reference sample",0,0,,,Table 2 l.305-315,2026-09-23
+1111.2147v1,deferred,relative to a CsI(Tl) crystal whose own yield is not given,0,0,,,l.175-179,2026-09-23
+1305.1560v2,excluded,simulation only,0,0,,,l.30-34,2026-09-23
+1503.00132v1,deferred,relative only (thin CsI(Tl) imaging screens),0,0,,,l.164-198,2026-09-23
+1504.05489v1,deferred,relative to ZnWO4 with no value assumed for it,0,0,,,"l.31, l.213-214",2026-09-23
+1510.05787v1,deferred,"relative to the same crystal at room temperature, as the 1203.1172v2 precedent",0,0,,,"l.468-474, l.536-537",2026-09-23
+1608.07556v1,deferred,relative to the unirradiated crystal,0,0,,,l.270,2026-09-23
+1909.02994v1,deferred,"bolometric light yield in keV per MeV, as the 0910.4414v1 precedent",0,0,,,l.719-730,2026-09-23
+2005.11659v1,would_enter,"absolute photoelectron yields per MeV from a single-photoelectron calibration, ZnWO4 and nine mixed crystals, no uncertainty",10,0,no,0,"Table 3 l.274-285; l.130-147 (teflon, BC-630 grease without index, R1847S); surface finish not stated",2026-09-23
+2401.00226v2,deferred,"yield only on a figure axis, as the 1709.04020v2 precedent",0,0,,,"l.519-521, l.550",2026-09-23
+2402.05026v5,would_enter,"absolute photoelectron yields at 77 K, pure CsI, polished and ground, cube and cylinder",4,1,no,0,"Table 3 l.376-380; l.196-197 (35.2(6)); crystal coupled directly to the PMT window, no QE",2026-09-23
+2508.15513v1,deferred,"modelling, light output in relative units",0,0,,,l.323-325,2026-09-23
+2511.20210v1,deferred,relative to BGO with no value assumed for it,0,0,,,"l.248-249, l.276-278",2026-09-23
