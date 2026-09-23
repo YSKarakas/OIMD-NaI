@@ -1,0 +1,39 @@
+{
+ "provenance": {
+  "image": "scint:11.4.2@sha256:b5e01ff7b473495800f270ac60bdd22e6c4ec4ac14ff59c53c8c14d81044fdf6",
+  "tool": "build/container-tools/g4data",
+  "tool_sha256": "dfa3df70b23632d8867e11e9c6f5388d1d29db60fd5072f3908be0dfcc814e55",
+  "geant4": "$Name: geant4-11-04-patch-02 [MT]$",
+  "git_commit": "8138c3a0e3efca452cc042b8de4c22761182e923",
+  "git_dirty": false,
+  "generated_at": "2026-09-23T09:30:31.668457+00:00"
+ },
+ "material": {
+  "density_g_cm3": 3.67,
+  "mass_fractions": "Na:0.153373922,I:0.846626078",
+  "length_cm": 7.62
+ },
+ "energy_MeV": 0.662,
+ "mu_per_cm": {
+  "total": 0.2801912435,
+  "conv": 0.0,
+  "compt": 0.2393398909,
+  "phot": 0.03141495931,
+  "rayl": 0.00943639334
+ },
+ "rayleigh_fraction_of_total": 0.033678402016157225,
+ "expected_interaction_probability": {
+  "with_rayleigh": 0.8817621819439077,
+  "without_rayleigh": 0.8729471272403833
+ },
+ "simulated": {
+  "interaction_probability": 0.866,
+  "events": 2000,
+  "binomial_standard_error": 0.007617217339685143,
+  "source": "runs_scratch/gates_final.json header"
+ },
+ "simulated_minus_expected_in_standard_errors": {
+  "with_rayleigh": -2.06928347203484,
+  "without_rayleigh": -0.9120295418366552
+ }
+}
