@@ -346,12 +346,12 @@ class NullAttenuation:
     the omission arises the same way the missing REFLECTIVITY does -- not from
     a decision but from a blank.
 
-    Geant4 needs a finite number, so the value written is a length far longer
-    than any path an untrapped photon takes in this geometry: the crystal is
-    76.2 mm long and the value is 1e7 mm. The exception is light trapped by
-    angle in a polished crystal behind a lossless wrapper (the polished G5
-    companion run), which circulates until something in the model ends it;
-    for that light the statement does not hold.
+    No ABSLENGTH at all would do the same: Geant4 treats a missing property as
+    no absorption, and the loader skips an empty table. The value written,
+    1e7 mm, is far longer than any path a delivered photon takes in this
+    geometry, where the crystal is 76.2 mm long. It is not known to be longer
+    than every path: in the lossless polished G5 companion about a fifth of
+    the light is never delivered, and what removes it has not been identified.
     """
 
     key = "abs_none"
@@ -370,8 +370,10 @@ class TabulatedEmission:
     Linear in wavelength between the tabulated points and zero outside them,
     which is what Geant4 itself does with a SCINTILLATIONCOMPONENT table. The
     one table this is used for is SSLG4's NaI(Tl) entry, which the library
-    attributes to a manufacturer's data sheet: it is a published description in
-    use, not a measurement, and it carries no conditions and no uncertainty.
+    attributes to a manufacturer (Luxium Solutions), its commercial data being
+    taken from manufacturers' data sheets "with a few exceptions": it is a
+    published description in use, not a measurement, and it carries no
+    conditions and no uncertainty.
     Its peak and width both sit outside what this study assumes, which is why
     it is run rather than only cited.
     """

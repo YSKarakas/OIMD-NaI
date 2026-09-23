@@ -343,14 +343,14 @@ def report(rows: list[dict]) -> dict:
     # G5: optical-transport closure. With a lossless wrapper and a crystal
     # that absorbs nothing on any ordinary path, every scintillation photon
     # has one way out, so the light-collection efficiency must be one and any
-    # deficit is transport losing light. None of G1-G4 tests this: G1 has no
-    # optical physics, G2 counts photons at birth, G3 is a one-sided bound and
+    # deficit is transport losing light. None of G1-G4 tests this: G1 involves
+    # no optical photons, G2 counts photons at birth, G3 is a one-sided bound and
     # G4 compares against another material. The gate is the GROUND-surface
     # run, where the angle is redrawn at every bounce and conservation is the
     # only thing under test. The polished companion is reported beside it and
-    # is not a second closure: in a polished cylinder part of the light never
-    # meets the readout inside its escape cone, and with nothing to absorb it
-    # the run measures how much light that is, not where the model ends it.
+    # is not a second closure: with the same lossless inputs it delivers about
+    # four fifths of the light, what removes the rest has not been identified,
+    # and so the closure stands for the ground finish only.
     closure = by_label.get("G5_closure")
     trapping = by_label.get("G5_trapping_polished")
     if closure is not None:

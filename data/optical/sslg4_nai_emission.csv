@@ -13,14 +13,14 @@
 #   sslg4/macros/iscnt/isc-2004.mac binds this file to SCINTILLATIONCOMPONENT1.
 #
 # THIS IS NOT A MEASUREMENT. The library states that the data for its
-# commercially available scintillators are taken from the manufacturers'
-# published data sheets, and attributes this entry to Luxium Solutions. No
-# temperature, excitation, sample or uncertainty travels with the table.
-# It is recorded here because it is the only openly distributed
-# machine-readable NaI(Tl) emission band we located, and because its shape
-# differs from the band this study assumes: read off the table the peak is
-# 424.3 nm against the 415 nm every compilation tabulates, and the full
-# width at half maximum is 52.8 nm, below the 55-75 nm this study scans.
+# commercially available scintillators are extracted from the manufacturers'
+# published data sheets, "with a few exceptions", and attributes this entry to
+# Luxium Solutions. No temperature, excitation, sample or uncertainty travels
+# with the table. It is recorded here because it is the only machine-readable
+# NaI(Tl) emission band we could locate, and because it differs from the band
+# this study assumes: read off the table the peak is 424.3 nm against the
+# 415 nm of the compilations read for this study, and the full width at half
+# maximum is 52.8 nm, below the 55-75 nm this study scans.
 #
 # Values are as distributed: wavelength in nm, intensity normalised to 1 at
 # the peak, on a uniform 4.605 nm grid.

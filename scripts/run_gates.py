@@ -346,18 +346,20 @@ def gather(set_name: str, events: int, seed: int) -> list[dict]:
         # G5: optical-transport closure. With a lossless wrapper and a crystal
         # that never absorbs, every scintillation photon must reach the
         # detection surface, so the light-collection efficiency must be 1. It
-        # is the only gate that tests transport rather than generation: G1 has
-        # no optical physics, G2 counts photons at birth, G3 is a one-sided
+        # is the only gate that tests transport rather than generation: G1
+        # involves no optical photons, G2 counts photons at birth, G3 is a one-sided
         # inequality that every member of the envelope satisfies, and G4
         # compares against a different material. Any deficit is a leak, and the
         # two defects of Appendix A are the reason this has to be measured
         # rather than assumed.
         # The gate is run on a GROUND surface, because that is the
         # configuration in which conservation is the only thing being tested.
-        # The polished companion below is not a second closure test: with a
-        # lossless mirror and no absorption it isolates how much light a
-        # polished cylinder traps by angle alone, which is the mechanism
-        # Appendix A.1 infers for the bare crystal, measured here directly.
+        # The polished companion below is not a second closure test: with the
+        # same lossless inputs it delivers about four fifths of the light, and
+        # what removes the rest has not been identified -- not the coupling
+        # rim, whose thickness does not move it, and not the bulk, the run
+        # being far too short for 10 km paths. Until it is, the closure stands
+        # for the ground finish only.
         configs.append(config_for(
             label="G5_closure",
             material_spec="materials/variants/NaI_Tl_abs_none.dat",
