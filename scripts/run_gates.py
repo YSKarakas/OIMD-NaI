@@ -352,8 +352,20 @@ def gather(set_name: str, events: int, seed: int) -> list[dict]:
         # compares against a different material. Any deficit is a leak, and the
         # two defects of Appendix A are the reason this has to be measured
         # rather than assumed.
+        # The gate is run on a GROUND surface, because that is the
+        # configuration in which conservation is the only thing being tested.
+        # The polished companion below is not a second closure test: with a
+        # lossless mirror and no absorption it isolates how much light a
+        # polished cylinder traps by angle alone, which is the mechanism
+        # Appendix A.1 infers for the bare crystal, measured here directly.
         configs.append(config_for(
             label="G5_closure",
+            material_spec="materials/variants/NaI_Tl_abs_none.dat",
+            events=events, seed=seed,
+            overrides={"surface": {"reflectivity": 1.00, "treatment": "ground"}},
+        ))
+        configs.append(config_for(
+            label="G5_trapping_polished",
             material_spec="materials/variants/NaI_Tl_abs_none.dat",
             events=events, seed=seed,
             overrides={"surface": {"reflectivity": 1.00}},
