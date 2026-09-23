@@ -1,0 +1,37 @@
+{
+ "provenance": {
+  "image": "scint:11.4.2@sha256:b5e01ff7b473495800f270ac60bdd22e6c4ec4ac14ff59c53c8c14d81044fdf6",
+  "binary": "build/container/scint_optical",
+  "binary_sha256": "04550111bbcbe79ef73ee3650c32e50d2f89ef1f76d51fe0e1656b3196da26ee",
+  "git_commit": "4d51bf16f7ff356040a1c039b3630f6844345cc9",
+  "git_dirty": false,
+  "generated_at": "2026-09-23T08:48:29.957354+00:00"
+ },
+ "configuration": "G5_trapping_polished",
+ "run_id": "e113bd7cf8606fa7",
+ "events": 3,
+ "energy_keV": 60.0,
+ "photons": 7332,
+ "ntuple_scintillation": 7332,
+ "ntuple_detected": 5773,
+ "fate": {
+  "detected": 5773,
+  "left the geometry": 1557,
+  "absorbed in bulk": 2
+ },
+ "left_the_geometry_from": {
+  "lateral wall": 1540,
+  "elsewhere": 11,
+  "back face": 6
+ },
+ "incidence_on_the_step_before_leaving": {
+  "n": 1540,
+  "median_deg": 85.82798542947972,
+  "fraction_above_80_deg": 0.724025974025974
+ },
+ "incidence_of_ordinary_reflections": {
+  "n": 274299,
+  "median_deg": 42.01885339294946,
+  "fraction_above_80_deg": 0.048713265451204704
+ }
+}

@@ -1,0 +1,44 @@
+{
+ "provenance": {
+  "image": "scint:11.4.2@sha256:b5e01ff7b473495800f270ac60bdd22e6c4ec4ac14ff59c53c8c14d81044fdf6",
+  "binary": "build/container/scint_optical",
+  "binary_sha256": "04550111bbcbe79ef73ee3650c32e50d2f89ef1f76d51fe0e1656b3196da26ee",
+  "git_commit": "4d51bf16f7ff356040a1c039b3630f6844345cc9",
+  "git_dirty": false,
+  "generated_at": "2026-09-23T09:04:56.159971+00:00"
+ },
+ "runs": [
+  {
+   "id": "616c6dd12c043688",
+   "label": "G4_wrap_none",
+   "published_image": "scint:11.4.2@sha256:6004c311be40b0547053be768028a5138af37e1738e7747f84bac24144a8d9af",
+   "published_output_sha256": "ee3745635839a4b0acb50db981f44866b64363ccdb483b86040f3b759d528071",
+   "reproduced_output_sha256": "ee3745635839a4b0acb50db981f44866b64363ccdb483b86040f3b759d528071",
+   "byte_identical": true
+  },
+  {
+   "id": "be512c37bda5041a",
+   "label": "SCOPE_finish_ground",
+   "published_image": "scint:11.4.2@sha256:6004c311be40b0547053be768028a5138af37e1738e7747f84bac24144a8d9af",
+   "published_output_sha256": "5623611b86f9f97253ac19af29883dda8ccf24be7d05a2d5b215c84a29f54d0e",
+   "reproduced_output_sha256": "5623611b86f9f97253ac19af29883dda8ccf24be7d05a2d5b215c84a29f54d0e",
+   "byte_identical": true
+  },
+  {
+   "id": "00ac94cfdb3fa287",
+   "label": "G5_closure",
+   "published_image": "scint:11.4.2@sha256:6004c311be40b0547053be768028a5138af37e1738e7747f84bac24144a8d9af",
+   "published_output_sha256": "e36303d4a02b5707dd2b7de0fa0f75d52d31b2d611637e5c10e084c40557a0c4",
+   "reproduced_output_sha256": "e36303d4a02b5707dd2b7de0fa0f75d52d31b2d611637e5c10e084c40557a0c4",
+   "byte_identical": true
+  },
+  {
+   "id": "4743478c1b564cba",
+   "label": "SYS_abs_measured",
+   "published_image": "scint:11.4.2@sha256:6004c311be40b0547053be768028a5138af37e1738e7747f84bac24144a8d9af",
+   "published_output_sha256": "2eeb2651b2e0d0226dff09b7c8b3475ea2b0615def299b9d860228de8599f19a",
+   "reproduced_output_sha256": "2eeb2651b2e0d0226dff09b7c8b3475ea2b0615def299b9d860228de8599f19a",
+   "byte_identical": true
+  }
+ ]
+}
