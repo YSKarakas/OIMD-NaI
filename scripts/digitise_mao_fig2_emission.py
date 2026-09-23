@@ -182,7 +182,6 @@ def main() -> int:
     if len(occluded) > 1:
         raise SystemExit("more than one occluded gap; expected only the red crossing")
 
-    half = inten >= 0.5
     lo = float(np.interp(0.5, inten[:int(np.argmax(inten)) + 1], lam[:int(np.argmax(inten)) + 1]))
     hi_part = slice(int(np.argmax(inten)), None)
     hi = float(np.interp(0.5, inten[hi_part][::-1], lam[hi_part][::-1]))
@@ -190,7 +189,6 @@ def main() -> int:
           f"FWHM {hi - lo:.1f} nm ({lo:.1f}-{hi:.1f})")
     print(f"  intensity at the ends: {inten[0]:.3f} at {lam[0]:.1f} nm, "
           f"{inten[-1]:.3f} at {lam[-1]:.1f} nm")
-    del half
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     with args.out.open("w", newline="") as fh:
