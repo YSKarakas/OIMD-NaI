@@ -4,26 +4,6 @@
 # klass is the keyword classification of scripts/scan_yields.py. No
 # reason was recorded for leaving any of these unread.
 arxiv_id,klass,year,title
-2112.04990v1,absolute,2021,The optical simulation model of the DarkSide-20k Veto detector
-2209.02885v3,absolute,2022,Testing the Gallium Anomaly
-2512.04965v3,absolute,2025,Characterization of thin optical filters for high purity Cherenkov light readout from scintillating crystals
-2604.14060v2,absolute,2026,Observation of light production by charged particles in WLS fibers
-2608.21171v1,absolute,2026,Preventing quart-NaI adhesion in Bridgman growth using ammonium iodide
-1809.10840v2,detected,2018,Characterization and Performance of PADME's Cherenkov-Based Small-Angle Calorimeter
-2212.13054v3,detected,2022,Developing a single phase liquid argon detector with SiPM readout
-0706.2422v1,relative,2007,Pulse-shape discrimination with PbWO$_4$ crystal scintillators
-1111.2147v1,relative,2011,Novel Scintillation Material - ZnO Transparent Ceramics
-1305.1560v2,relative,2013,New Approaches for Improvement of TOF-PET
-1503.00132v1,relative,2015,Performance assessment of CsI(Tl) screens on various substrates for X-ray imaging
-1504.05489v1,relative,2015,Temperature dependence of scintillation properties of SrMoO4
-1510.05787v1,relative,2015,Low-Temperature Scintillation Properties of CaWO4 Crystals for Rare-Event Searches
-1608.07556v1,relative,2016,Radiation Hardness of 30 cm Long CsI(Tl) Crystals
-1909.02994v1,relative,2019,The CUPID-Mo experiment for neutrinoless double-beta decay: performance and prospects
-2005.11659v1,relative,2020,Scintillation properties of $({\rm Zn}_{0.9} {\rm Pb}_{0.1})({\rm W}_{0.9} {\rm Mo}_{0.1}){\rm O}_4$ and $({\rm Zn}_{0.9} {\rm Cd}_{0.1})({\rm W}_{0.9} {\rm Mo}_{0.1}){\rm O}_4$ mixed crystals
-2401.00226v2,relative,2023,The Intrinsic Energy Resolution of LaBr$_3$(Ce) Crystal for GECAM
-2402.05026v5,relative,2024,Characterization and Optimization of a Cryogenic Pure CsI Detector with Remarkable Light Yield and Unprecedented Energy Resolution for CLOVERS Experiment
-2508.15513v1,relative,2025,Modeling of Light Production in Inorganic Scintillators
-2511.20210v1,relative,2025,Drastic reduction of the slow scintillation component in highly luminescent Ce3+ and Mg2+ doped Lu2.5Gd0.5Ga2Al3O12 garnet powders
 0705.3703v1,none,2007,Branching Transport Model of Alkali-Halide Scintillators
 0707.0766v1,none,2007,Interpretation of Light-Quenching Factor Measurements
 0806.4483v3,none,2008,Future use of silicon photomultiplier for KAOS at MAMI and PANDA at FAIR

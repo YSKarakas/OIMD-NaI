@@ -99,10 +99,10 @@ dates and every identifier returned), `scripts/scan_reporting.py` and
 the statistics the paper quotes, and `scripts/scan_optical_practice.py` the
 classification of optical inputs. The hand-extracted records are
 `data/literature/ly_records.csv`, the texts read and deferred with a reason
-`data/literature/ly_records.csv.pending`, the retrieved texts left without a
-disposition when the sample was closed `data/literature/undisposed.csv`
-(`scripts/list_undisposed.py`), and what reading the 20 of them that report a
-yield found afterwards `data/literature/read_after_close.csv`; the provenance of every optical input is
+`data/literature/ly_records.csv.pending`, the retrieved texts with no
+disposition, none of which reports a light yield, `data/literature/undisposed.csv`
+(`scripts/list_undisposed.py`), and the second extraction pass over the 20 texts
+the first left undecided `data/literature/read_after_close.csv`; the provenance of every optical input is
 `data/literature/optical_provenance.csv`, and the reference-crystal yields of
 the paper's Figure 5, assumed or published, `data/literature/reference_standards.csv`.
 

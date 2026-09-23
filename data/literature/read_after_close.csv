@@ -1,9 +1,10 @@
 # The 20 retrieved texts that the keyword classification marked as reporting a
 # light yield but that were left without a disposition when the survey sample
 # was closed (data/literature/undisposed.csv, class != none). They were read on
-# 23 September 2026, after the close, and are recorded here rather than added to
-# ly_records.csv, so that the counts the manuscript gives describe the sample as
-# it was fixed. For each: the disposition the existing precedents in
+# 23 September 2026 in a second pass. The same day the four that report
+# measurements the schema takes were extracted into ly_records.csv (26 rows) and
+# the other sixteen recorded in ly_records.csv.pending with their reasons; this
+# file keeps what the second pass found, text by text. For each: the disposition the existing precedents in
 # ly_records.csv.pending would give it, or the rows it would add; for would-be
 # rows, how many there are, how many give an uncertainty, whether any row states
 # every condition of the manuscript's Section 7 and how many state the index of
