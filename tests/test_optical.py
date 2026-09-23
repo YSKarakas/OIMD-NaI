@@ -135,8 +135,11 @@ def test_scanned_slope_brackets_the_published_flat_values():
     the emission peak. The scanned family must contain both, otherwise the
     systematic band would not cover current practice.
     """
-    shallow, steep = AbsorptionEdge(0.10)(415.0), AbsorptionEdge(0.25)(415.0)
-    assert steep < 500.0 < 1000.0 < shallow
+    # A larger Urbach energy is a SHALLOWER, broader edge, and so the more
+    # absorbing member inside the band: E_U = 0.25 eV is the absorbing end of
+    # the scan and E_U = 0.10 eV, the steep edge, the transparent one.
+    steep, shallow = AbsorptionEdge(0.10)(415.0), AbsorptionEdge(0.25)(415.0)
+    assert shallow < 500.0 < 1000.0 < steep
 
 
 def test_a_bulk_length_shorter_than_the_anchor_is_refused():
@@ -192,11 +195,15 @@ def test_material_files_are_in_sync_with_their_generator():
     spec.loader.exec_module(module)
 
     stale = []
-    for path, variant, note, dispersion, absorption, fwhm, jacobian in module.VARIANTS:
+    for entry in module.VARIANTS:
+        # The same unpacking as the generator's main(): a row may carry an
+        # eighth element, a tabulated emission band in place of the Gaussian.
+        path, variant, note, dispersion, absorption, fwhm, jacobian = entry[:7]
+        emission = entry[7] if len(entry) > 7 else None
         expected = module.build(
             variant=variant, variant_note=note,
             dispersion=dispersion, absorption=absorption, fwhm_nm=fwhm,
-            jacobian_corrected=jacobian,
+            jacobian_corrected=jacobian, emission=emission,
         )
         if (root / path).read_text() != expected:
             stale.append(path)

@@ -347,8 +347,11 @@ class NullAttenuation:
     a decision but from a blank.
 
     Geant4 needs a finite number, so the value written is a length far longer
-    than any path a photon can take in this geometry; the crystal is 76.2 mm
-    long and the cap is 1e7 mm, so no photon is absorbed in bulk.
+    than any path an untrapped photon takes in this geometry: the crystal is
+    76.2 mm long and the value is 1e7 mm. The exception is light trapped by
+    angle in a polished crystal behind a lossless wrapper (the polished G5
+    companion run), which circulates until something in the model ends it;
+    for that light the statement does not hold.
     """
 
     key = "abs_none"
@@ -644,9 +647,9 @@ class MeasuredAttenuation:
         """Half-spreads from each axis separately, and their quadrature sum.
 
         Reported separately because which one dominates flips inside the
-        emission band: the wavelength axis below about 390 nm, where the curve
-        is steep, and the transmittance axis above about 430 nm, where it is
-        flat and close to the Fresnel limit.
+        emission band, near 400 nm: the wavelength axis below it, where the
+        curve is steep, and the transmittance axis above it, where the curve
+        flattens toward the Fresnel limit.
         """
         def half(**kw):
             hi = MeasuredAttenuation(self.path, dispersion=self.dispersion, **{k: +1.0 for k in kw})(wavelength_nm)

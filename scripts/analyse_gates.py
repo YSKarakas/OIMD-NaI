@@ -339,6 +339,42 @@ def report(rows: list[dict]) -> dict:
         verdicts["G4"] = {"pass": ok,
                           "lce": {r["wrapping"]: r["lce_mean"] for r in wraps.values()}}
 
+    # ------------------------------------------------------------------ #
+    # G5: optical-transport closure. With a lossless wrapper and a crystal
+    # that absorbs nothing on any ordinary path, every scintillation photon
+    # has one way out, so the light-collection efficiency must be one and any
+    # deficit is transport losing light. None of G1-G4 tests this: G1 has no
+    # optical physics, G2 counts photons at birth, G3 is a one-sided bound and
+    # G4 compares against another material. The gate is the GROUND-surface
+    # run, where the angle is redrawn at every bounce and conservation is the
+    # only thing under test. The polished companion is reported beside it and
+    # is not a second closure: in a polished cylinder part of the light never
+    # meets the readout inside its escape cone, and with nothing to absorb it
+    # the run measures how much light that is, not where the model ends it.
+    closure = by_label.get("G5_closure")
+    trapping = by_label.get("G5_trapping_polished")
+    if closure is not None:
+        print()
+        print("=" * 78)
+        print("G5 -- OPTICAL-TRANSPORT CLOSURE (lossless wrapper, no bulk absorption)")
+        print("=" * 78)
+        deficit = 1.0 - closure["lce_mean"]
+        print(f"  ground surface, LCE           {closure['lce_mean']:.5f} +- {closure['lce_sem']:.5f}"
+              f"   ({closure['full_energy_events']} full-energy events)")
+        print(f"  deficit                       {100 * deficit:.3f} %")
+        ok = deficit < 0.01
+        print(f"  VERDICT                       {'PASS' if ok else 'FAIL'}"
+              f"  (a lossless configuration must deliver its light to within 1 %)")
+        g5 = {"pass": bool(ok), "lce": closure["lce_mean"], "lce_sem": closure["lce_sem"],
+              "full_energy_events": closure["full_energy_events"],
+              "deficit_fraction": deficit}
+        if trapping is not None:
+            print(f"  polished companion, LCE       {trapping['lce_mean']:.5f} +- {trapping['lce_sem']:.5f}"
+                  f"   ({100 * (1 - trapping['lce_mean']):.1f} % of the light never delivered)")
+            g5.update({"polished_lce": trapping["lce_mean"],
+                       "polished_sem": trapping["lce_sem"]})
+        verdicts["G5"] = g5
+
     print()
     print("=" * 78)
     print("OPTICAL INPUT SYSTEMATICS -- LCE under one-at-a-time variation")
@@ -359,8 +395,9 @@ def report(rows: list[dict]) -> dict:
         spread = (max(values) - min(values)) / b
 
         # Two spreads, because they answer different questions. The wider one is
-        # over everything the literature actually does, flat absorption lengths
-        # included. The narrower one drops the flat-absorption variants, which the
+        # over every model run, flat and absent absorption included; its bottom
+        # is this study's own Urbach scan. The narrower one drops the variants
+        # with no absorption edge in the band, which the
         # Mao et al. 365 nm transmittance measurement excludes, and so is the
         # spread that survives after using the evidence that already exists.
         # The rule is about the physics, not the label: what the 365 nm
@@ -373,6 +410,11 @@ def report(rows: list[dict]) -> dict:
         EXCLUDED_BY_THE_CUTOFF = ("SYS_abs_flat", "SYS_abs_none")
         defensible = [b] + [r["lce_mean"] for r in sys_rows
                             if not r["label"].startswith(EXCLUDED_BY_THE_CUTOFF)]
+        # Written into the verdict, so that the table, the figure and the
+        # manuscript checker select the same subset instead of re-deriving it
+        # from a label prefix -- which is how the prefix rule went wrong twice.
+        excluded = sorted(r["label"][4:] for r in sys_rows
+                          if r["label"].startswith(EXCLUDED_BY_THE_CUTOFF))
         defensible_spread = (max(defensible) - min(defensible)) / b
 
         # Where the schema records it, show what the crystal does to its own
@@ -391,12 +433,13 @@ def report(rows: list[dict]) -> dict:
                     continue
                 print(f"  {name:<22} {gen_nm:>9.2f} {det_nm:>9.2f} {det_nm - gen_nm:>+9.2f} nm")
 
-        print(f"\n  spread over published practice  {100 * spread:.1f} % of baseline LCE"
+        print(f"\n  spread over every model run     {100 * spread:.1f} % of baseline LCE"
               f"   [{len(values)} variants]")
-        print("    (includes the flat absorption lengths that appear in the literature)")
+        print("    (includes the flat absorption lengths and the transparent crystal)")
         print(f"  spread over defensible models   {100 * defensible_spread:.1f} % of baseline LCE"
               f"   [{len(defensible)} variants]")
-        print("    (flat absorption dropped: the 365 nm transmittance measurement excludes it)")
+        print("    (flat and absent absorption dropped: the 365 nm transmittance measurement")
+        print("    excludes both; both ends of what remains are the scanned Urbach edge)")
         if len(values) < 11:
             print("    NOTE: this is a SUBSET of the variant family, so these spreads are")
             print("    narrower than the full scan by construction -- not a different answer.")
@@ -414,6 +457,7 @@ def report(rows: list[dict]) -> dict:
             "baseline_lce": b,
             "spread_fraction": spread,
             "defensible_spread_fraction": defensible_spread,
+            "excluded_by_cutoff": excluded,
             "brown_vs_measured_pct": brown_vs_measured,
             "variants": {r["label"][4:]: r["lce_mean"] for r in sys_rows},
         }
