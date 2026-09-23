@@ -342,7 +342,7 @@ FLAT_500 = constant_absorption(
 VARIANTS: list[tuple[str, str, str, Dispersion, object, float, bool]] = [
     # (path, variant key, note, dispersion, absorption, emission FWHM)
     # The note below says the reference compilation uses the 1976 dispersion;
-    # it draws a flat 1.86. The note is written into materials/NaI_Tl.dat,
+    # it draws a flat 1.85. The note is written into materials/NaI_Tl.dat,
     # whose checksum the runs record, so it is corrected in materials/ERRATA.md.
     (
         "materials/NaI_Tl.dat", "baseline",
