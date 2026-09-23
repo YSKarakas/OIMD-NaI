@@ -393,7 +393,7 @@ def gather(set_name: str, events: int, seed: int) -> list[dict]:
                       "meas_scatter_max",
                       "meas_rindex_jellison", "meas_rindex_flat185",
                       "meas_fwhm55", "meas_fwhm75", "meas_jacobian",
-                      "meas_emission_sslg4"):
+                      "meas_emission_sslg4", "meas_emission_mao"):
             configs.append(config_for(
                 label=f"MEAS_{label}",
                 material_spec=f"materials/variants/NaI_Tl_{label}.dat",

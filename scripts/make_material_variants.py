@@ -38,6 +38,7 @@ from scint.optical import (  # noqa: E402
     sample_wavelengths,
     NullAttenuation,
     TabulatedEmission,
+    MAO_PL_EMISSION_CURVE,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -229,6 +230,23 @@ SSLG4_BAND = TabulatedEmission(key="emission_sslg4", source=(
     "digitised published curve -- the convention of Appendix B.2 applies to it "
     "unchanged."))
 
+MAO_PL_BAND = TabulatedEmission(
+    path=str(Path(__file__).resolve().parents[1] / MAO_PL_EMISSION_CURVE),
+    key="emission_mao_pl", source=(
+    "MEASURED BAND, BUT PHOTO-LUMINESCENCE. The blue curve of the NaI(Tl) "
+    "panel of Mao, Zhang and Zhu, IEEE Trans. Nucl. Sci. 55 (2008) 2425, "
+    "Fig. 2 -- the figure the attenuation curve is digitised from -- read from "
+    "data/optical/mao2008_nai_photoluminescence.csv, which "
+    "scripts/digitise_mao_fig2_emission.py traces on the same calibrated "
+    "wavelength axis as the transmittance. Measured with a Hitachi F4500 "
+    "fluorescence spectrophotometer, the excitation beam at 10 degrees to the "
+    "sample normal so that internal absorption does not shape the spectrum; "
+    "excited by ultraviolet light rather than ionising radiation, and not "
+    "stated to be corrected for the instrument's spectral response. Peak "
+    "410 nm, full width at half maximum 90 nm; the traced band runs from 351 "
+    "to 603 nm. Tabulated as plotted, per unit wavelength, so Geant4 samples "
+    "it in photon energy under the same convention as the baseline Gaussian."))
+
 TRANSPARENT = NullAttenuation(source=(
     "NO BULK ATTENUATION AT ALL, which is what one published Geant4 material "
     "library supplies for NaI(Tl): SSLG4 (Comput. Phys. Commun. 306 (2025) "
@@ -406,6 +424,17 @@ VARIANTS: list[tuple[str, str, str, Dispersion, object, float, bool]] = [
         "band, so what it measures is the cost of the shape assumption rather "
         "than of the width scan.",
         LI_1976, MEASURED, EMISSION_FWHM_NM, False, SSLG4_BAND,
+    ),
+    (
+        "materials/variants/NaI_Tl_meas_emission_mao.dat",
+        "measured absorption + the photo-luminescence band of Mao et al. Fig. 2",
+        "The one measured NaI(Tl) emission band located with its instrument and "
+        "geometry stated, drawn in the same figure as the attenuation curve, on "
+        "the measured attenuation. Replaces the assumed Gaussian with a "
+        "measurement of the band's shape, so what it measures is the cost of "
+        "the shape assumption -- with the caveat that the measurement is "
+        "photo-luminescence, not scintillation.",
+        LI_1976, MEASURED, EMISSION_FWHM_NM, False, MAO_PL_BAND,
     ),
     (
         "materials/variants/NaI_Tl_abs_none.dat",

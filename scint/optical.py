@@ -331,6 +331,10 @@ class ScatteringSplit:
 
 
 SSLG4_EMISSION_CURVE = "data/optical/sslg4_nai_emission.csv"
+# The photo-luminescence band drawn in the same figure as the transmittance
+# curve (Mao et al. 2008, Fig. 2, blue), digitised on the same calibrated axis
+# by scripts/digitise_mao_fig2_emission.py.
+MAO_PL_EMISSION_CURVE = "data/optical/mao2008_nai_photoluminescence.csv"
 
 
 class NullAttenuation:
@@ -368,14 +372,16 @@ class TabulatedEmission:
     """Emission band read from a published table rather than assumed.
 
     Linear in wavelength between the tabulated points and zero outside them,
-    which is what Geant4 itself does with a SCINTILLATIONCOMPONENT table. The
-    one table this is used for is SSLG4's NaI(Tl) entry, which the library
-    attributes to a manufacturer (Luxium Solutions), its commercial data being
-    taken from manufacturers' data sheets "with a few exceptions": it is a
-    published description in use, not a measurement, and it carries no
-    conditions and no uncertainty.
-    Its peak and width both sit outside what this study assumes, which is why
-    it is run rather than only cited.
+    which is what Geant4 itself does with a SCINTILLATIONCOMPONENT table. Two
+    tables are used. SSLG4's NaI(Tl) entry, which the library attributes to a
+    manufacturer (Luxium Solutions), its commercial data being taken from
+    manufacturers' data sheets "with a few exceptions": a published
+    description in use, not a measurement, carrying no conditions and no
+    uncertainty. And the photo-luminescence band of Mao et al. (2008) Fig. 2,
+    digitised from the figure the attenuation curve comes from: a measurement
+    with its instrument and geometry stated, but under ultraviolet excitation
+    rather than ionising radiation. Both differ from the assumed Gaussian in
+    peak or width, which is why they are run rather than only cited.
     """
 
     def __init__(self, path: str | None = None, root: str | None = None, *,
