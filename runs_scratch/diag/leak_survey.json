@@ -1,0 +1,1263 @@
+{
+ "provenance": {
+  "image": "scint:11.4.2@sha256:b5e01ff7b473495800f270ac60bdd22e6c4ec4ac14ff59c53c8c14d81044fdf6",
+  "binary": "build/container/scint_optical",
+  "binary_sha256": "04550111bbcbe79ef73ee3650c32e50d2f89ef1f76d51fe0e1656b3196da26ee",
+  "git_commit": "c3166fe5283140b49ff03ec663a18897b3adae25",
+  "git_dirty": false,
+  "generated_at": "2026-09-23T09:59:02.012301+00:00"
+ },
+ "events_per_configuration": 10,
+ "configurations": [
+  {
+   "id": "4743478c1b564cba",
+   "label": "SYS_abs_measured",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 132175,
+   "fate": {
+    "absorbed in bulk": 78253,
+    "detected": 46704,
+    "absorbed at the wrapper": 6365,
+    "left the geometry": 853
+   },
+   "left_from": {
+    "lateral wall": 771,
+    "readout side (coupling layer and its rim)": 72,
+    "back face": 9,
+    "elsewhere": 1
+   },
+   "lost_detections_estimate": 133.74861270313662,
+   "lost_detections_estimate_lateral_wall": 119.47736191088823,
+   "ntuple_scintillation": 131998,
+   "ntuple_detected": 46704
+  },
+  {
+   "id": "616c6dd12c043688",
+   "label": "G4_wrap_none",
+   "events": 10,
+   "bare_crystal": true,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 206334,
+   "fate": {
+    "left the geometry": 100626,
+    "detected": 53605,
+    "absorbed in bulk": 52103
+   },
+   "left_from": {
+    "lateral wall": 86120,
+    "back face": 13657,
+    "elsewhere": 761,
+    "readout side (coupling layer and its rim)": 88
+   },
+   "lost_detections_estimate": 61752.265702409146,
+   "lost_detections_estimate_lateral_wall": 52729.904727474495,
+   "ntuple_scintillation": 206201,
+   "ntuple_detected": 53605
+  },
+  {
+   "id": "3a9a52b975a5e479",
+   "label": "G4_wrap_lumirror",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 168557,
+   "fate": {
+    "absorbed in bulk": 96466,
+    "detected": 56182,
+    "absorbed at the wrapper": 14895,
+    "left the geometry": 1014
+   },
+   "left_from": {
+    "readout side (coupling layer and its rim)": 102,
+    "lateral wall": 904,
+    "back face": 7,
+    "elsewhere": 1
+   },
+   "lost_detections_estimate": 131.4539449118356,
+   "lost_detections_estimate_lateral_wall": 110.92468978419751,
+   "ntuple_scintillation": 168382,
+   "ntuple_detected": 56182
+  },
+  {
+   "id": "072b2d08f0cf8d99",
+   "label": "G4_wrap_tyvek",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 163182,
+   "fate": {
+    "absorbed in bulk": 86520,
+    "detected": 55287,
+    "absorbed at the wrapper": 20376,
+    "left the geometry": 999
+   },
+   "left_from": {
+    "lateral wall": 903,
+    "readout side (coupling layer and its rim)": 86,
+    "back face": 8,
+    "elsewhere": 2
+   },
+   "lost_detections_estimate": 207.8465640686391,
+   "lost_detections_estimate_lateral_wall": 190.23675311283847,
+   "ntuple_scintillation": 162996,
+   "ntuple_detected": 55287
+  },
+  {
+   "id": "7a4469f5806bbf37",
+   "label": "G4_wrap_tio",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 181342,
+   "fate": {
+    "absorbed at the wrapper": 29524,
+    "detected": 66211,
+    "absorbed in bulk": 84936,
+    "left the geometry": 671
+   },
+   "left_from": {
+    "lateral wall": 533,
+    "readout side (coupling layer and its rim)": 132,
+    "back face": 5,
+    "elsewhere": 1
+   },
+   "lost_detections_estimate": 214.02477663546006,
+   "lost_detections_estimate_lateral_wall": 170.6258943037604,
+   "ntuple_scintillation": 181144,
+   "ntuple_detected": 66211
+  },
+  {
+   "id": "4517b4c04c5b5dcb",
+   "label": "G4_wrap_esr",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 252186,
+   "fate": {
+    "absorbed in bulk": 144609,
+    "detected": 89452,
+    "absorbed at the wrapper": 16992,
+    "left the geometry": 1133
+   },
+   "left_from": {
+    "lateral wall": 928,
+    "back face": 7,
+    "readout side (coupling layer and its rim)": 197,
+    "elsewhere": 1
+   },
+   "lost_detections_estimate": 236.43840156963074,
+   "lost_detections_estimate_lateral_wall": 188.82840495503558,
+   "ntuple_scintillation": 251934,
+   "ntuple_detected": 89452
+  },
+  {
+   "id": "00ac94cfdb3fa287",
+   "label": "G5_closure",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 204237,
+   "fate": {
+    "detected": 203823,
+    "left the geometry": 408,
+    "absorbed in bulk": 6
+   },
+   "left_from": {
+    "lateral wall": 161,
+    "readout side (coupling layer and its rim)": 246,
+    "back face": 1
+   },
+   "lost_detections_estimate": 407.99245336597903,
+   "lost_detections_estimate_lateral_wall": 160.99732565992778,
+   "ntuple_scintillation": 203989,
+   "ntuple_detected": 203823
+  },
+  {
+   "id": "e113bd7cf8606fa7",
+   "label": "G5_trapping_polished",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 232118,
+   "fate": {
+    "detected": 182447,
+    "left the geometry": 49620,
+    "absorbed in bulk": 51
+   },
+   "left_from": {
+    "lateral wall": 48727,
+    "readout side (coupling layer and its rim)": 454,
+    "elsewhere": 361,
+    "back face": 78
+   },
+   "lost_detections_estimate": 49584.30517154384,
+   "lost_detections_estimate_lateral_wall": 48691.85598696098,
+   "ntuple_scintillation": 231926,
+   "ntuple_detected": 182447
+  },
+  {
+   "id": "cde2a5a9d130c501",
+   "label": "SYS_baseline",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 206520,
+   "fate": {
+    "absorbed in bulk": 130286,
+    "detected": 66385,
+    "absorbed at the wrapper": 8718,
+    "left the geometry": 1131
+   },
+   "left_from": {
+    "readout side (coupling layer and its rim)": 113,
+    "lateral wall": 1005,
+    "back face": 10,
+    "elsewhere": 3
+   },
+   "lost_detections_estimate": 192.88679754468967,
+   "lost_detections_estimate_lateral_wall": 166.1949004483663,
+   "ntuple_scintillation": 206344,
+   "ntuple_detected": 66385
+  },
+  {
+   "id": "92d4ad2134355d06",
+   "label": "SYS_abs_brown",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 160777,
+   "fate": {
+    "absorbed in bulk": 107274,
+    "detected": 47773,
+    "absorbed at the wrapper": 4970,
+    "left the geometry": 760
+   },
+   "left_from": {
+    "lateral wall": 698,
+    "readout side (coupling layer and its rim)": 52,
+    "back face": 5,
+    "elsewhere": 5
+   },
+   "lost_detections_estimate": 88.10754337667412,
+   "lost_detections_estimate_lateral_wall": 79.73126432286946,
+   "ntuple_scintillation": 160620,
+   "ntuple_detected": 47773
+  },
+  {
+   "id": "0223475e470d25ed",
+   "label": "SYS_abs_edge010",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 221505,
+   "fate": {
+    "absorbed in bulk": 114526,
+    "detected": 88284,
+    "absorbed at the wrapper": 16041,
+    "left the geometry": 2654
+   },
+   "left_from": {
+    "lateral wall": 2450,
+    "readout side (coupling layer and its rim)": 183,
+    "elsewhere": 7,
+    "back face": 14
+   },
+   "lost_detections_estimate": 539.9936823565924,
+   "lost_detections_estimate_lateral_wall": 489.9990243376725,
+   "ntuple_scintillation": 221334,
+   "ntuple_detected": 88284
+  },
+  {
+   "id": "d4b352f0b10e1a9d",
+   "label": "SYS_abs_edge025",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 144381,
+   "fate": {
+    "absorbed in bulk": 101301,
+    "detected": 38851,
+    "left the geometry": 386,
+    "absorbed at the wrapper": 3843
+   },
+   "left_from": {
+    "lateral wall": 337,
+    "readout side (coupling layer and its rim)": 49
+   },
+   "lost_detections_estimate": 56.07602376199518,
+   "lost_detections_estimate_lateral_wall": 46.88271386417568,
+   "ntuple_scintillation": 144266,
+   "ntuple_detected": 38851
+  },
+  {
+   "id": "df3fe392f3803734",
+   "label": "SYS_abs_flat1000",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 156581,
+   "fate": {
+    "absorbed in bulk": 75878,
+    "detected": 67055,
+    "absorbed at the wrapper": 11739,
+    "left the geometry": 1909
+   },
+   "left_from": {
+    "lateral wall": 1755,
+    "back face": 12,
+    "readout side (coupling layer and its rim)": 137,
+    "elsewhere": 5
+   },
+   "lost_detections_estimate": 341.0865755418215,
+   "lost_detections_estimate_lateral_wall": 303.559164232274,
+   "ntuple_scintillation": 156517,
+   "ntuple_detected": 67055
+  },
+  {
+   "id": "e8d38079966cc5f2",
+   "label": "SYS_abs_flat2000",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 148890,
+   "fate": {
+    "absorbed in bulk": 54465,
+    "detected": 73447,
+    "left the geometry": 3283,
+    "absorbed at the wrapper": 17695
+   },
+   "left_from": {
+    "lateral wall": 3095,
+    "readout side (coupling layer and its rim)": 161,
+    "elsewhere": 14,
+    "back face": 13
+   },
+   "lost_detections_estimate": 736.8186993279635,
+   "lost_detections_estimate_lateral_wall": 685.7784861330535,
+   "ntuple_scintillation": 148743,
+   "ntuple_detected": 73447
+  },
+  {
+   "id": "e9d7b26627fcf649",
+   "label": "SYS_abs_flat500",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 228208,
+   "fate": {
+    "absorbed in bulk": 134593,
+    "detected": 82077,
+    "absorbed at the wrapper": 10332,
+    "left the geometry": 1206
+   },
+   "left_from": {
+    "lateral wall": 1072,
+    "readout side (coupling layer and its rim)": 120,
+    "back face": 11,
+    "elsewhere": 3
+   },
+   "lost_detections_estimate": 167.96854605552957,
+   "lost_detections_estimate_lateral_wall": 142.65719827210899,
+   "ntuple_scintillation": 227964,
+   "ntuple_detected": 82077
+  },
+  {
+   "id": "26f6a6179de8f3d0",
+   "label": "MEAS_abs_measured_hi",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 209385,
+   "fate": {
+    "absorbed in bulk": 118821,
+    "detected": 77446,
+    "left the geometry": 1571,
+    "absorbed at the wrapper": 11547
+   },
+   "left_from": {
+    "lateral wall": 1392,
+    "readout side (coupling layer and its rim)": 163,
+    "back face": 13,
+    "elsewhere": 3
+   },
+   "lost_detections_estimate": 275.25956961725154,
+   "lost_detections_estimate_lateral_wall": 234.47590036975492,
+   "ntuple_scintillation": 209201,
+   "ntuple_detected": 77446
+  },
+  {
+   "id": "3b27f19cffc2b0e2",
+   "label": "MEAS_abs_measured_lamhi",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 185200,
+   "fate": {
+    "absorbed in bulk": 112899,
+    "detected": 63197,
+    "absorbed at the wrapper": 8007,
+    "left the geometry": 1097
+   },
+   "left_from": {
+    "lateral wall": 977,
+    "readout side (coupling layer and its rim)": 118,
+    "back face": 2
+   },
+   "lost_detections_estimate": 186.75955647897473,
+   "lost_detections_estimate_lateral_wall": 161.58850218763897,
+   "ntuple_scintillation": 184963,
+   "ntuple_detected": 63197
+  },
+  {
+   "id": "e7235b09c072169f",
+   "label": "MEAS_abs_measured_lamlo",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 231659,
+   "fate": {
+    "absorbed in bulk": 132587,
+    "detected": 85628,
+    "left the geometry": 1579,
+    "absorbed at the wrapper": 11865
+   },
+   "left_from": {
+    "readout side (coupling layer and its rim)": 154,
+    "lateral wall": 1418,
+    "elsewhere": 1,
+    "back face": 6
+   },
+   "lost_detections_estimate": 264.6621332518723,
+   "lost_detections_estimate_lateral_wall": 231.36822524615022,
+   "ntuple_scintillation": 231536,
+   "ntuple_detected": 85628
+  },
+  {
+   "id": "1f8b43c00e34a14e",
+   "label": "MEAS_abs_measured_lo",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 182069,
+   "fate": {
+    "absorbed in bulk": 110786,
+    "detected": 62056,
+    "left the geometry": 1140,
+    "absorbed at the wrapper": 8087
+   },
+   "left_from": {
+    "lateral wall": 1028,
+    "readout side (coupling layer and its rim)": 103,
+    "back face": 7,
+    "elsewhere": 2
+   },
+   "lost_detections_estimate": 158.32280974217954,
+   "lost_detections_estimate_lateral_wall": 138.01900938695735,
+   "ntuple_scintillation": 181916,
+   "ntuple_detected": 62056
+  },
+  {
+   "id": "d60fd4b60679f67b",
+   "label": "SYS_abs_none",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 232191,
+   "fate": {
+    "absorbed at the wrapper": 62046,
+    "detected": 151372,
+    "left the geometry": 18729,
+    "absorbed in bulk": 44
+   },
+   "left_from": {
+    "lateral wall": 18194,
+    "readout side (coupling layer and its rim)": 376,
+    "back face": 51,
+    "elsewhere": 108
+   },
+   "lost_detections_estimate": 7929.7155145169245,
+   "lost_detections_estimate_lateral_wall": 7670.392472019554,
+   "ntuple_scintillation": 231856,
+   "ntuple_detected": 151372
+  },
+  {
+   "id": "3a42d69889422645",
+   "label": "SYS_emission_fwhm55",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 180258,
+   "fate": {
+    "absorbed in bulk": 111432,
+    "detected": 59332,
+    "absorbed at the wrapper": 8044,
+    "left the geometry": 1450
+   },
+   "left_from": {
+    "lateral wall": 1325,
+    "readout side (coupling layer and its rim)": 114,
+    "back face": 7,
+    "elsewhere": 4
+   },
+   "lost_detections_estimate": 235.92070467808082,
+   "lost_detections_estimate_lateral_wall": 208.81943591332205,
+   "ntuple_scintillation": 180085,
+   "ntuple_detected": 59332
+  },
+  {
+   "id": "04760b8b70d31286",
+   "label": "SYS_emission_fwhm75",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 206984,
+   "fate": {
+    "absorbed in bulk": 132396,
+    "detected": 64355,
+    "absorbed at the wrapper": 8882,
+    "left the geometry": 1351
+   },
+   "left_from": {
+    "lateral wall": 1279,
+    "readout side (coupling layer and its rim)": 65,
+    "elsewhere": 2,
+    "back face": 5
+   },
+   "lost_detections_estimate": 237.8495336866303,
+   "lost_detections_estimate_lateral_wall": 225.32647847835543,
+   "ntuple_scintillation": 206758,
+   "ntuple_detected": 64355
+  },
+  {
+   "id": "96cc9177e9f1a43f",
+   "label": "SYS_emission_jacobian",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 144024,
+   "fate": {
+    "absorbed in bulk": 87790,
+    "detected": 48177,
+    "left the geometry": 1256,
+    "absorbed at the wrapper": 6801
+   },
+   "left_from": {
+    "readout side (coupling layer and its rim)": 66,
+    "lateral wall": 1176,
+    "back face": 11,
+    "elsewhere": 3
+   },
+   "lost_detections_estimate": 252.73548042714336,
+   "lost_detections_estimate_lateral_wall": 236.2845256461106,
+   "ntuple_scintillation": 143892,
+   "ntuple_detected": 48177
+  },
+  {
+   "id": "4ba1829e20798f84",
+   "label": "SYS_meas_emission_mao",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 244668,
+   "fate": {
+    "absorbed in bulk": 138843,
+    "detected": 90749,
+    "absorbed at the wrapper": 13078,
+    "left the geometry": 1998
+   },
+   "left_from": {
+    "lateral wall": 1799,
+    "readout side (coupling layer and its rim)": 184,
+    "back face": 11,
+    "elsewhere": 4
+   },
+   "lost_detections_estimate": 345.4276118100631,
+   "lost_detections_estimate_lateral_wall": 307.508420976066,
+   "ntuple_scintillation": 244411,
+   "ntuple_detected": 90749
+  },
+  {
+   "id": "825f96e6e3c9071f",
+   "label": "SYS_meas_emission_sslg4",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 217694,
+   "fate": {
+    "absorbed in bulk": 121795,
+    "detected": 81880,
+    "absorbed at the wrapper": 12072,
+    "left the geometry": 1947
+   },
+   "left_from": {
+    "readout side (coupling layer and its rim)": 133,
+    "lateral wall": 1800,
+    "back face": 13,
+    "elsewhere": 1
+   },
+   "lost_detections_estimate": 365.1684678632268,
+   "lost_detections_estimate_lateral_wall": 334.9688346434326,
+   "ntuple_scintillation": 217495,
+   "ntuple_detected": 81880
+  },
+  {
+   "id": "58e9629a86d508f3",
+   "label": "SYS_meas_fwhm55",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 195177,
+   "fate": {
+    "absorbed in bulk": 113342,
+    "detected": 71294,
+    "absorbed at the wrapper": 9517,
+    "left the geometry": 1024
+   },
+   "left_from": {
+    "readout side (coupling layer and its rim)": 130,
+    "lateral wall": 887,
+    "back face": 6,
+    "elsewhere": 1
+   },
+   "lost_detections_estimate": 166.59437731370446,
+   "lost_detections_estimate_lateral_wall": 137.6334873266892,
+   "ntuple_scintillation": 194997,
+   "ntuple_detected": 71294
+  },
+  {
+   "id": "b2a49699e1170fb4",
+   "label": "SYS_meas_fwhm75",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 202132,
+   "fate": {
+    "absorbed in bulk": 122101,
+    "detected": 69662,
+    "absorbed at the wrapper": 9239,
+    "left the geometry": 1130
+   },
+   "left_from": {
+    "lateral wall": 995,
+    "readout side (coupling layer and its rim)": 128,
+    "elsewhere": 3,
+    "back face": 4
+   },
+   "lost_detections_estimate": 185.66533143408154,
+   "lost_detections_estimate_lateral_wall": 156.77227009658708,
+   "ntuple_scintillation": 201987,
+   "ntuple_detected": 69662
+  },
+  {
+   "id": "0653c3702f5fbce4",
+   "label": "MEAS_meas_jacobian",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 209195,
+   "fate": {
+    "absorbed in bulk": 120936,
+    "detected": 76440,
+    "absorbed at the wrapper": 10397,
+    "left the geometry": 1422
+   },
+   "left_from": {
+    "lateral wall": 1288,
+    "readout side (coupling layer and its rim)": 124,
+    "back face": 9,
+    "elsewhere": 1
+   },
+   "lost_detections_estimate": 243.4116747768353,
+   "lost_detections_estimate_lateral_wall": 219.92969578830625,
+   "ntuple_scintillation": 209025,
+   "ntuple_detected": 76440
+  },
+  {
+   "id": "cc01fb11e81d79b2",
+   "label": "MEAS_meas_rindex_flat185",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 188066,
+   "fate": {
+    "absorbed in bulk": 108537,
+    "detected": 67460,
+    "absorbed at the wrapper": 10529,
+    "left the geometry": 1540
+   },
+   "left_from": {
+    "lateral wall": 1397,
+    "readout side (coupling layer and its rim)": 134,
+    "back face": 9
+   },
+   "lost_detections_estimate": 296.515853216868,
+   "lost_detections_estimate_lateral_wall": 266.3753890445865,
+   "ntuple_scintillation": 187892,
+   "ntuple_detected": 67460
+  },
+  {
+   "id": "04767e90fa2eacfa",
+   "label": "MEAS_meas_rindex_jellison",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 231688,
+   "fate": {
+    "absorbed in bulk": 135903,
+    "detected": 81548,
+    "left the geometry": 1630,
+    "absorbed at the wrapper": 12607
+   },
+   "left_from": {
+    "lateral wall": 1430,
+    "readout side (coupling layer and its rim)": 186,
+    "back face": 11,
+    "elsewhere": 3
+   },
+   "lost_detections_estimate": 250.4848371339128,
+   "lost_detections_estimate_lateral_wall": 206.44324010900525,
+   "ntuple_scintillation": 231404,
+   "ntuple_detected": 81548
+  },
+  {
+   "id": "601cffb85c3cfcc4",
+   "label": "SYS_meas_scatter_max",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 165008,
+   "fate": {
+    "absorbed in bulk": 92518,
+    "detected": 62890,
+    "left the geometry": 1128,
+    "absorbed at the wrapper": 8472
+   },
+   "left_from": {
+    "lateral wall": 1007,
+    "elsewhere": 3,
+    "back face": 11,
+    "readout side (coupling layer and its rim)": 107
+   },
+   "lost_detections_estimate": 219.1727197555203,
+   "lost_detections_estimate_lateral_wall": 190.37736345285361,
+   "ntuple_scintillation": 164848,
+   "ntuple_detected": 62890
+  },
+  {
+   "id": "c45cb3f40ecb75ec",
+   "label": "SYS_rindex_flat185",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 196514,
+   "fate": {
+    "absorbed in bulk": 124938,
+    "detected": 60906,
+    "absorbed at the wrapper": 8856,
+    "left the geometry": 1814
+   },
+   "left_from": {
+    "lateral wall": 1706,
+    "readout side (coupling layer and its rim)": 94,
+    "back face": 9,
+    "elsewhere": 5
+   },
+   "lost_detections_estimate": 282.2888774473035,
+   "lost_detections_estimate_lateral_wall": 262.81391309284106,
+   "ntuple_scintillation": 196376,
+   "ntuple_detected": 60906
+  },
+  {
+   "id": "a96249252dbee751",
+   "label": "SYS_rindex_jellison",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 244722,
+   "fate": {
+    "absorbed in bulk": 157640,
+    "detected": 74639,
+    "absorbed at the wrapper": 10752,
+    "left the geometry": 1691
+   },
+   "left_from": {
+    "lateral wall": 1556,
+    "readout side (coupling layer and its rim)": 109,
+    "back face": 22,
+    "elsewhere": 4
+   },
+   "lost_detections_estimate": 295.04418226547995,
+   "lost_detections_estimate_lateral_wall": 272.326614565818,
+   "ntuple_scintillation": 244469,
+   "ntuple_detected": 74639
+  },
+  {
+   "id": "bcc93fa1a2628593",
+   "label": "SCOPE_geom_1inch",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 12.7,
+    "half_length_mm": 12.7
+   },
+   "photons": 173083,
+   "fate": {
+    "absorbed in bulk": 72005,
+    "detected": 79402,
+    "absorbed at the wrapper": 17810,
+    "left the geometry": 3866
+   },
+   "left_from": {
+    "lateral wall": 3269,
+    "readout side (coupling layer and its rim)": 597
+   },
+   "lost_detections_estimate": 900.4964176943962,
+   "lost_detections_estimate_lateral_wall": 715.2484984657531,
+   "ntuple_scintillation": 172904,
+   "ntuple_detected": 79402
+  },
+  {
+   "id": "ec0ead3a2b249fd0",
+   "label": "SCOPE_geom_2inch",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 25.4,
+    "half_length_mm": 25.4
+   },
+   "photons": 197562,
+   "fate": {
+    "absorbed in bulk": 103691,
+    "detected": 77551,
+    "absorbed at the wrapper": 13197,
+    "left the geometry": 3123
+   },
+   "left_from": {
+    "lateral wall": 2911,
+    "readout side (coupling layer and its rim)": 189,
+    "back face": 12,
+    "elsewhere": 11
+   },
+   "lost_detections_estimate": 561.2389189323617,
+   "lost_detections_estimate_lateral_wall": 516.9519550416234,
+   "ntuple_scintillation": 197387,
+   "ntuple_detected": 77551
+  },
+  {
+   "id": "3de39fcf8ca8f414",
+   "label": "SCOPE_geom_4inch",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 50.8,
+    "half_length_mm": 50.8
+   },
+   "photons": 198656,
+   "fate": {
+    "absorbed in bulk": 125435,
+    "detected": 64431,
+    "absorbed at the wrapper": 7622,
+    "left the geometry": 1168
+   },
+   "left_from": {
+    "lateral wall": 1110,
+    "back face": 6,
+    "readout side (coupling layer and its rim)": 52
+   },
+   "lost_detections_estimate": 210.7128764005915,
+   "lost_detections_estimate_lateral_wall": 199.95254850924755,
+   "ntuple_scintillation": 198480,
+   "ntuple_detected": 64431
+  },
+  {
+   "id": "2dc88ecbb72b5934",
+   "label": "SCOPE_geom_long",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 76.2
+   },
+   "photons": 263102,
+   "fate": {
+    "absorbed in bulk": 172664,
+    "detected": 75470,
+    "absorbed at the wrapper": 12970,
+    "left the geometry": 1998
+   },
+   "left_from": {
+    "readout side (coupling layer and its rim)": 135,
+    "lateral wall": 1846,
+    "back face": 17
+   },
+   "lost_detections_estimate": 406.2570927092455,
+   "lost_detections_estimate_lateral_wall": 378.4114471142112,
+   "ntuple_scintillation": 262826,
+   "ntuple_detected": 75470
+  },
+  {
+   "id": "6447c71755dd008e",
+   "label": "SCOPE_geom_short",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 12.7
+   },
+   "photons": 98995,
+   "fate": {
+    "absorbed in bulk": 51533,
+    "detected": 40714,
+    "absorbed at the wrapper": 5306,
+    "left the geometry": 1442
+   },
+   "left_from": {
+    "lateral wall": 1358,
+    "readout side (coupling layer and its rim)": 67,
+    "back face": 15,
+    "elsewhere": 2
+   },
+   "lost_detections_estimate": 255.81268732793893,
+   "lost_detections_estimate_lateral_wall": 239.97598874970885,
+   "ntuple_scintillation": 98885,
+   "ntuple_detected": 40714
+  },
+  {
+   "id": "e491e58c5b31c1e1",
+   "label": "SCOPE_couple_air",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 190023,
+   "fate": {
+    "absorbed in bulk": 146678,
+    "absorbed at the wrapper": 12343,
+    "detected": 29562,
+    "left the geometry": 1440
+   },
+   "left_from": {
+    "lateral wall": 1376,
+    "readout side (coupling layer and its rim)": 53,
+    "back face": 8,
+    "elsewhere": 3
+   },
+   "lost_detections_estimate": 94.21080928120762,
+   "lost_detections_estimate_lateral_wall": 88.62861882593558,
+   "ntuple_scintillation": 189834,
+   "ntuple_detected": 29562
+  },
+  {
+   "id": "1b323e32d1094227",
+   "label": "SCOPE_couple_gel146",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 244831,
+   "fate": {
+    "absorbed in bulk": 144504,
+    "detected": 85829,
+    "absorbed at the wrapper": 12291,
+    "left the geometry": 2207
+   },
+   "left_from": {
+    "lateral wall": 2060,
+    "readout side (coupling layer and its rim)": 119,
+    "back face": 18,
+    "elsewhere": 10
+   },
+   "lost_detections_estimate": 349.88391911613434,
+   "lost_detections_estimate_lateral_wall": 326.1961955555866,
+   "ntuple_scintillation": 244567,
+   "ntuple_detected": 85829
+  },
+  {
+   "id": "0c0ff0f2257026a1",
+   "label": "SCOPE_couple_n15",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 117543,
+   "fate": {
+    "absorbed in bulk": 68130,
+    "detected": 43509,
+    "absorbed at the wrapper": 5258,
+    "left the geometry": 646
+   },
+   "left_from": {
+    "lateral wall": 551,
+    "readout side (coupling layer and its rim)": 93,
+    "back face": 1,
+    "elsewhere": 1
+   },
+   "lost_detections_estimate": 109.22350078652528,
+   "lost_detections_estimate_lateral_wall": 85.97540806207441,
+   "ntuple_scintillation": 117485,
+   "ntuple_detected": 43509
+  },
+  {
+   "id": "2f9cb5f9f1abd3cc",
+   "label": "SCOPE_couple_n157",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 176145,
+   "fate": {
+    "absorbed in bulk": 94168,
+    "detected": 73332,
+    "absorbed at the wrapper": 7503,
+    "left the geometry": 1142
+   },
+   "left_from": {
+    "lateral wall": 970,
+    "readout side (coupling layer and its rim)": 162,
+    "back face": 10
+   },
+   "lost_detections_estimate": 273.7734563221336,
+   "lost_detections_estimate_lateral_wall": 228.7604220588174,
+   "ntuple_scintillation": 175929,
+   "ntuple_detected": 73332
+  },
+  {
+   "id": "be512c37bda5041a",
+   "label": "SCOPE_finish_ground",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 127762,
+   "fate": {
+    "absorbed in bulk": 60409,
+    "detected": 62596,
+    "absorbed at the wrapper": 4627,
+    "left the geometry": 130
+   },
+   "left_from": {
+    "lateral wall": 37,
+    "readout side (coupling layer and its rim)": 93
+   },
+   "lost_detections_estimate": 65.82790806736021,
+   "lost_detections_estimate_lateral_wall": 20.2810020984869,
+   "ntuple_scintillation": 127643,
+   "ntuple_detected": 62596
+  },
+  {
+   "id": "e399ca7947987fc4",
+   "label": "SCOPE_reflectance_100",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 151615,
+   "fate": {
+    "absorbed in bulk": 95498,
+    "detected": 54956,
+    "left the geometry": 1161
+   },
+   "left_from": {
+    "lateral wall": 1036,
+    "readout side (coupling layer and its rim)": 117,
+    "back face": 7,
+    "elsewhere": 1
+   },
+   "lost_detections_estimate": 193.02125772067922,
+   "lost_detections_estimate_lateral_wall": 165.8009704288434,
+   "ntuple_scintillation": 151437,
+   "ntuple_detected": 54956
+  },
+  {
+   "id": "ca010deaa8454e0a",
+   "label": "SCOPE_reflectance_095",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 214154,
+   "fate": {
+    "absorbed at the wrapper": 40566,
+    "detected": 69985,
+    "absorbed in bulk": 102543,
+    "left the geometry": 1060
+   },
+   "left_from": {
+    "lateral wall": 941,
+    "readout side (coupling layer and its rim)": 111,
+    "back face": 6,
+    "elsewhere": 2
+   },
+   "lost_detections_estimate": 164.2150723989822,
+   "lost_detections_estimate_lateral_wall": 141.1211067888621,
+   "ntuple_scintillation": 213916,
+   "ntuple_detected": 69985
+  },
+  {
+   "id": "892190bc78bebfeb",
+   "label": "SCOPE_reflectance_090",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 38.1,
+    "half_length_mm": 38.1
+   },
+   "photons": 212048,
+   "fate": {
+    "absorbed at the wrapper": 63456,
+    "detected": 63681,
+    "absorbed in bulk": 84220,
+    "left the geometry": 691
+   },
+   "left_from": {
+    "readout side (coupling layer and its rim)": 96,
+    "lateral wall": 590,
+    "back face": 5
+   },
+   "lost_detections_estimate": 101.61359984350166,
+   "lost_detections_estimate_lateral_wall": 85.47543628559312,
+   "ntuple_scintillation": 211812,
+   "ntuple_detected": 63681
+  },
+  {
+   "id": "4662d792a65103de",
+   "label": "SCOPE_ctrl_flatabs_1inch",
+   "events": 10,
+   "bare_crystal": false,
+   "crystal": {
+    "radius_mm": 12.7,
+    "half_length_mm": 12.7
+   },
+   "photons": 34381,
+   "fate": {
+    "absorbed in bulk": 6439,
+    "detected": 19503,
+    "absorbed at the wrapper": 6723,
+    "left the geometry": 1716
+   },
+   "left_from": {
+    "lateral wall": 1585,
+    "readout side (coupling layer and its rim)": 131
+   },
+   "lost_detections_estimate": 541.2071282957295,
+   "lost_detections_estimate_lateral_wall": 493.85345686727476,
+   "ntuple_scintillation": 34342,
+   "ntuple_detected": 19503
+  }
+ ]
+}
