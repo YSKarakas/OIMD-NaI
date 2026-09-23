@@ -56,12 +56,12 @@ G3 -- STATISTICAL RESOLUTION (lower bound)
 G4 -- LIGHT-COLLECTION EFFICIENCY BY WRAPPING
 ==============================================================================
   wrapping           LCE    +- sem    vs none
-  tio             0.3649    0.0004     1.400x
-  esr             0.3549    0.0001     1.362x
-  teflon          0.3543    0.0001     1.359x
-  tyvek           0.3390    0.0001     1.301x
-  lumirror        0.3347    0.0001     1.284x
-  none            0.2606    0.0002     1.000x
+  tio             0.3645    0.0004     1.400x
+  esr             0.3545    0.0001     1.362x
+  teflon          0.3539    0.0001     1.359x
+  tyvek           0.3387    0.0001     1.301x
+  lumirror        0.3344    0.0001     1.284x
+  none            0.2604    0.0002     1.000x
 
   measured on one CsI crystal by arXiv:1602.02983, for comparison:
     teflon              91 p.e./MeV  1.152x aluminium
@@ -76,41 +76,41 @@ G4 -- LIGHT-COLLECTION EFFICIENCY BY WRAPPING
 ==============================================================================
 G5 -- OPTICAL-TRANSPORT CLOSURE (lossless wrapper, no bulk absorption)
 ==============================================================================
-  ground surface, LCE           0.99906 +- 0.00002   (1240 full-energy events)
-  deficit                       0.094 %
+  ground surface, LCE           0.99803 +- 0.00001   (1240 full-energy events)
+  deficit                       0.197 %
   VERDICT                       PASS  (a lossless configuration must deliver its light to within 1 %)
-  polished companion, LCE       0.78708 +- 0.00052   (21.3 % of the light never delivered)
+  polished companion, LCE       0.78627 +- 0.00051   (21.4 % of the light never delivered)
 
 ==============================================================================
 OPTICAL INPUT SYSTEMATICS -- LCE under one-at-a-time variation
 ==============================================================================
   variant                      LCE    +- sem   vs baseline
-  baseline                  0.3219    0.0001            --
-  abs_brown                 0.2981    0.0001        -7.38 %
-  abs_edge010               0.3973    0.0001       +23.42 %
-  abs_edge025               0.2700    0.0002       -16.11 %
-  abs_flat1000              0.4288    0.0001       +33.21 %
-  abs_flat2000              0.4928    0.0002       +53.10 %
-  abs_flat500               0.3598    0.0001       +11.79 %
-  abs_measured              0.3543    0.0001       +10.07 %
-  abs_measured_hi           0.3690    0.0001       +14.63 %
-  abs_measured_lamhi        0.3396    0.0001        +5.50 %
-  abs_measured_lamlo        0.3676    0.0001       +14.21 %
-  abs_measured_lo           0.3417    0.0001        +6.16 %
-  abs_none                  0.6514    0.0004      +102.36 %
-  emission_fwhm55           0.3311    0.0001        +2.86 %
-  emission_fwhm75           0.3123    0.0002        -2.97 %
-  emission_jacobian         0.3358    0.0001        +4.33 %
-  meas_emission_mao         0.3694    0.0001       +14.75 %
-  meas_emission_sslg4       0.3784    0.0001       +17.56 %
-  meas_fwhm55               0.3644    0.0001       +13.20 %
-  meas_fwhm75               0.3435    0.0001        +6.72 %
-  meas_jacobian             0.3638    0.0001       +13.02 %
-  meas_rindex_flat185       0.3553    0.0001       +10.37 %
-  meas_rindex_jellison      0.3522    0.0001        +9.41 %
-  meas_scatter_max          0.3799    0.0001       +18.02 %
-  rindex_flat185            0.3094    0.0002        -3.87 %
-  rindex_jellison           0.3079    0.0002        -4.35 %
+  baseline                  0.3215    0.0001            --
+  abs_brown                 0.2978    0.0001        -7.38 %
+  abs_edge010               0.3969    0.0001       +23.43 %
+  abs_edge025               0.2697    0.0002       -16.11 %
+  abs_flat1000              0.4283    0.0001       +33.21 %
+  abs_flat2000              0.4923    0.0002       +53.10 %
+  abs_flat500               0.3595    0.0001       +11.79 %
+  abs_measured              0.3539    0.0001       +10.07 %
+  abs_measured_hi           0.3686    0.0001       +14.63 %
+  abs_measured_lamhi        0.3393    0.0001        +5.51 %
+  abs_measured_lamlo        0.3673    0.0001       +14.21 %
+  abs_measured_lo           0.3414    0.0001        +6.16 %
+  abs_none                  0.6507    0.0004      +102.36 %
+  emission_fwhm55           0.3308    0.0001        +2.86 %
+  emission_fwhm75           0.3120    0.0002        -2.97 %
+  emission_jacobian         0.3355    0.0001        +4.33 %
+  meas_emission_mao         0.3690    0.0001       +14.76 %
+  meas_emission_sslg4       0.3780    0.0001       +17.56 %
+  meas_fwhm55               0.3640    0.0001       +13.20 %
+  meas_fwhm75               0.3432    0.0001        +6.72 %
+  meas_jacobian             0.3634    0.0001       +13.02 %
+  meas_rindex_flat185       0.3549    0.0001       +10.37 %
+  meas_rindex_jellison      0.3518    0.0001        +9.41 %
+  meas_scatter_max          0.3795    0.0001       +18.02 %
+  rindex_flat185            0.3091    0.0002        -3.87 %
+  rindex_jellison           0.3075    0.0002        -4.36 %
 
   Self-absorption seen directly -- mean wavelength, emitted vs detected:
   variant                  emitted  detected     shift
@@ -155,67 +155,67 @@ OPTICAL INPUT SYSTEMATICS -- LCE under one-at-a-time variation
 MEASURED ATTENUATION CURVE -- digitised from Mao et al. Fig. 2
 ==============================================================================
   variant                      LCE    +- sem   vs baseline
-  baseline (edge model)     0.3219    0.0002            --
-  abs_measured              0.3543    0.0001       +10.07 %
-  abs_measured_hi           0.3690    0.0001       +14.63 %
-  abs_measured_lamhi        0.3396    0.0001        +5.50 %
-  abs_measured_lamlo        0.3676    0.0001       +14.21 %
-  abs_measured_lo           0.3417    0.0001        +6.16 %
-  meas_emission_mao         0.3694    0.0001       +14.75 %
-  meas_emission_sslg4       0.3784    0.0001       +17.56 %
-  meas_fwhm55               0.3644    0.0001       +13.20 %
-  meas_fwhm75               0.3435    0.0001        +6.72 %
-  meas_jacobian             0.3638    0.0001       +13.02 %
-  meas_rindex_flat185       0.3553    0.0001       +10.37 %
-  meas_rindex_jellison      0.3522    0.0001        +9.41 %
-  meas_scatter_max          0.3799    0.0001       +18.02 %
+  baseline (edge model)     0.3215    0.0002            --
+  abs_measured              0.3539    0.0001       +10.07 %
+  abs_measured_hi           0.3686    0.0001       +14.63 %
+  abs_measured_lamhi        0.3393    0.0001        +5.51 %
+  abs_measured_lamlo        0.3673    0.0001       +14.21 %
+  abs_measured_lo           0.3414    0.0001        +6.16 %
+  meas_emission_mao         0.3690    0.0001       +14.76 %
+  meas_emission_sslg4       0.3780    0.0001       +17.56 %
+  meas_fwhm55               0.3640    0.0001       +13.20 %
+  meas_fwhm75               0.3432    0.0001        +6.72 %
+  meas_jacobian             0.3634    0.0001       +13.02 %
+  meas_rindex_flat185       0.3549    0.0001       +10.37 %
+  meas_rindex_jellison      0.3518    0.0001        +9.41 %
+  meas_scatter_max          0.3795    0.0001       +18.02 %
 
   light-collection efficiency from the measured curve:
-      0.3543 +- 0.0195  (5.5 %)
+      0.3539 +- 0.0195  (5.5 %)
         transmittance axis  +- 0.0136 (3.8 %)
         wavelength axis     +- 0.0140 (4.0 %)
   for comparison, the scanned-slope family spanned 40 % of baseline
 
   ENVELOPE over the family built on the measured curve
-      abs_measured_lamhi       0.3396
-      abs_measured_lo          0.3417
-      meas_fwhm75              0.3435
-      meas_rindex_jellison     0.3522
-      abs_measured             0.3543
-      meas_rindex_flat185      0.3553
-      meas_jacobian            0.3638
-      meas_fwhm55              0.3644
-      abs_measured_lamlo       0.3676
-      abs_measured_hi          0.3690
-      meas_emission_mao        0.3694
-      meas_emission_sslg4      0.3784
-      meas_scatter_max         0.3799
-      spread 11.4 % of the measured central value (0.3396 .. 0.3799)
+      abs_measured_lamhi       0.3393
+      abs_measured_lo          0.3414
+      meas_fwhm75              0.3432
+      meas_rindex_jellison     0.3518
+      abs_measured             0.3539
+      meas_rindex_flat185      0.3549
+      meas_jacobian            0.3634
+      meas_fwhm55              0.3640
+      abs_measured_lamlo       0.3673
+      abs_measured_hi          0.3686
+      meas_emission_mao        0.3690
+      meas_emission_sslg4      0.3780
+      meas_scatter_max         0.3795
+      spread 11.4 % of the measured central value (0.3393 .. 0.3795)
 
 ==============================================================================
 ARRANGEMENT SCAN -- geometry, coupling and surface finish
 ==============================================================================
   variant                    LCE    +- sem   vs baseline
-  baseline                0.3543    0.0001            --
-  couple_air              0.1572    0.0001       -55.63 %
-  couple_gel146           0.3519    0.0001        -0.68 %
-  couple_n15              0.3697    0.0001        +4.36 %
-  couple_n157             0.4145    0.0002       +17.00 %
-  ctrl_flatabs_1inch      0.5723    0.0005       +61.54 %
-  ctrl_flatabs_3inch      0.4928    0.0002       +39.10 %
-  finish_ground           0.4886    0.0002       +37.92 %
-  geom_1inch              0.4585    0.0003       +29.40 %
-  geom_2inch              0.3948    0.0001       +11.44 %
-  geom_4inch              0.3246    0.0001        -8.37 %
-  geom_long               0.2896    0.0001       -18.25 %
-  geom_short              0.4132    0.0002       +16.62 %
-  reflectance_090         0.3005    0.0002       -15.18 %
-  reflectance_095         0.3271    0.0001        -7.67 %
-  reflectance_100         0.3629    0.0001        +2.43 %
+  baseline                0.3539    0.0001            --
+  couple_air              0.1570    0.0001       -55.63 %
+  couple_gel146           0.3515    0.0001        -0.68 %
+  couple_n15              0.3694    0.0001        +4.36 %
+  couple_n157             0.4141    0.0002       +17.00 %
+  ctrl_flatabs_1inch      0.5716    0.0004       +61.50 %
+  ctrl_flatabs_3inch      0.4923    0.0002       +39.09 %
+  finish_ground           0.4881    0.0002       +37.92 %
+  geom_1inch              0.4579    0.0003       +29.37 %
+  geom_2inch              0.3944    0.0001       +11.43 %
+  geom_4inch              0.3243    0.0001        -8.37 %
+  geom_long               0.2894    0.0001       -18.24 %
+  geom_short              0.4127    0.0002       +16.61 %
+  reflectance_090         0.3002    0.0002       -15.18 %
+  reflectance_095         0.3268    0.0001        -7.67 %
+  reflectance_100         0.3625    0.0001        +2.43 %
 
-  geometry           envelope   47.6 % of baseline  (0.2896 .. 0.4585)
-  readout coupling   envelope   72.6 % of baseline  (0.1572 .. 0.4145)
-  surface finish     envelope   37.9 % of baseline  (0.3543 .. 0.4886)
+  geometry           envelope   47.6 % of baseline  (0.2894 .. 0.4579)
+  readout coupling   envelope   72.6 % of baseline  (0.1570 .. 0.4141)
+  surface finish     envelope   37.9 % of baseline  (0.3539 .. 0.4881)
   crystal optics     envelope   39.5 % of baseline  (defensible models, from the scan above)
 
   Read this as scope, not as a ranking: the geometry entries are a
