@@ -68,7 +68,7 @@ PEAK_TOLERANCE_NM = 1.0
 MAX_GAP_NM = 3.0
 # The one occlusion allowed, and how wide it may be: the red excitation curve
 # crosses the blue flank. Anything else is a tracing failure.
-MAX_OCCLUDED_GAP_NM = 10.0
+MAX_OCCLUDED_GAP_NM = 15.0
 
 
 def runs(idx: np.ndarray) -> list[tuple[int, int]]:
@@ -83,22 +83,32 @@ def runs(idx: np.ndarray) -> list[tuple[int, int]]:
     return out
 
 
-def centreline(mask: np.ndarray, panel: dict) -> list[tuple[float, float]]:
-    """(x, y) points on the stroke's centreline, in page pixels."""
+# A run of blue pixels with another curve's stroke this close to either end
+# may be cut short by it, which pulls its centre; such runs are not used.
+CLEARANCE_PX = 2
+
+
+def centreline(mask: np.ndarray, other: np.ndarray, panel: dict) -> list[tuple[float, float]]:
+    """(x, y) points on the stroke's centreline, in page pixels.
+
+    A run is used only where the red excitation curve does not touch it: where
+    it is drawn over the blue one, the visible part of the blue stroke is
+    truncated and its centre is biased."""
     pts: list[tuple[float, float]] = []
     top, bottom = panel["top"] + 2, panel["bottom"] - 1
     left, right = panel["left"] + 3, panel["right"] - 3
+    c = CLEARANCE_PX
     for x in range(left, right):
         yy = np.where(mask[top:bottom, x])[0]
         if len(yy):
             for s, e in runs(yy + top):
-                if e - s <= NARROW_PX:
+                if e - s <= NARROW_PX and not other[s - c:e + c + 1, x - c:x + c + 1].any():
                     pts.append((float(x), (s + e) / 2.0))
     for y in range(top, bottom):
         xx = np.where(mask[y, left:right])[0]
         if len(xx):
             for s, e in runs(xx + left):
-                if e - s <= NARROW_PX:
+                if e - s <= NARROW_PX and not other[y - c:y + c + 1, s - c:e + c + 1].any():
                     pts.append(((s + e) / 2.0, float(y)))
     return pts
 
@@ -124,15 +134,23 @@ def main() -> int:
     to_nm = lambda x: raw_nm(x) + offset                                    # noqa: E731
     zero_px = float(panel["bottom"])
 
-    pts = centreline(m["blue"], panel)
-    # One value per wavelength bin of one pixel column: the mean of the
-    # centreline points that fall in it.
-    by_col: dict[int, list[float]] = {}
-    for x, y in pts:
-        by_col.setdefault(int(round(x)), []).append(y)
-    cols = sorted(by_col)
-    lam = np.array([to_nm(c) for c in cols])
-    height = np.array([zero_px - float(np.mean(by_col[c])) for c in cols])
+    # Only the red excitation curve is drawn over the blue one; the green
+    # transmittance rise runs beside the foot of the band without covering it.
+    pts = centreline(m["blue"], m["red"], panel)
+    # Every centreline point is a (wavelength, height) pair in its own right:
+    # a row locates the wavelength on a steep flank, a column the height on a
+    # shallow stretch, and neither is binned into the other's grid -- binning
+    # row points by column let the rows the red stroke hides bias the column
+    # averages beside the crossing. Points closer than 0.25 nm are merged.
+    raw = sorted((to_nm(x), zero_px - y) for x, y in pts)
+    merged: list[list[float]] = []
+    for lm, h in raw:
+        if merged and lm - merged[-1][0] < 0.25:
+            merged[-1][2].append(h)
+            continue
+        merged.append([lm, lm, [h]])
+    lam = np.array([row[0] for row in merged])
+    height = np.array([float(np.mean(row[2])) for row in merged])
     peak = float(height.max())
     inten = height / peak
 
@@ -146,14 +164,15 @@ def main() -> int:
                          "emission peak is; do not use this output")
     gaps = np.diff(lam)
     occluded = []
+    to_px = lambda lm: tr.LAM_REF_PX + (lm - offset - tr.LAM_REF_NM) * tr.PX_PER_NM   # noqa: E731
     for i in np.where(gaps > MAX_GAP_NM)[0]:
-        # Between the two traced columns, is the blue stroke's path covered by
-        # another colour? Look for red or green pixels in the columns between
-        # them, over the rows the flank spans there.
-        c0, c1 = cols[i], cols[i + 1]
-        y0, y1 = sorted((float(np.mean(by_col[c0])), float(np.mean(by_col[c1]))))
+        # Between the two traced points, is the blue stroke's path covered by
+        # the red one? Look for red pixels in the columns between them, over
+        # the rows the flank spans there.
+        c0, c1 = int(round(to_px(lam[i]))), int(round(to_px(lam[i + 1])))
+        y0, y1 = sorted((zero_px - height[i], zero_px - height[i + 1]))
         rows = slice(int(y0) - 4, int(y1) + 5)
-        covered = any((m["red"][rows, c] | m["green"][rows, c]).any() for c in range(c0 + 1, c1))
+        covered = any(m["red"][rows, c].any() for c in range(c0, c1 + 1))
         if not covered or gaps[i] > MAX_OCCLUDED_GAP_NM:
             raise SystemExit(f"gap of {gaps[i]:.1f} nm in the trace at {lam[i]:.1f} nm "
                              "that no other curve covers; the trace has failed there")

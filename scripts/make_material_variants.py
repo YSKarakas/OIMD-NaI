@@ -243,9 +243,11 @@ MAO_PL_BAND = TabulatedEmission(
     "sample normal so that internal absorption does not shape the spectrum; "
     "excited by ultraviolet light rather than ionising radiation, and not "
     "stated to be corrected for the instrument's spectral response. Peak "
-    "410 nm, full width at half maximum 90 nm; the traced band runs from 351 "
-    "to 603 nm. Tabulated as plotted, per unit wavelength, so Geant4 samples "
-    "it in photon energy under the same convention as the baseline Gaussian."))
+    "409 nm (410 nm printed in the panel), full width at half maximum 90 nm; "
+    "the traced band runs from 351 to 603 nm, and 13 nm of its blue flank, "
+    "where the excitation curve is drawn over it, is bridged linearly. "
+    "Tabulated as plotted, per unit wavelength, so Geant4 samples it in "
+    "photon energy under the same convention as the baseline Gaussian."))
 
 TRANSPARENT = NullAttenuation(source=(
     "NO BULK ATTENUATION AT ALL, which is what one published Geant4 material "
