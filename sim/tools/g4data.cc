@@ -255,15 +255,23 @@ int DumpAttenuation(const std::map<G4String, G4String>& opts) {
   f << "# Photon attenuation computed by Geant4 " << G4Version << "\n";
   f << "# Physics list: G4EmStandardPhysics_option4\n";
   f << "# Material: " << label << ", density " << density << " g/cm3\n";
-  f << "# attenuation_length is the total mean free path (1/mu).\n";
-  f << "energy_MeV,attenuation_length_cm,mu_per_cm,mu_over_rho_cm2_per_g\n";
+  f << "# attenuation_length is the total mean free path (1/mu); it includes\n";
+  f << "# coherent (Rayleigh) scattering. The per-process columns are the four\n";
+  f << "# terms of that total: pair conversion, Compton, photoelectric, Rayleigh.\n";
+  f << "energy_MeV,attenuation_length_cm,mu_per_cm,mu_over_rho_cm2_per_g,"
+       "mu_conv_per_cm,mu_compt_per_cm,mu_phot_per_cm,mu_rayl_per_cm\n";
   f << std::setprecision(10);
+  const G4ParticleDefinition* gamma = G4Gamma::Gamma();
   for (const auto& tok : Split(energies, ',')) {
     const G4double e = std::stod(tok) * MeV;
     const G4double lambda = calc.ComputeGammaAttenuationLength(e, mat);
     const G4double lambda_cm = lambda / cm;
     const G4double mu = (lambda_cm > 0.0) ? 1.0 / lambda_cm : 0.0;
-    f << e / MeV << "," << lambda_cm << "," << mu << "," << mu / density << "\n";
+    f << e / MeV << "," << lambda_cm << "," << mu << "," << mu / density;
+    for (const char* proc : {"conv", "compt", "phot", "Rayl"}) {
+      f << "," << calc.ComputeCrossSectionPerVolume(e, gamma, proc, mat, 0.0) * cm;
+    }
+    f << "\n";
   }
   std::cout << "g4data: wrote " << out << "\n";
   delete rm;

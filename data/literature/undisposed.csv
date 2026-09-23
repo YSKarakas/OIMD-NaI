@@ -1,0 +1,65 @@
+# Retrieved full texts with no recorded disposition: neither extracted
+# (ly_records.csv) nor read and deferred with a reason
+# (ly_records.csv.pending). Written by scripts/list_undisposed.py.
+# klass is the keyword classification of scripts/scan_yields.py. No
+# reason was recorded for leaving any of these unread.
+arxiv_id,klass,year,title
+2112.04990v1,absolute,2021,The optical simulation model of the DarkSide-20k Veto detector
+2209.02885v3,absolute,2022,Testing the Gallium Anomaly
+2512.04965v3,absolute,2025,Characterization of thin optical filters for high purity Cherenkov light readout from scintillating crystals
+2604.14060v2,absolute,2026,Observation of light production by charged particles in WLS fibers
+2608.21171v1,absolute,2026,Preventing quart-NaI adhesion in Bridgman growth using ammonium iodide
+1809.10840v2,detected,2018,Characterization and Performance of PADME's Cherenkov-Based Small-Angle Calorimeter
+2212.13054v3,detected,2022,Developing a single phase liquid argon detector with SiPM readout
+0706.2422v1,relative,2007,Pulse-shape discrimination with PbWO$_4$ crystal scintillators
+1111.2147v1,relative,2011,Novel Scintillation Material - ZnO Transparent Ceramics
+1305.1560v2,relative,2013,New Approaches for Improvement of TOF-PET
+1503.00132v1,relative,2015,Performance assessment of CsI(Tl) screens on various substrates for X-ray imaging
+1504.05489v1,relative,2015,Temperature dependence of scintillation properties of SrMoO4
+1510.05787v1,relative,2015,Low-Temperature Scintillation Properties of CaWO4 Crystals for Rare-Event Searches
+1608.07556v1,relative,2016,Radiation Hardness of 30 cm Long CsI(Tl) Crystals
+1909.02994v1,relative,2019,The CUPID-Mo experiment for neutrinoless double-beta decay: performance and prospects
+2005.11659v1,relative,2020,Scintillation properties of $({\rm Zn}_{0.9} {\rm Pb}_{0.1})({\rm W}_{0.9} {\rm Mo}_{0.1}){\rm O}_4$ and $({\rm Zn}_{0.9} {\rm Cd}_{0.1})({\rm W}_{0.9} {\rm Mo}_{0.1}){\rm O}_4$ mixed crystals
+2401.00226v2,relative,2023,The Intrinsic Energy Resolution of LaBr$_3$(Ce) Crystal for GECAM
+2402.05026v5,relative,2024,Characterization and Optimization of a Cryogenic Pure CsI Detector with Remarkable Light Yield and Unprecedented Energy Resolution for CLOVERS Experiment
+2508.15513v1,relative,2025,Modeling of Light Production in Inorganic Scintillators
+2511.20210v1,relative,2025,Drastic reduction of the slow scintillation component in highly luminescent Ce3+ and Mg2+ doped Lu2.5Gd0.5Ga2Al3O12 garnet powders
+0705.3703v1,none,2007,Branching Transport Model of Alkali-Halide Scintillators
+0707.0766v1,none,2007,Interpretation of Light-Quenching Factor Measurements
+0806.4483v3,none,2008,Future use of silicon photomultiplier for KAOS at MAMI and PANDA at FAIR
+1002.0560v2,none,2010,First test of a cryogenic scintillation module with a CaWO4 scintillator and a low-temperature photomultiplier down to 6 K
+1009.1321v1,none,2010,Scintillation properties of ceramics based on zinc oxide
+1308.6085v1,none,2013,Characterization of Large Volume 3.5 x 8 inches LaBr3:Ce Detectors
+1404.7846v1,none,2014,Impact of geometry on light collection efficiency of scintillation detectors for cryogenic rare event searches
+1502.03931v2,none,2015,A First Comparison of the responses of a He4-based fast-neutron detector and a NE-213 liquid-scintillator reference detector
+1503.03544v1,none,2015,Design Optimization of a Small-animal SPECT System Using LGSO Continuous Crystal and a Micro Parallel-hole Collimator
+1507.08305v1,none,2015,Test of Lightguides for the J-PET Detector
+1510.03030v1,none,2015,Tests of Scintillator+WLS strips for Muon System at Future Colliders
+1511.08424v2,none,2015,"Temperature dependence of alpha-induced scintillation in the 1,1,4,4-tetraphenyl-1,3-butadiene wavelength shifter"
+1512.06729v3,none,2015,Time and Position Resolution of the Scintillator Strips for a Muon System at Future Colliders
+1604.04128v1,none,2016,A measurement method of a detector response function for monochromatic electrons based on the Compton scattering
+1608.08778v2,none,2016,The light-yield response of a NE-213 liquid-scintillator detector measured using 2 -- 6 MeV tagged neutrons
+1611.00241v2,none,2016,Effect of Low Electric Fields on Alpha Scintillation Light Yield in Liquid Argon
+1801.07909v2,none,2018,First scintillating bolometer tests of a CLYMENE R&D on Li$_2$MoO$_4$ scintillators towards a large-scale double-beta decay experiment
+1906.09296v2,none,2019,Production and characterization of a PbMoO$_4$ cryogenic detector from archaeological Pb
+1911.13217v1,none,2019,Na-based crystal scintillators for next-generation rare event searches
+2001.07518v2,none,2020,Value-assigned pulse shape discrimination for neutron detectors
+2002.06415v1,none,2020,Optimization study of scintillator shape of electromagnetic calorimeter for Higgs factories
+2003.01485v2,none,2020,Performance recovery of long CsI(Tl) scintillator crystals with APD-based readout
+2005.09087v1,none,2020,Optical properties of YAG:Ce and GGG:Ce scintillation crystals irradiated with a high fluence proton beam
+2107.11571v1,none,2021,Performance of ZnSe-based scintillators at low temperatures
+2108.13929v3,none,2021,Scintillation light increase of carbontetrafluoride gas at low temperature
+2109.07362v1,none,2021,Performance evaluation of GAGG(Ce)/LFS scintillator + MPPC array readout with ASIC
+2110.03306v1,none,2021,Scintillation characteristics of a NaI(Tl) crystal at low-temperature with silicon photomultiplier
+2111.03660v2,none,2021,Scintillator Tile Batch Test of CEPC AHCAL
+2207.05496v1,none,2022,A high-performance custom photodetection system to probe the light yield enhancement in oriented crystals
+2212.04342v1,none,2022,"Development of a large-mass, low-threshold detector system with simultaneous measurements of athermal phonons and scintillation light"
+2408.01340v1,none,2024,On the origin of the light yield enhancement in polymeric composite scintillators loaded with dense nanoparticles
+2410.07141v1,none,2024,Large-scale self-assembled nanophotonic scintillators for X-ray imaging
+2410.22863v2,none,2024,Impact of extreme ultraviolet radiation on the scintillation of pure and xenon-doped liquid argon
+2505.01961v1,none,2025,Pre-study of a Li2MoO4 based bolometer for 100Mo neutrinoless double beta decay experiment in China
+2509.20390v4,none,2025,Optical characterization of wavelength-shifting and scintillating-wavelength-shifting fibers
+2603.06429v2,none,2026,"Comprehensive characterization of a YAG:Ce scintillator: light yield, alpha quenching and pulse-shape discrimination"
+2606.16007v1,none,2026,Dosimetric characterization of a nanophotonic scintillator and applications to real-time in-vivo total body irradiation dosimetry
+2608.14959v1,none,2026,Development of a 10 mol% Rubidium-doped CsI Crystal for $^{87}$Rb Beta-Spectroscopy and Sterile Neutrino Searches
+2608.21397v2,none,2026,Optical characterization and ionizing-radiation response of the BCF-20XL scintillating-wavelength-shifting fiber
