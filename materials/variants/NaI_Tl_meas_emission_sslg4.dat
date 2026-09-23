@@ -1,0 +1,319 @@
+# NaI:Tl -- material specification for the optical simulation.
+#
+# GENERATED FILE.  Produced by scripts/make_material_variants.py from the models
+# in scint/optical.py.  Do not edit by hand: regenerate instead, so that the
+# provenance notes below cannot drift away from the code that made the numbers.
+#
+# VARIANT: measured absorption + the SSLG4 tabulated emission band
+# The one openly distributed machine-readable NaI(Tl) emission band, on the
+# measured attenuation. Replaces this study's assumed Gaussian with a
+# published table whose peak and width both lie outside the assumed band, so
+# what it measures is the cost of the shape assumption rather than of the
+# width scan.
+#
+# PROVENANCE OF THE NON-OPTICAL PARAMETERS
+#
+#   src_A = Bonesini, arXiv:2505.06929, Table 1
+#   src_B = Miller et al., IEEE TNS 72 197 (2025), arXiv:2403.02668, Table I (Geant4 parameter compilation)
+#
+# NOTE -- the two sources disagree about this material:
+#   light yield   src_A 38,000 ph/MeV   src_B 41,000 ph/MeV      (7.9 %)
+#   decay         src_A 250 ns single   src_B 220 ns (96 %) + 1500 ns (4 %)
+# The structure of the decay differs, not merely its value. src_B is used here
+# because it is the compilation assembled specifically for Geant4 and benchmarked
+# against measurement; the disagreement is itself a subject of this study.
+
+name          = NaI_Tl
+density_g_cm3 = 3.67                    # src_A; PDG gives 3.667 for pure NaI
+composition   = Na:0.153373922,I:0.846626078   # exact, from stoichiometry
+
+scintillation_yield_per_MeV = 41000     # src_B
+yield_ratio_1               = 0.96      # src_B
+yield_ratio_2               = 0.04      # src_B
+time_constant_1_ns          = 220       # src_B
+time_constant_2_ns          = 1500      # src_B
+
+# RESOLUTIONSCALE inflates the variance of the photon number above Poisson.
+# src_B uses 3.50 for this material, stating that the resolution scale "was
+# calculated from the energy resolution" -- that is, fitted to the observable it
+# would then be used to reproduce. Using it would make simulated energy
+# resolution a fit rather than a prediction, so this study keeps it at 1 and
+# reports the statistical resolution as a lower bound. The gap to measurement is
+# the non-proportionality and transfer term, which Geant4 does not model.
+resolution_scale = 1.0
+
+# --- Refractive index --------------------------------------------------------
+# H. H. Li, 'Refractive index of alkali halides and its wavelength and
+# temperature derivatives', J. Phys. Chem. Ref. Data 5, 329-528 (1976),
+# doi:10.1063/1.555536; coefficients as tabulated by refractiveindex.info
+# (database/data/main/NaI/nk/Li.yml, CC0), verified by reproducing the
+# classical sodium-D-line value n(589.3 nm) = 1.7745. The database entry
+# itself records that the fit 'is based on a single data point'; Jellison et
+# al. (2012) identify that point as Spangenberg, Z. Kristallogr. 57, 494-534
+# (1923). This is the model used by Mao, Zhang and Zhu, IEEE TNS 55, 2425
+# (2008), which in turn is the source cited for NaI:Tl by the Geant4 parameter
+# compilation of Miller et al., IEEE TNS 72 197 (2025), arXiv:2403.02668 (Fig.
+# 8b).
+[RINDEX]
+280    1.97595
+290    1.95244
+300    1.93251
+310    1.91541
+320    1.90061
+330    1.88769
+340    1.87633
+350    1.86627
+360    1.85731
+370    1.84929
+380    1.84208
+390    1.83556
+400    1.82965
+410    1.82427
+420    1.81936
+430    1.81486
+440    1.81072
+450    1.80691
+460    1.80339
+470    1.80013
+480    1.79711
+490    1.7943
+500    1.79168
+510    1.78923
+520    1.78695
+530    1.78481
+540    1.7828
+550    1.78091
+560    1.77914
+570    1.77747
+580    1.77589
+590    1.7744
+600    1.773
+610    1.77166
+620    1.7704
+630    1.7692
+640    1.76807
+650    1.76699
+660    1.76596
+670    1.76498
+680    1.76405
+690    1.76316
+700    1.76231
+
+# --- Bulk absorption length --------------------------------------------------
+# Effective attenuation length from the NaI(Tl) transmittance curve of Mao,
+# Zhang & Zhu, IEEE Trans. Nucl. Sci. 55 (2008) 2425, Fig. 2, digitised by
+# scripts/digitise_mao_fig2.py and inverted with the paper's own transmittance
+# expression over its 38.8 mm sample. Calibration was checked against the
+# emission and excitation peaks printed inside the panel, and the recovered 50
+# % cut-off against the 365 nm stated in the text. This is an EFFECTIVE
+# attenuation: a single-beam transmittance does not separate absorption from
+# scattering, so implementing it as ABSLENGTH overestimates the loss by
+# whatever fraction is scattering.
+[ABSLENGTH_mm]
+280    9.67605
+290    9.67605
+300    9.67605
+310    9.67605
+320    9.67605
+330    9.67605
+340    10.2543
+350    19.8469
+360    52.5246
+370    162.565
+380    275.75
+390    405.53
+400    506.36
+410    593.847
+420    638.981
+430    718.086
+440    782.435
+450    841.293
+460    936.621
+470    1030.39
+480    1102.82
+490    1225.61
+500    1339.27
+510    1429.53
+520    1628.11
+530    1736.8
+540    1928.64
+550    2038.13
+560    2424.59
+570    2515.57
+580    2630.31
+590    2888.59
+600    2888.59
+610    3347.24
+620    3818.23
+630    4070.72
+640    4090.63
+650    4653.28
+660    5485.06
+670    7124.4
+680    8692.15
+690    8692.15
+700    13480.6
+
+# --- Emission spectrum (1) ---------------------------------------------------
+# PUBLISHED TABLE, NOT A MEASUREMENT AND NOT THIS STUDY'S GAUSSIAN. The
+# NaI(Tl) emission component distributed for Geant4 by SSLG4 (Kandemir et al.,
+# Comput. Phys. Commun. 306 (2025) 109385), read from
+# data/optical/sslg4_nai_emission.csv, which records the upstream commit and
+# the file's sha256. The library states that the data for its commercially
+# available scintillators come from the manufacturers' published data sheets
+# and attributes this entry to Luxium Solutions; no temperature, excitation,
+# sample or uncertainty travels with it. It is carried as a variant because it
+# is the only openly distributed machine-readable band we located and because
+# its shape lies outside what this study assumes: peak 424.3 nm against the
+# 415 nm every compilation tabulates, full width at half maximum 52.8 nm
+# against the 55-75 nm scanned here. Tabulated as distributed, so Geant4
+# samples it in photon energy exactly as it would a digitised published curve
+# -- the convention of Appendix B.2 applies to it unchanged.
+[SCINTILLATIONCOMPONENT1]
+300    0
+305    0.000257273
+310    0.003
+315    0.00377134
+320    0.00668578
+325    0.008
+330    0.00954267
+335    0.011
+340    0.0130573
+345    0.0163142
+350    0.0367136
+355    0.0692295
+360    0.102802
+365    0.132627
+370    0.1576
+375    0.184859
+380    0.223716
+385    0.276684
+390    0.34726
+395    0.430397
+400    0.543993
+405    0.6548
+410    0.782065
+415    0.892163
+420    0.973599
+425    0.996428
+430    0.960597
+435    0.879007
+440    0.7686
+445    0.659993
+450    0.531714
+455    0.407003
+460    0.31454
+465    0.242794
+470    0.180802
+475    0.133
+480    0.0975421
+485    0.0801153
+490    0.0694573
+495    0.0639713
+500    0.062
+505    0.062
+510    0.062
+515    0.062
+520    0.0596858
+525    0.059
+530    0.059
+535    0.062
+540    0.0614289
+545    0.0558
+550    0.0492853
+555    0.0438856
+560    0.042
+565    0.0409142
+570    0.0381144
+575    0.037
+580    0.037
+585    0.0343427
+590    0.031086
+595    0.031
+600    0.031
+605    0.0316858
+610    0.034
+615    0.034
+620    0.034
+625    0.034
+630    0.0359713
+635    0.0347713
+640    0.034
+645    0.034
+650    0.034
+
+# --- Emission spectrum (2) ---------------------------------------------------
+# The two decay components are given the same emission spectrum: no source
+# reports a different band for the slow component of NaI:Tl.
+[SCINTILLATIONCOMPONENT2]
+300    0
+305    0.000257273
+310    0.003
+315    0.00377134
+320    0.00668578
+325    0.008
+330    0.00954267
+335    0.011
+340    0.0130573
+345    0.0163142
+350    0.0367136
+355    0.0692295
+360    0.102802
+365    0.132627
+370    0.1576
+375    0.184859
+380    0.223716
+385    0.276684
+390    0.34726
+395    0.430397
+400    0.543993
+405    0.6548
+410    0.782065
+415    0.892163
+420    0.973599
+425    0.996428
+430    0.960597
+435    0.879007
+440    0.7686
+445    0.659993
+450    0.531714
+455    0.407003
+460    0.31454
+465    0.242794
+470    0.180802
+475    0.133
+480    0.0975421
+485    0.0801153
+490    0.0694573
+495    0.0639713
+500    0.062
+505    0.062
+510    0.062
+515    0.062
+520    0.0596858
+525    0.059
+530    0.059
+535    0.062
+540    0.0614289
+545    0.0558
+550    0.0492853
+555    0.0438856
+560    0.042
+565    0.0409142
+570    0.0381144
+575    0.037
+580    0.037
+585    0.0343427
+590    0.031086
+595    0.031
+600    0.031
+605    0.0316858
+610    0.034
+615    0.034
+620    0.034
+625    0.034
+630    0.0359713
+635    0.0347713
+640    0.034
+645    0.034
+650    0.034

@@ -330,6 +330,108 @@ class ScatteringSplit:
         return 1.0 / inv if inv > 1.0e-5 else 1.0e5
 
 
+SSLG4_EMISSION_CURVE = "data/optical/sslg4_nai_emission.csv"
+
+
+class NullAttenuation:
+    """No bulk attenuation at all: a crystal transparent by omission.
+
+    This is not an assumption anyone defends; it is what a published Geant4
+    material library supplies. SSLG4 (Comput. Phys. Commun. 306 (2025) 109385)
+    binds RINDEX and SCINTILLATIONCOMPONENT1 for its NaI(Tl) entry and leaves
+    the ABSLENGTH line commented out, with the file it names absent from the
+    distribution, so a user who loads that entry gets a crystal that never
+    absorbs its own light. Carried as a variant because it is the top of the
+    range of what the published record actually hands to Geant4, and because
+    the omission arises the same way the missing REFLECTIVITY does -- not from
+    a decision but from a blank.
+
+    Geant4 needs a finite number, so the value written is a length far longer
+    than any path a photon can take in this geometry; the crystal is 76.2 mm
+    long and the cap is 1e7 mm, so no photon is absorbed in bulk.
+    """
+
+    key = "abs_none"
+    TRANSPARENT_MM = 1.0e7
+
+    def __init__(self, *, source: str):
+        self.source = source
+
+    def __call__(self, lam_nm: float) -> float:
+        return self.TRANSPARENT_MM
+
+
+class TabulatedEmission:
+    """Emission band read from a published table rather than assumed.
+
+    Linear in wavelength between the tabulated points and zero outside them,
+    which is what Geant4 itself does with a SCINTILLATIONCOMPONENT table. The
+    one table this is used for is SSLG4's NaI(Tl) entry, which the library
+    attributes to a manufacturer's data sheet: it is a published description in
+    use, not a measurement, and it carries no conditions and no uncertainty.
+    Its peak and width both sit outside what this study assumes, which is why
+    it is run rather than only cited.
+    """
+
+    def __init__(self, path: str | None = None, root: str | None = None, *,
+                 key: str, source: str):
+        import csv as _csv
+        import os
+
+        base = root or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        self.path = path or os.path.join(base, SSLG4_EMISSION_CURVE)
+        self.key = key
+        self.source = source
+        lams: list[float] = []
+        vals: list[float] = []
+        with open(self.path) as fh:
+            for row in _csv.DictReader(ln for ln in fh if not ln.startswith("#")):
+                lams.append(float(row["wavelength_nm"]))
+                vals.append(float(row["intensity"]))
+        if not lams:
+            raise ValueError(f"no rows in {self.path}")
+        order = sorted(range(len(lams)), key=lambda i: lams[i])
+        self._lam = [lams[i] for i in order]
+        self._val = [vals[i] for i in order]
+        peak = max(self._val)
+        if peak <= 0.0:
+            raise ValueError(f"emission table in {self.path} is everywhere zero")
+        self._val = [v / peak for v in self._val]
+
+    @property
+    def peak_nm(self) -> float:
+        return self._lam[self._val.index(max(self._val))]
+
+    @property
+    def fwhm_nm(self) -> float:
+        i = self._val.index(max(self._val))
+        half = 0.5
+        def cross(a, b, ya, yb):
+            return a + (b - a) * (half - ya) / (yb - ya)
+        lo = next(cross(self._lam[k], self._lam[k + 1], self._val[k], self._val[k + 1])
+                  for k in range(i) if self._val[k] <= half <= self._val[k + 1])
+        hi = next(cross(self._lam[k], self._lam[k + 1], self._val[k], self._val[k + 1])
+                  for k in range(i, len(self._val) - 1)
+                  if self._val[k] >= half >= self._val[k + 1])
+        return hi - lo
+
+    def __call__(self, lam_nm: float) -> float:
+        import bisect
+
+        # Outside the table the band is zero; AT the endpoints it is whatever
+        # the table says, which for this curve is 0.034 at 650 nm, not zero.
+        # Returning zero there would silently clip the published red tail.
+        if lam_nm < self._lam[0] or lam_nm > self._lam[-1]:
+            return 0.0
+        if lam_nm == self._lam[0]:
+            return self._val[0]
+        if lam_nm == self._lam[-1]:
+            return self._val[-1]
+        i = bisect.bisect_left(self._lam, lam_nm)
+        f = (lam_nm - self._lam[i - 1]) / (self._lam[i] - self._lam[i - 1])
+        return self._val[i - 1] + f * (self._val[i] - self._val[i - 1])
+
+
 # --------------------------------------------------------------------------- #
 # Emission spectrum
 # --------------------------------------------------------------------------- #

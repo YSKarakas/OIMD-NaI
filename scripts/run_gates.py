@@ -343,6 +343,21 @@ def gather(set_name: str, events: int, seed: int) -> list[dict]:
                 label=f"G4_wrap_{wrap}", material_spec=BASELINE_MATERIAL,
                 events=events, seed=seed, wrapping=wrap,
             ))
+        # G5: optical-transport closure. With a lossless wrapper and a crystal
+        # that never absorbs, every scintillation photon must reach the
+        # detection surface, so the light-collection efficiency must be 1. It
+        # is the only gate that tests transport rather than generation: G1 has
+        # no optical physics, G2 counts photons at birth, G3 is a one-sided
+        # inequality that every member of the envelope satisfies, and G4
+        # compares against a different material. Any deficit is a leak, and the
+        # two defects of Appendix A are the reason this has to be measured
+        # rather than assumed.
+        configs.append(config_for(
+            label="G5_closure",
+            material_spec="materials/variants/NaI_Tl_abs_none.dat",
+            events=events, seed=seed,
+            overrides={"surface": {"reflectivity": 1.00}},
+        ))
     if set_name in ("systematics", "all"):
         configs.append(config_for(
             label="SYS_baseline", material_spec=OUTSET_MATERIAL,
@@ -363,7 +378,8 @@ def gather(set_name: str, events: int, seed: int) -> list[dict]:
                       "abs_measured_lamhi", "abs_measured_lamlo",
                       "meas_scatter_max",
                       "meas_rindex_jellison", "meas_rindex_flat185",
-                      "meas_fwhm55", "meas_fwhm75", "meas_jacobian"):
+                      "meas_fwhm55", "meas_fwhm75", "meas_jacobian",
+                      "meas_emission_sslg4"):
             configs.append(config_for(
                 label=f"MEAS_{label}",
                 material_spec=f"materials/variants/NaI_Tl_{label}.dat",

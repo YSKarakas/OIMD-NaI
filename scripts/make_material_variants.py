@@ -36,6 +36,8 @@ from scint.optical import (  # noqa: E402
     gaussian_emission,
     gaussian_emission_sampled_in_wavelength,
     sample_wavelengths,
+    NullAttenuation,
+    TabulatedEmission,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -122,9 +124,21 @@ def build(
     fwhm_nm: float,
     name: str = "NaI_Tl",
     jacobian_corrected: bool = False,
+    emission=None,
 ) -> str:
     optical_lams = sample_wavelengths(OPTICAL_LOW_NM, OPTICAL_HIGH_NM, OPTICAL_STEP_NM)
-    band_lams = sample_wavelengths(BAND_LOW_NM, BAND_HIGH_NM, BAND_STEP_NM)
+    # A tabulated band is sampled over its own support, on the same 5 nm grid:
+    # SSLG4's table runs to 650 nm and 1.2 % of it (integrated the way Geant4
+    # samples, in photon energy) lies above the 600 nm the Gaussian variants
+    # stop at. That tail is the least absorbed part of the band, so truncating
+    # it would bias the comparison in the direction the variant is testing.
+    if emission is not None:
+        band_lams = sample_wavelengths(
+            min(BAND_LOW_NM, emission._lam[0]), max(BAND_HIGH_NM, emission._lam[-1]),
+            BAND_STEP_NM,
+        )
+    else:
+        band_lams = sample_wavelengths(BAND_LOW_NM, BAND_HIGH_NM, BAND_STEP_NM)
 
     extrapolated = [lam for lam in optical_lams if dispersion.extrapolating(lam)]
     rindex_note = dispersion.source
@@ -182,16 +196,49 @@ def build(
             "unit is the millimetre and G4OpRayleigh reads RAYLEIGH unscaled.",
             [(lam, scattering_mm) for lam in optical_lams], "RAYLEIGH",
         )
-    shape = gaussian_emission_sampled_in_wavelength if jacobian_corrected else gaussian_emission
-    emission = [(lam, shape(lam, EMISSION_PEAK_NM, fwhm_nm)) for lam in band_lams]
+    if emission is not None:
+        emission_note = emission.source
+        band = [(lam, emission(lam)) for lam in band_lams]
+    else:
+        shape = (gaussian_emission_sampled_in_wavelength if jacobian_corrected
+                 else gaussian_emission)
+        band = [(lam, shape(lam, EMISSION_PEAK_NM, fwhm_nm)) for lam in band_lams]
     for component in ("SCINTILLATIONCOMPONENT1", "SCINTILLATIONCOMPONENT2"):
         note = emission_note if component.endswith("1") else (
             "The two decay components are given the same emission spectrum: no "
             "source reports a different band for the slow component of NaI:Tl."
         )
-        text += _section(f"Emission spectrum ({component[-1]})", note, emission, component)
+        text += _section(f"Emission spectrum ({component[-1]})", note, band, component)
     return text
 
+
+SSLG4_BAND = TabulatedEmission(key="emission_sslg4", source=(
+    "PUBLISHED TABLE, NOT A MEASUREMENT AND NOT THIS STUDY'S GAUSSIAN. The "
+    "NaI(Tl) emission component distributed for Geant4 by SSLG4 (Kandemir et "
+    "al., Comput. Phys. Commun. 306 (2025) 109385), read from "
+    "data/optical/sslg4_nai_emission.csv, which records the upstream commit and "
+    "the file's sha256. The library states that the data for its commercially "
+    "available scintillators come from the manufacturers' published data "
+    "sheets and attributes this entry to Luxium Solutions; no temperature, "
+    "excitation, sample or uncertainty travels with it. It is carried as a "
+    "variant because it is the only openly distributed machine-readable band "
+    "we located and because its shape lies outside what this study assumes: "
+    "peak 424.3 nm against the 415 nm every compilation tabulates, full width "
+    "at half maximum 52.8 nm against the 55-75 nm scanned here. Tabulated as "
+    "distributed, so Geant4 samples it in photon energy exactly as it would a "
+    "digitised published curve -- the convention of Appendix B.2 applies to it "
+    "unchanged."))
+
+TRANSPARENT = NullAttenuation(source=(
+    "NO BULK ATTENUATION AT ALL, which is what one published Geant4 material "
+    "library supplies for NaI(Tl): SSLG4 (Comput. Phys. Commun. 306 (2025) "
+    "109385) binds RINDEX and SCINTILLATIONCOMPONENT1 for its isc-2004 entry "
+    "and leaves the ABSLENGTH line commented out in the material macro, with "
+    "the file it names absent from the distribution. The value written is "
+    "1e7 mm, longer than any path a photon takes in a 76.2 mm crystal, so "
+    "nothing is absorbed in bulk. Not an assumption anyone defends: the top of "
+    "what the published record actually hands to Geant4, arrived at the same "
+    "way the missing REFLECTIVITY is -- not by a decision but by a blank."))
 
 BASELINE_EDGE = AbsorptionEdge(urbach_energy_eV=0.175)
 
@@ -351,6 +398,25 @@ VARIANTS: list[tuple[str, str, str, Dispersion, object, float, bool]] = [
         LI_1976, MEASURED_SCATTER_MAX, EMISSION_FWHM_NM, False,
     ),
     (
+        "materials/variants/NaI_Tl_meas_emission_sslg4.dat",
+        "measured absorption + the SSLG4 tabulated emission band",
+        "The one openly distributed machine-readable NaI(Tl) emission band, on "
+        "the measured attenuation. Replaces this study's assumed Gaussian with "
+        "a published table whose peak and width both lie outside the assumed "
+        "band, so what it measures is the cost of the shape assumption rather "
+        "than of the width scan.",
+        LI_1976, MEASURED, EMISSION_FWHM_NM, False, SSLG4_BAND,
+    ),
+    (
+        "materials/variants/NaI_Tl_abs_none.dat",
+        "no bulk attenuation (SSLG4 supplies none)",
+        "A crystal transparent by omission, which is what a user of the SSLG4 "
+        "NaI(Tl) entry gets. The top of the range of absorption models the "
+        "published record hands to Geant4, and unlike the flat 2000 mm at the "
+        "old top of that range it is somebody else's.",
+        LI_1976, TRANSPARENT, EMISSION_FWHM_NM, False,
+    ),
+    (
         "materials/variants/NaI_Tl_abs_measured_hi.dat",
         "absorption = measured, +1 sigma of the transmittance digitisation error",
         "Transmittance-axis upper bound of the measured curve.",
@@ -425,14 +491,16 @@ VARIANTS: list[tuple[str, str, str, Dispersion, object, float, bool]] = [
 
 
 def main() -> None:
-    for path, variant, note, dispersion, absorption, fwhm, jacobian in VARIANTS:
+    for entry in VARIANTS:
+        path, variant, note, dispersion, absorption, fwhm, jacobian = entry[:7]
+        emission = entry[7] if len(entry) > 7 else None
         out = ROOT / path
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(
             build(
                 variant=variant, variant_note=note,
                 dispersion=dispersion, absorption=absorption, fwhm_nm=fwhm,
-                jacobian_corrected=jacobian,
+                jacobian_corrected=jacobian, emission=emission,
             )
         )
         print(f"wrote {path}")
