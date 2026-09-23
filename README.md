@@ -48,7 +48,9 @@ docker build -t scint:11.4.2 -f containers/Dockerfile .
 docker run --rm -v "$PWD":/work -w /work scint:11.4.2 \
     bash -c 'cmake -S sim -B build/container && cmake --build build/container -j8'
 
-# The campaign the paper reports: 60 runs of 2000 events, inside the container
+# The campaign the paper reports: 63 labelled runs of 2000 events, inside the
+# container (46 distinct configurations: labels that ask for the same physics
+# share one run)
 sh scripts/run_in_container.sh --set all --events 2000 --jobs 2
 
 # From run records to the verdict every quoted number is read from

@@ -1,4 +1,4 @@
-60 completed runs, output schema 5 (schemas on disk: [1, 2, 3, 4, 5])
+64 completed runs, output schema 5 (schemas on disk: [1, 2, 3, 4, 5])
 
 ==============================================================================
 ORPHANED RUNS -- configurations the runner no longer defines; not analysed
@@ -74,6 +74,14 @@ G4 -- LIGHT-COLLECTION EFFICIENCY BY WRAPPING
   VERDICT                       PASS  (every reflector must beat the unwrapped crystal)
 
 ==============================================================================
+G5 -- OPTICAL-TRANSPORT CLOSURE (lossless wrapper, no bulk absorption)
+==============================================================================
+  ground surface, LCE           0.99906 +- 0.00002   (1240 full-energy events)
+  deficit                       0.094 %
+  VERDICT                       PASS  (a lossless configuration must deliver its light to within 1 %)
+  polished companion, LCE       0.78708 +- 0.00052   (21.3 % of the light never delivered)
+
+==============================================================================
 OPTICAL INPUT SYSTEMATICS -- LCE under one-at-a-time variation
 ==============================================================================
   variant                      LCE    +- sem   vs baseline
@@ -89,9 +97,11 @@ OPTICAL INPUT SYSTEMATICS -- LCE under one-at-a-time variation
   abs_measured_lamhi        0.3396    0.0001        +5.50 %
   abs_measured_lamlo        0.3676    0.0001       +14.21 %
   abs_measured_lo           0.3417    0.0001        +6.16 %
+  abs_none                  0.6514    0.0004      +102.36 %
   emission_fwhm55           0.3311    0.0001        +2.86 %
   emission_fwhm75           0.3123    0.0002        -2.97 %
   emission_jacobian         0.3358    0.0001        +4.33 %
+  meas_emission_sslg4       0.3784    0.0001       +17.56 %
   meas_fwhm55               0.3644    0.0001       +13.20 %
   meas_fwhm75               0.3435    0.0001        +6.72 %
   meas_jacobian             0.3638    0.0001       +13.02 %
@@ -115,9 +125,11 @@ OPTICAL INPUT SYSTEMATICS -- LCE under one-at-a-time variation
   abs_measured_lamhi        411.26    417.88     +6.62 nm
   abs_measured_lamlo        411.25    416.00     +4.74 nm
   abs_measured_lo           411.24    416.76     +5.52 nm
+  abs_none                  411.26    411.66     +0.40 nm
   emission_fwhm55           412.32    418.66     +6.34 nm
   emission_fwhm75           410.03    422.14    +12.11 nm
   emission_jacobian         414.97    423.15     +8.18 nm
+  meas_emission_sslg4       426.99    435.04     +8.05 nm
   meas_fwhm55               412.31    415.85     +3.54 nm
   meas_fwhm75               410.02    418.28     +8.26 nm
   meas_jacobian             414.97    419.93     +4.96 nm
@@ -127,10 +139,11 @@ OPTICAL INPUT SYSTEMATICS -- LCE under one-at-a-time variation
   rindex_flat185            411.26    419.92     +8.66 nm
   rindex_jellison           411.25    420.62     +9.37 nm
 
-  spread over published practice  69.2 % of baseline LCE   [23 variants]
-    (includes the flat absorption lengths that appear in the literature)
-  spread over defensible models   39.5 % of baseline LCE   [20 variants]
-    (flat absorption dropped: the 365 nm transmittance measurement excludes it)
+  spread over every model run     118.5 % of baseline LCE   [25 variants]
+    (includes the flat absorption lengths and the transparent crystal)
+  spread over defensible models   39.5 % of baseline LCE   [21 variants]
+    (flat and absent absorption dropped: the 365 nm transmittance measurement
+    excludes both; both ends of what remains are the scanned Urbach edge)
   Neither is reducible by running more events. Both measure what the state
   of the published optical inputs costs, not what the simulation costs.
 
@@ -146,6 +159,7 @@ MEASURED ATTENUATION CURVE -- digitised from Mao et al. Fig. 2
   abs_measured_lamhi        0.3396    0.0001        +5.50 %
   abs_measured_lamlo        0.3676    0.0001       +14.21 %
   abs_measured_lo           0.3417    0.0001        +6.16 %
+  meas_emission_sslg4       0.3784    0.0001       +17.56 %
   meas_fwhm55               0.3644    0.0001       +13.20 %
   meas_fwhm75               0.3435    0.0001        +6.72 %
   meas_jacobian             0.3638    0.0001       +13.02 %
@@ -170,6 +184,7 @@ MEASURED ATTENUATION CURVE -- digitised from Mao et al. Fig. 2
       meas_fwhm55              0.3644
       abs_measured_lamlo       0.3676
       abs_measured_hi          0.3690
+      meas_emission_sslg4      0.3784
       meas_scatter_max         0.3799
       spread 11.4 % of the measured central value (0.3396 .. 0.3799)
 
