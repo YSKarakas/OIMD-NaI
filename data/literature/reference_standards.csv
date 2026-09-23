@@ -1,7 +1,8 @@
 # Values that published measurements ASSUME for the crystal they calibrate
-# against. This is the "ruler" problem: a light yield quoted in photons/MeV is
-# usually a pulse-height ratio against another crystal, and the value assumed
-# for that other crystal is part of the answer.
+# against, beside the values published for the same crystals. This is the
+# "ruler" problem: a light yield quoted in photons/MeV is usually a
+# pulse-height ratio against another crystal, and the value assumed for that
+# other crystal is part of the answer.
 #
 # These numbers previously lived inside scripts/make_figures.py, typed in by
 # hand. That is the exact failure this project exists to argue against, so they
@@ -9,27 +10,37 @@
 # written down. The `read_at` column says where in the source the number is, so
 # the check is repeatable by a person and not only by us.
 #
-# Columns
-#   material        the reference crystal whose yield is being assumed
-#   value_ph_per_MeV the assumed value
-#   source_key      short label used in the figure
-#   source_id       arXiv identifier, or the DOI where there is no preprint
-#   read_at         where in the source the value appears
-#   verified_on     the date it was re-read
+# Only five of the values are assumptions made for a reference crystal in a
+# measurement (kind = assumed). The others (kind = published) are values a
+# measurement could adopt for the same crystal: a measured absolute yield, a
+# compilation input, a review table, a property quoted from earlier work. The
+# source_key labels were corrected on 23 September 2026: seven of them had
+# named the wrong author.
 #
-material,value_ph_per_MeV,source_key,source_id,read_at,verified_on
-BGO,6000,Kim 2015,arXiv:1503.03759v1,"l.303, l.384, l.529: 'taking 6000 ph/MeV for 1 cm thick BGO [24]'",2026-09-12
-BGO,8000,Yanagida 2016,arXiv:1607.05486v2,"Table, l.416: BGO:Ce row, light yield column",2026-09-12
-BGO,8200,Bizarri 2013,arXiv:1308.3908v1,"Table, l.109: BGO row, light-yield column",2026-09-12
-BGO,8500,Miller 2025,arXiv:2403.02668,"Table I, optical yield row for BGO; cites its ref [22]",2026-09-12
-BGO,10000,Bonesini 2025,arXiv:2505.06929,"Table 1, l.179: last column of the light-yield row",2026-09-12
-NaI:Tl,35000,Hawrami 2020,arXiv:1911.03611v1,"l.169-170: 'a 1 inch x 1 inch NaI:Tl crystal, which was measured to have a light yield of 35,000 ph/MeV'",2026-09-20
-NaI:Tl,38000,Bonesini 2025,arXiv:2505.06929,"Table 1, l.179: NaI(Tl) column of the light-yield row",2026-09-12
-NaI:Tl,40000,Cebrian 2017,arXiv:1703.01262v1,"l.121: 'scintillation efficiency in NaI(Tl) to be 40,000 photons/MeV'",2026-09-12
-NaI:Tl,41000,Miller 2025,arXiv:2403.02668,"Table I, l.179: optical yield for NaI:Tl, cites refs [12] and [21]",2026-09-12
-NaI:Tl,43000,Yanagida 2012,arXiv:1210.3755v1,"l.157: 'Light output of NaI-Tl crystals is approximately 43000 photons/MeV'",2026-09-12
-LYSO:Ce,26000,Auffray 2013,arXiv:1309.3736v1,"l.83: 'output (26,000 photons/MeV)'; also l.301 table",2026-09-12
-LYSO:Ce,32000,Yanagida 2016 (table),arXiv:1607.05486v2,"Table, l.421: LYSO:Ce row, light-yield column",2026-09-12
-LYSO:Ce,33000,Yanagida 2016 (text),arXiv:1607.05486v2,"l.120: 'calculated light yield 33,000 ph/MeV was used'",2026-09-12
-GSO:Ce,11000,Hawrami 2021,arXiv:2104.07568v2,"l.178: 'Ce:Gd2SiO5 (light output: 11,000'",2026-09-12
-GSO:Ce,12500,Yanagida 2016,arXiv:1607.05486v2,"Table, l.418: GSO:Ce row, light-yield column",2026-09-12
+# Columns
+#   material         the reference crystal
+#   value_ph_per_MeV the value
+#   kind             assumed (for a reference crystal in a measurement) or
+#                    published (any other value given for that crystal)
+#   source_key       short label used in the figure: first author and year of
+#                    the published version
+#   source_id        arXiv identifier, or the DOI where there is no preprint
+#   read_at          where in the source the value appears
+#   verified_on      the date it was re-read
+#
+material,value_ph_per_MeV,kind,source_key,source_id,read_at,verified_on
+BGO,6000,assumed,Kobayashi 2015,arXiv:1503.03759v1,"l.303, l.384, l.529: 'taking 6000 ph/MeV for 1 cm thick BGO [24]'",2026-09-23
+BGO,8000,published,Kim 2017,arXiv:1607.05486v2,"Table, l.416: BGO row, light yield column",2026-09-23
+BGO,8200,published,Shendrik 2014,arXiv:1308.3908v1,"Table, l.109: BGO row, photon-yield column",2026-09-23
+BGO,8500,published,Miller 2025,arXiv:2403.02668,"Table I, optical yield row for BGO; cites its ref [22]",2026-09-12
+BGO,10000,published,Bonesini 2025,arXiv:2505.06929,"Table 1, l.179: last column of the light-yield row",2026-09-12
+NaI:Tl,35000,assumed,Hawrami 2020,arXiv:1911.03611v1,"l.169-170: 'a 1 inch x 1 inch NaI:Tl crystal, which was measured to have a light yield of 35,000 ph/MeV'",2026-09-23
+NaI:Tl,38000,published,Bonesini 2025,arXiv:2505.06929,"Table 1, l.179: NaI(Tl) column of the light-yield row",2026-09-12
+NaI:Tl,40000,published,Olivan 2017,arXiv:1703.01262v1,"l.121: 'scintillation efficiency in NaI(Tl) to be 40,000 photons/MeV'",2026-09-23
+NaI:Tl,41000,published,Miller 2025,arXiv:2403.02668,"Table I, l.179: optical yield for NaI:Tl, cites refs [12] and [21]",2026-09-12
+NaI:Tl,43000,assumed,Shendrik 2013,arXiv:1210.3755v1,l.157: 'Light output of NaI-Tl crystals is approximately 43000 photons/MeV',2026-09-23
+LYSO:Ce,26000,published,Chen 2013,arXiv:1309.3736v1,"l.83: 'output (26,000 photons/MeV)'; also l.301 table",2026-09-23
+LYSO:Ce,32000,published,Kim 2017 (table),arXiv:1607.05486v2,"Table, l.421: LYSO:Ce row, light-yield column",2026-09-23
+LYSO:Ce,33000,assumed,Kim 2017 (text),arXiv:1607.05486v2,"l.120: 'calculated light yield 33,000 ph/MeV was used'",2026-09-23
+GSO:Ce,11000,assumed,Horiai 2021,arXiv:2104.07568v2,"l.178: 'Ce:Gd2SiO5 (light output: 11,000'",2026-09-23
+GSO:Ce,12500,published,Kim 2017,arXiv:1607.05486v2,"Table, l.418: GSO:Ce row, light-yield column",2026-09-23

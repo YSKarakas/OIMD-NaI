@@ -64,15 +64,41 @@ def require_g4data() -> Path:
     return G4DATA_BIN
 
 
+@lru_cache(maxsize=1)
+def _datasets_from_config() -> dict[str, str]:
+    """The dataset paths the installation on PATH was built with, if any.
+
+    `geant4-config --datasets` prints one line per dataset: name, variable,
+    path. The table in _DATASET_DIRS names the directories of the pre-release
+    this project was first developed against; a machine with another
+    installation has other directory names, and asking the installation is
+    the only way to be right about them.
+    """
+    try:
+        out = subprocess.run(["geant4-config", "--datasets"], capture_output=True,
+                             text=True, timeout=10).stdout
+    except (OSError, subprocess.SubprocessError):
+        return {}
+    found = {}
+    for line in out.splitlines():
+        parts = line.split()
+        if len(parts) == 3:
+            found[parts[1]] = parts[2]
+    return found
+
+
 def geant4_env(base: dict[str, str] | None = None) -> dict[str, str]:
     """Return an environment with Geant4 dataset variables set.
 
     Variables already present in the environment win, so a container that has
-    them baked in is not overridden with host paths.
+    them baked in is not overridden with host paths. Otherwise the paths come
+    from the installation's own geant4-config, and only failing that from the
+    fixed table below GEANT4_DATA_ROOT.
     """
     env = dict(base if base is not None else os.environ)
+    configured = _datasets_from_config()
     for var, directory in _DATASET_DIRS.items():
-        env.setdefault(var, str(GEANT4_DATA_ROOT / directory))
+        env.setdefault(var, configured.get(var, str(GEANT4_DATA_ROOT / directory)))
     return env
 
 

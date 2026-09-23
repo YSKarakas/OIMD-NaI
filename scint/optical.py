@@ -308,7 +308,7 @@ class TabulatedAttenuation:
 class ScatteringSplit:
     """The measured attenuation split into absorption and a grey scattering term.
 
-    A single-beam transmittance cannot separate absorption from scattering; the
+    A transmittance measurement cannot separate absorption from scattering; the
     plateau above 750 nm bounds a wavelength-independent scattering length from
     below (4.8 m at the +1 sigma_T limit, scint/optical.py's digitisation
     model). This object is the extreme of that bound: scattering AT the bound
@@ -507,7 +507,7 @@ def sample_wavelengths(low_nm: float, high_nm: float, step_nm: float) -> list[fl
 # and scripts/digitise_mao_fig2.py turns that picture back into numbers.
 #
 # Three honest limits travel with it. The quantity is an EFFECTIVE ATTENUATION
-# length -- a single-beam transmittance cannot separate absorption from
+# length -- a transmittance measurement cannot separate absorption from
 # scattering. The inversion is well conditioned only where the crystal is not
 # yet transparent: above about 450 nm the measured transmittance sits close to
 # its Fresnel limit, so a digitisation error of half a percent in T moves the
@@ -616,6 +616,9 @@ class MeasuredAttenuation:
             "Calibration was checked against the emission and excitation peaks "
             "printed inside the panel, and the recovered 50 % cut-off against "
             "the 365 nm stated in the text. This is an EFFECTIVE attenuation: a "
+            # "single-beam" is wrong -- the instrument is double-beam -- but this
+            # text is written into 13 material files whose checksums the runs
+            # record; it is corrected in materials/ERRATA.md, not here.
             "single-beam transmittance does not separate absorption from "
             "scattering, so implementing it as ABSLENGTH overestimates the loss "
             "by whatever fraction is scattering."

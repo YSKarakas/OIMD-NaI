@@ -3,9 +3,12 @@
 The Geant4 application, optical models, digitised inputs, run records,
 literature records and analysis scripts behind the paper of that title
 (Y. S. Karakaş and Ö. Beysi, submitted to *Nuclear Instruments and Methods in
-Physics Research A*). Every number the paper quotes is read from the verdict
-file `runs_scratch/gates_final.json`, which the scripts here regenerate from
-the run records in `runs/`.
+Physics Research A*). Every simulated number the paper quotes is read from the
+verdict file `runs_scratch/gates_final.json`, which the scripts here
+regenerate from the run records in `runs/`; the others are read from the data
+files under `data/` and the diagnostic records under `runs_scratch/diag/`.
+The scripts that draw the paper's figures and tables, and the checker that
+asserts its numbers against these files, are kept with the manuscript source.
 
 ## What the study does
 
@@ -15,8 +18,10 @@ which published optical model the simulation was fed, for a 3"×3" NaI(Tl)
 crystal, varying one input at a time; digitises the published transmittance
 curve that constrains the dominant term; scans the arrangement (geometry,
 coupling, surface finish, reflector reflectance); surveys what published
-light-yield measurements state about their own conditions; and documents two
-reproducibility hazards in Geant4 11.4's optical physics found on the way.
+light-yield measurements state about their own conditions; and documents
+three reproducibility hazards in Geant4 11.4's optical physics found on the
+way, one of which -- photons at grazing incidence leaving a convex crystal
+through a lossless look-up-table wrapper -- is measured in every run.
 
 ## Layout
 
@@ -48,8 +53,8 @@ docker build -t scint:11.4.2 -f containers/Dockerfile .
 docker run --rm -v "$PWD":/work -w /work scint:11.4.2 \
     bash -c 'cmake -S sim -B build/container && cmake --build build/container -j8'
 
-# The campaign the paper reports: 63 labelled runs of 2000 events, inside the
-# container (46 distinct configurations: labels that ask for the same physics
+# The campaign the paper reports: 65 labelled runs of 2000 events, inside the
+# container (47 distinct configurations: labels that ask for the same physics
 # share one run)
 sh scripts/run_in_container.sh --set all --events 2000 --jobs 2
 
@@ -69,14 +74,16 @@ file on disk.
 
 ### Inputs derived from published figures
 
-Two curves are digitised from published figures whose PDFs are not
-redistributed here (both are copyrighted); each digitiser records the SHA-256
-of the file it read, calibrates the axes on the figure's own marks and reports
-the residuals, and the committed CSVs are byte-identical to what the scripts
-produce:
+Three curves are digitised from published figures whose PDFs are not
+redistributed here (both articles are copyrighted); each digitiser records the
+SHA-256 of the file it read, calibrates the axes on the figure's own marks and
+reports the residuals, and the committed CSVs are byte-identical to what the
+scripts produce. The transmittance and the photo-luminescence band of the same
+NaI(Tl) sample come from one figure, on one calibrated axis:
 
 ```bash
 python3 scripts/digitise_mao_fig2.py --pdf <Mao, Zhang & Zhu, IEEE TNS 55 (2008) 2425>
+python3 scripts/digitise_mao_fig2_emission.py --pdf <the same PDF>
 python3 scripts/digitise_brown_corrigendum.py --pdf <Brown, Appl. Radiat. Isot. 194 (2023) 110721>
 ```
 
@@ -91,15 +98,32 @@ dates and every identifier returned), `scripts/scan_reporting.py` and
 `scripts/scan_yields.py` the keyword scans, `scripts/analyse_literature.py`
 the statistics the paper quotes, and `scripts/scan_optical_practice.py` the
 classification of optical inputs. The hand-extracted records are
-`data/literature/ly_records.csv`; the provenance of every optical input is
-`data/literature/optical_provenance.csv`.
+`data/literature/ly_records.csv`, the texts read and deferred with a reason
+`data/literature/ly_records.csv.pending`, and the retrieved texts with no
+recorded disposition `data/literature/undisposed.csv`
+(`scripts/list_undisposed.py`); the provenance of every optical input is
+`data/literature/optical_provenance.csv`, and the reference-crystal yields of
+the paper's Figure 5, assumed or published, `data/literature/reference_standards.csv`.
+
+### Transport checks
+
+`scripts/transport_checks.py` re-runs published runs in the container and
+compares their outputs with the recorded checksums, tracks every optical
+photon of the lossless polished closure to see where the missing light goes,
+reads the look-up tables Geant4 ships for the probability of the in-surface
+bin, and surveys every configuration of the verdict for photons that leave
+the geometry and through which surface. `scripts/g1_expectation.py` records
+the analytic side of gate G1 from the container's own attenuation
+coefficients. The records are in `runs_scratch/diag/`, each with the image,
+binary checksum and commit that made it.
 
 ## Run records
 
 Every run directory holds `config.yaml` (the complete input), `env.json`
-(git commit and dirty flag, Geant4 tag and pre-release flag, container image
-identifier, dataset versions, seed), `status.json` (state, elapsed time,
-binary and material-file checksums, output checksum, label aliases),
+(git commit and dirty flag, Geant4 tag and pre-release flag, Python and
+platform, seed), `status.json` (state, elapsed time, material-file checksum,
+output checksum, label aliases and, for every run of the two container
+campaigns, the binary checksum and the container image identifier),
 `run.mac` and the per-event output `output_nt_events.csv`. The Geant4 log
 of each run is not tracked, for size, with one exception: the three attempts
 at an unwrapped crystal under the look-up-table surface model (labels
@@ -124,10 +148,14 @@ commit here; the file trees are identical.
 
 ## Beyond this study
 
-`scint/materials.py`, `scint/cost.py` and `data/elements/` implement the
-stoichiometric, cost and critical-raw-material layer of a wider scintillator
-screening framework that this study is the first part of. They are tested
-here but not used by the paper.
+`scint/materials.py` implements the stoichiometric layer of a wider
+scintillator screening framework that this study is the first part of. It is
+tested here but not used by the paper.
+
+The physics datasets of every run are those the pinned 11.4.2 installation
+fetches when the image is built (`containers/Dockerfile`); `env.json` records
+none, because the variables it reads are not set inside the container
+(`containers/README.md`, item 3).
 
 ## Licence
 

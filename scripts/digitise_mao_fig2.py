@@ -176,7 +176,7 @@ def attenuation_length(lam_nm: float, transmittance: float, length_mm: float):
 
     T = (1-R)^2 a / (1 - R^2 a^2),  a = exp(-L/L_att),  R = ((n-1)/(n+1))^2.
 
-    What comes back is an EFFECTIVE ATTENUATION length: a single-beam
+    What comes back is an EFFECTIVE ATTENUATION length: a transmittance
     transmittance cannot separate absorption from scattering.
     """
     n = LI_1976(lam_nm)
@@ -305,7 +305,7 @@ def main() -> int:
             "#\n"
             "# The sample is a cylinder 1.5 X0 = 38.8 mm long (Section III).\n"
             "# attenuation_length_mm inverts the paper's own transmittance\n"
-            "# expression and is EFFECTIVE: a single-beam transmittance cannot\n"
+            "# expression and is EFFECTIVE: a transmittance measurement cannot\n"
             "# separate absorption from scattering. It is empty where the\n"
             "# transmittance exceeds the Fresnel limit of a lossless crystal\n"
             "# and the inversion has no solution.\n"

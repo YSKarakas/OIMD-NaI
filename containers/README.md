@@ -39,8 +39,16 @@ referee asked where the runs had been made.
 | Host beta vs container release, event by event | 61 % of events differ |
 | Host vs container, photopeak efficiency | 0.61090 vs 0.61060 -- 0.05 %, 0.1 sigma |
 | Host vs container, total interaction probability | 0.87945 vs 0.87285 -- 0.75 %, about 2.9 sigma |
-| **Host vs container, photons detected per full-energy event** | **release collects 4.3 % more -- 4.8 sigma over 7477 events** |
+| **Host vs container, detected per generated photon, events above 660 keV** | **release collects 4.3 % more -- 19 sigma (12 217 and 12 209 events, compared unpaired)** |
 | **Host vs container, mean detection time** | **3.415 ns vs 2.215 ns -- the release is a third shorter, 70 sigma** |
+
+The light-collection row is the comparison the manuscript quotes, and
+`scripts/check_paper_numbers.py` recomputes it: each run on its own events
+above 660 keV that generate light, the per-event detected/generated fraction
+compared unpaired. Until 23 September 2026 the row gave a different statistic
+-- photons detected per event, on the 7477 events above 600 keV in both runs
+matched by event number, 4.8 sigma -- which means little when 61 % of the
+events differ between the two builds.
 
 An earlier version of this section compared only the two EM quantities, found
 them in agreement, and concluded "physics agreement". That conclusion was wrong
@@ -63,9 +71,13 @@ Consequences, in force since 2026-09-13:
 3. `/etc/geant4.env`, which the entrypoint sources, is **empty** in the image as
    built (the `grep` in the Dockerfile matched nothing), so `LD_LIBRARY_PATH`
    and the dataset variables are unset for any command run directly. The
-   launcher sources `/opt/geant4/bin/geant4.sh` itself. The Dockerfile should
-   be fixed at the next rebuild; it is not rebuilt now because the image on
-   disk is the one the published runs used.
+   launcher sources `/opt/geant4/bin/geant4.sh` itself. The image was rebuilt
+   from this Dockerfile, unchanged, on a new machine on 23 September 2026
+   (`scint:11.4.2@sha256:b5e01ff7b473...`); four published runs re-run in it
+   reproduced the per-event output checksums they recorded, byte for byte
+   (`runs_scratch/diag/rebuilt_image_reproduction.json`). The empty
+   `/etc/geant4.env` is left as it is, so that the recipe stays the one the
+   published image was built from.
 
 Byte-identity **across** Geant4 versions is impossible by construction:
 different model implementations consume random numbers differently, and the two

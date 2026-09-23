@@ -56,6 +56,12 @@ OPTICAL_LOW_NM, OPTICAL_HIGH_NM, OPTICAL_STEP_NM = 280.0, 700.0, 10.0
 EMISSION_PEAK_NM = 415.0
 EMISSION_FWHM_NM = 65.0
 
+# Some provenance text below, and in the models of scint/optical.py, is known
+# to be wrong: the Gaussian band's note that no open source tabulates the band,
+# the swapped "Shallow"/"Steep" of the two scanned edges, "single-beam", and a
+# few more. Each run records the checksum of the file it was made from, so the
+# text is kept as it is -- a correction would change no number and retire
+# every run -- and materials/ERRATA.md lists the corrections.
 HEADER = """\
 # NaI:Tl -- material specification for the optical simulation.
 #

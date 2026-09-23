@@ -11,8 +11,8 @@ authors:
     given-names: Öykü
     orcid: https://orcid.org/0009-0006-1872-5650
     affiliation: "Department of Physics, TU Dortmund University; Department of Physics and Astronomy \"Augusto Righi\", University of Bologna"
-version: 1.1.0
-date-released: 2026-09-15
+version: 1.5.0
+date-released: 2026-09-23
 license: MIT
 doi: 10.5281/zenodo.22770120
 repository-code: https://github.com/YSKarakas/OIMD-NaI
@@ -33,4 +33,5 @@ preferred-citation:
     - family-names: Beysi
       given-names: Öykü
   journal: "Nuclear Instruments and Methods in Physics Research Section A"
+  status: submitted
   year: 2026

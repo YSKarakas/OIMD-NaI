@@ -9,7 +9,7 @@
 #
 # The sample is a cylinder 1.5 X0 = 38.8 mm long (Section III).
 # attenuation_length_mm inverts the paper's own transmittance
-# expression and is EFFECTIVE: a single-beam transmittance cannot
+# expression and is EFFECTIVE: a transmittance measurement cannot
 # separate absorption from scattering. It is empty where the
 # transmittance exceeds the Fresnel limit of a lossless crystal
 # and the inversion has no solution.
