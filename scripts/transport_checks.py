@@ -16,8 +16,12 @@ Four checks, each writing one JSON record to runs_scratch/diag/:
              DielectricLUT() draws the edge bin of its polar-angle grid, a
              direction lying in the surface.
   survey     For every configuration in the verdict, track a number of
-             662 keV events and record how many photons leave the geometry, and
-             an estimate of the light they would have delivered.
+             662 keV events and record how many photons leave the geometry,
+             through which surface of the crystal, and an estimate of the light
+             they would have delivered. Only an exit through a wrapped face is
+             a leak: the bare crystal loses light to the air by Fresnel
+             transmission, and the open rim of the coupling layer lets a little
+             light out beside the photodetector, both of which are physics.
 
 All four use the published binary (build/container/scint_optical) and the
 published run macros, changing only the event count, the output path, the
@@ -273,10 +277,16 @@ def cmd_lut(args) -> None:
 # survey
 # --------------------------------------------------------------------------- #
 
-AWK = (r"""/Particle = / { if (p != "") print p, last; s = $0; sub(/.*Particle = /, "", s); """
-       r"""sub(/,.*/, "", s); p = s; last = "0 ? ?"; next } """
-       r"""/^ *[0-9]+ +-?[0-9.]/ { last = $1 " " $(NF-1) " " $NF; next } """
-       r"""END { if (p != "") print p, last }""")
+# Each track's particle, then its last two steps as (step number, x, y, z in mm,
+# next volume, process). The second-to-last step of a photon that leaves the
+# geometry ends where it left the crystal.
+AWK = (r"""/Particle = / { if (p != "") print p, prev, last; s = $0; sub(/.*Particle = /, "", s); """
+       r"""sub(/,.*/, "", s); p = s; prev = "0 0 0 0 ? ?"; last = "0 0 0 0 ? ?"; next } """
+       r"""/^ *[0-9]+ +-?[0-9.]/ { prev = last; last = $1 " " $2 " " $3 " " $4 " " $(NF-1) " " $NF; next } """
+       r"""END { if (p != "") print p, prev, last }""")
+
+# How close to a surface an exit point must lie to be assigned to it [mm].
+SURFACE_TOL_MM = 0.06
 
 
 def classify(next_volume: str, process: str) -> str:
@@ -291,40 +301,67 @@ def classify(next_volume: str, process: str) -> str:
     return f"other: {next_volume}/{process}"
 
 
+def exit_surface(x: float, y: float, z: float, radius: float, half: float) -> str:
+    """Which surface of the crystal (or of the coupling layer beside the
+    readout face, z from +half to +half + 0.1 mm) an exit point lies on."""
+    r = math.hypot(x, y)
+    if abs(r - radius) < SURFACE_TOL_MM and z < half - SURFACE_TOL_MM:
+        return "lateral wall"
+    if abs(z + half) < SURFACE_TOL_MM:
+        return "back face"
+    if z > half - SURFACE_TOL_MM:
+        return "readout side (coupling layer and its rim)"
+    return "elsewhere"
+
+
 def survey_one(run, events: int) -> dict:
     rid, label = run
     stem = f"runs_scratch/transport_checks_tmp/survey_{rid}"
     (ROOT / f"{stem}.mac").write_text(macro_for(rid, stem, events=events, verbose=True))
-    # Only each track's particle and last step are kept: step number, next
-    # volume, process. The full history would be gigabytes.
+    cfg = (ROOT / "runs" / rid / "config.yaml").read_text()
+    radius = float(re.search(r"diameter_mm: ([\d.]+)", cfg).group(1)) / 2
+    half = float(re.search(r"length_mm: ([\d.]+)", cfg).group(1)) / 2
+    bare = re.search(r"wrapping: (\S+)", cfg).group(1) == "none"
+    # Only each track's particle and last two steps are kept. The full history
+    # would be gigabytes.
     run_in_container(f"{stem}.mac",
                      f"2>&1 | awk -f /work/runs_scratch/transport_checks_tmp/last_step.awk > /work/{stem}.tracks")
-    fates = []
+    fates = []   # (fate, steps survived, exit surface or None)
     for ln in (ROOT / f"{stem}.tracks").read_text().splitlines():
         t = ln.split()
-        if len(t) == 4 and t[0] == "opticalphoton":
-            fates.append((classify(t[2], t[3]), int(t[1]) if t[1].isdigit() else 0))
-    counts = Counter(f for f, _ in fates)
-    # Estimate of the detections the leak removed: each photon that left is
+        if len(t) == 13 and t[0] == "opticalphoton":
+            fate = classify(t[11], t[12])
+            where = (exit_surface(float(t[2]), float(t[3]), float(t[4]), radius, half)
+                     if fate == "left the geometry" else None)
+            fates.append((fate, int(t[7]) if t[7].isdigit() else 0, where))
+    counts = Counter(f for f, _, _ in fates)
+    where = Counter(w for _, _, w in fates if w)
+
+    # Estimate of the detections the escapes removed: each photon that left is
     # credited with the probability that a photon which did not leave, and
-    # survived at least as many steps, was detected.
-    kept = sorted(((f, s) for f, s in fates if f != "left the geometry"), key=lambda x: x[1])
+    # survived at least as many steps, was detected. Reported for every exit
+    # and for exits through the lateral wall alone, which in a wrapped crystal
+    # is the look-up-table leak.
+    kept = sorted(((f, s) for f, s, _ in fates if f != "left the geometry"), key=lambda x: x[1])
     steps = [s for _, s in kept]
     suffix = [0] * (len(kept) + 1)
     for i in range(len(kept) - 1, -1, -1):
         suffix[i] = suffix[i + 1] + (kept[i][0] == "detected")
-    lost = 0.0
-    for f, s in fates:
-        if f == "left the geometry":
-            i = bisect.bisect_left(steps, s)
-            m = len(kept) - i
-            lost += suffix[i] / m if m else 0.0
+
+    def credit(s: int) -> float:
+        i = bisect.bisect_left(steps, s)
+        m = len(kept) - i
+        return suffix[i] / m if m else 0.0
+    lost = sum(credit(s) for f, s, _ in fates if f == "left the geometry")
+    lost_wall = sum(credit(s) for f, s, w in fates if w == "lateral wall")
     rows = [ln.split(",") for ln in (ROOT / f"{stem}_nt_events.csv").read_text().splitlines()
             if ln and not ln.startswith("#")]
     for p in (f"{stem}.tracks", f"{stem}.mac", f"{stem}_nt_events.csv"):
         (ROOT / p).unlink()
-    return {"id": rid, "label": label, "events": events, "photons": len(fates),
-            "fate": dict(counts), "lost_detections_estimate": lost,
+    return {"id": rid, "label": label, "events": events, "bare_crystal": bare,
+            "crystal": {"radius_mm": radius, "half_length_mm": half},
+            "photons": len(fates), "fate": dict(counts), "left_from": dict(where),
+            "lost_detections_estimate": lost, "lost_detections_estimate_lateral_wall": lost_wall,
             "ntuple_scintillation": sum(int(r[3]) for r in rows),
             "ntuple_detected": sum(int(r[5]) for r in rows)}
 
@@ -338,8 +375,11 @@ def cmd_survey(args) -> None:
         for res in ex.map(lambda r: survey_one(r, args.events), runs):
             results.append(res)
             n = res["photons"] or 1
+            wall = res["left_from"].get("lateral wall", 0)
             print(f"{res['label']:28s} photons {n:7d}  left {res['fate'].get('left the geometry', 0) / n:.4%}"
-                  f"  lost-detection estimate {res['lost_detections_estimate'] / n:.4%}", flush=True)
+                  f"  through the lateral wall {wall / n:.4%}"
+                  f"  lost-detection estimate (wall) {res['lost_detections_estimate_lateral_wall'] / n:.4%}",
+                  flush=True)
     write(DIAG / "leak_survey.json", {"provenance": provenance(), "events_per_configuration": args.events,
                                       "configurations": results})
 
