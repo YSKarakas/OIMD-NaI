@@ -62,14 +62,21 @@ def summarise(run) -> dict | None:
                  if "photons_cherenkov" in data else None)
 
     mask = photopeak(data)
-    # Light COLLECTION is scintillation photons detected over scintillation
-    # photons generated. Cherenkov photons are 0.1 % of the total and used to
-    # sit in this denominator by accident -- the yield gate already excluded
-    # them, the LCE did not. Schema 1 cannot separate them and says so.
-    gen = gen_scint[mask]
+    # Light COLLECTION is optical photons detected over optical photons
+    # generated, Cherenkov photons included on both sides. The separation by
+    # creator process is made where a photon is born, not where it is detected:
+    # photons_detected counts every optical photon that reaches the
+    # photodetector. Dividing it by the scintillation photons alone put the
+    # Cherenkov photons (about 0.1 % of the total) in the numerator and not in
+    # the denominator, which overstated every efficiency by about 0.1 % and the
+    # transport closure by as much as it is meant to test. The scintillation-
+    # only ratio is kept beside it so that the size of that convention stays
+    # on record.
+    gen = gen_all[mask]
     det = np.asarray(data["photons_detected"], dtype=float)[mask]
     if gen.size < 30:
         return None
+    lce_scint_denominator = det / gen_scint[mask]
 
     # Yield closure is tested on the RATIO, event by event, over every event with
     # a meaningful deposit. Testing the mean photon count inside an energy window
@@ -113,7 +120,7 @@ def summarise(run) -> dict | None:
         "yield_ratio_sem": float(ratio.std(ddof=1) / math.sqrt(ratio.size)),
         "yield_ratio_events": int(ratio.size),
         "yield_is_scintillation_only": bool(scint_only),
-        "lce_denominator": "scintillation" if scint_only else "all optical photons (schema 1)",
+        "lce_denominator": "all optical photons, as the numerator",
         "cherenkov_mean": float(cherenkov[full].mean()) if cherenkov is not None and full.any() else None,
         "mean_generated_nm": float(np.asarray(data["mean_generated_nm"])[full].mean())
         if "mean_generated_nm" in data and full.any() else None,
@@ -128,6 +135,9 @@ def summarise(run) -> dict | None:
         "detected_mean": float(det.mean()),
         "lce_mean": float(lce.mean()),
         "lce_sem": float(lce.std(ddof=1) / math.sqrt(n)),
+        # Detected photons of every origin over scintillation photons only: the
+        # mismatched convention, recorded for comparison and used nowhere else.
+        "lce_over_scintillation_only_mean": float(lce_scint_denominator.mean()),
         # Resolution from photon statistics alone: RESOLUTIONSCALE = 1 and
         # detection efficiency 1, so this is a lower bound, not a prediction.
         "fwhm_pct": float(2.3548 * det.std(ddof=1) / det.mean() * 100.0),
@@ -341,16 +351,20 @@ def report(rows: list[dict]) -> dict:
 
     # ------------------------------------------------------------------ #
     # G5: optical-transport closure. With a lossless wrapper and a crystal
-    # that absorbs nothing on any ordinary path, every scintillation photon
-    # has one way out, so the light-collection efficiency must be one and any
-    # deficit is transport losing light. None of G1-G4 tests this: G1 involves
-    # no optical photons, G2 counts photons at birth, G3 is a one-sided bound and
-    # G4 compares against another material. The gate is the GROUND-surface
-    # run, where the angle is redrawn at every bounce and conservation is the
-    # only thing under test. The polished companion is reported beside it and
-    # is not a second closure: with the same lossless inputs it delivers about
-    # four fifths of the light, what removes the rest has not been identified,
-    # and so the closure stands for the ground finish only.
+    # that absorbs nothing on any ordinary path, a photon can leave only
+    # through the photodetector or through the open rim of the coupling layer
+    # beside it, so the light-collection efficiency must be close to one and a
+    # larger deficit is transport losing light. None of G1-G4 tests this: G1
+    # involves no optical photons, G2 counts photons at birth, G3 is a
+    # one-sided bound and G4 compares against another material. The gate is the
+    # GROUND-surface run, where the angle is redrawn at every bounce. The
+    # polished companion is reported beside it and is not a second closure:
+    # with the same lossless inputs it delivers about four fifths of the light,
+    # and what removes the rest is the look-up-table leak that
+    # scripts/transport_checks.py measures (grazing photons sent along the
+    # lateral wall pass out through the lossless wrapper), so the closure
+    # stands for the ground finish only. The ground run loses about 0.2 %,
+    # 0.12 % through the rim and 0.08 % by the same leak.
     closure = by_label.get("G5_closure")
     trapping = by_label.get("G5_trapping_polished")
     if closure is not None:
