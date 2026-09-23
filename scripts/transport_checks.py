@@ -43,7 +43,6 @@ import math
 import re
 import shutil
 import subprocess
-import tempfile
 import zlib
 from collections import Counter
 from pathlib import Path
@@ -69,8 +68,11 @@ def provenance() -> dict:
                            capture_output=True, text=True, check=True).stdout.strip()
     commit = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True,
                             cwd=ROOT).stdout.strip()
-    dirty = bool(subprocess.run(["git", "status", "--porcelain"], capture_output=True,
-                                text=True, cwd=ROOT).stdout.strip())
+    # Dirty means a tracked file differs from the commit. Untracked files do not
+    # count: the records this script writes are themselves untracked until
+    # they are committed, and would otherwise mark every record after the first.
+    dirty = bool(subprocess.run(["git", "status", "--porcelain", "--untracked-files=no"],
+                                capture_output=True, text=True, cwd=ROOT).stdout.strip())
     return {"image": f"{IMAGE}@{image}", "binary": BINARY,
             "binary_sha256": sha256(ROOT / BINARY), "git_commit": commit, "git_dirty": dirty,
             "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat()}
