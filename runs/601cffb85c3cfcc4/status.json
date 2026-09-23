@@ -9,5 +9,8 @@
   "returncode": 0,
   "elapsed_s": 898.1,
   "output": "runs/601cffb85c3cfcc4/output_nt_events.csv",
-  "output_sha256": "9360d8e33997624af0c1d5f15596010c12f9cd30bcfac749e3e0b94e270cdcda"
+  "output_sha256": "9360d8e33997624af0c1d5f15596010c12f9cd30bcfac749e3e0b94e270cdcda",
+  "aliases": [
+    "MEAS_meas_scatter_max"
+  ]
 }

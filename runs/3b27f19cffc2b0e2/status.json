@@ -9,5 +9,8 @@
   "returncode": 0,
   "elapsed_s": 751.3,
   "output": "runs/3b27f19cffc2b0e2/output_nt_events.csv",
-  "output_sha256": "8de84c9b9ae14236f4c7e4ee78c4bf09c550ad28d566a259d014c32d04aea447"
+  "output_sha256": "8de84c9b9ae14236f4c7e4ee78c4bf09c550ad28d566a259d014c32d04aea447",
+  "aliases": [
+    "SYS_abs_measured_lamhi"
+  ]
 }

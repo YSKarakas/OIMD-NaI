@@ -363,8 +363,16 @@ def report(rows: list[dict]) -> dict:
         # included. The narrower one drops the flat-absorption variants, which the
         # Mao et al. 365 nm transmittance measurement excludes, and so is the
         # spread that survives after using the evidence that already exists.
+        # The rule is about the physics, not the label: what the 365 nm
+        # half-transmittance measurement excludes is any model with no
+        # absorption edge inside the emission band. That is the flat lengths
+        # and, more sharply, the crystal with no attenuation at all -- a
+        # transparent NaI(Tl) is the extreme case of the same error, so it is
+        # dropped here too. It was admitted for one analysis run because the
+        # test keyed on the "abs_flat" prefix; the prefix is not the criterion.
+        EXCLUDED_BY_THE_CUTOFF = ("SYS_abs_flat", "SYS_abs_none")
         defensible = [b] + [r["lce_mean"] for r in sys_rows
-                            if not r["label"].startswith("SYS_abs_flat")]
+                            if not r["label"].startswith(EXCLUDED_BY_THE_CUTOFF)]
         defensible_spread = (max(defensible) - min(defensible)) / b
 
         # Where the schema records it, show what the crystal does to its own

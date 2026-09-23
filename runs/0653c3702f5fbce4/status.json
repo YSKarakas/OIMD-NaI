@@ -9,5 +9,8 @@
   "returncode": 0,
   "elapsed_s": 841.9,
   "output": "runs/0653c3702f5fbce4/output_nt_events.csv",
-  "output_sha256": "d8d6701c8457fe11fa2d56ab9c36c49b596bd9b83fe495e79fe474feadaa7517"
+  "output_sha256": "d8d6701c8457fe11fa2d56ab9c36c49b596bd9b83fe495e79fe474feadaa7517",
+  "aliases": [
+    "SYS_meas_jacobian"
+  ]
 }

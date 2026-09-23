@@ -1,0 +1,16 @@
+{
+  "aliases": [
+    "MEAS_meas_emission_sslg4"
+  ],
+  "label": "SYS_meas_emission_sslg4",
+  "state": "done",
+  "started_unix": 1789949658.0115998,
+  "material_sha256": "1fdce04d6e33d25e47b779232a2da0c149a4f03cb8bec36380b3e46d56cd40ec",
+  "binary": "build/container/scint_optical",
+  "binary_sha256": "04550111bbcbe79ef73ee3650c32e50d2f89ef1f76d51fe0e1656b3196da26ee",
+  "container_image": "scint:11.4.2@sha256:6004c311be40b0547053be768028a5138af37e1738e7747f84bac24144a8d9af",
+  "returncode": 0,
+  "elapsed_s": 1009.3,
+  "output": "runs/825f96e6e3c9071f/output_nt_events.csv",
+  "output_sha256": "8fa93186f289f2c4518485470549a54d3305dddde27f6755d31155544023117d"
+}

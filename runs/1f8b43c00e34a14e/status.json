@@ -9,5 +9,8 @@
   "returncode": 0,
   "elapsed_s": 740.0,
   "output": "runs/1f8b43c00e34a14e/output_nt_events.csv",
-  "output_sha256": "c38c357f911d3b8cb34bc53aeecedc87b09819bd12ead9d085287143dc3e1e6a"
+  "output_sha256": "c38c357f911d3b8cb34bc53aeecedc87b09819bd12ead9d085287143dc3e1e6a",
+  "aliases": [
+    "SYS_abs_measured_lo"
+  ]
 }
